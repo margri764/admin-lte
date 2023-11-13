@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'admin-lte'`, () => {
+  it(`should have as title 'adminlte'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('admin-lte');
+    expect(app.title).toEqual('adminlte');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('admin-lte app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('adminlte app is running!');
   });
 });
