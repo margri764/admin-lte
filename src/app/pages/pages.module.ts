@@ -7,8 +7,11 @@ import { SharedModule } from '../shared/shared.module';
 import { NgChartsModule } from 'ng2-charts';
 import { Graphic1Component } from './graphic1.component';
 import { UsersComponent } from './users/users.component';
-import { PagesRoutingModule } from './pages-routing';
+// import { PagesRoutingModule } from './pages-routing';
 import { RouterModule } from '@angular/router';
+import { ClientsComponent } from './clients/clients.component';
+import { DataTablesModule } from "angular-datatables";
+
 
 
 
@@ -18,7 +21,8 @@ import { RouterModule } from '@angular/router';
     ProgressComponent,
     PagesComponent,
     Graphic1Component,
-    UsersComponent
+    UsersComponent,
+    ClientsComponent
   ],
   exports: [
     DashboardComponent,
@@ -31,6 +35,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     SharedModule,
     RouterModule,
+    DataTablesModule,
     NgChartsModule.forRoot(),
   ]
 })
