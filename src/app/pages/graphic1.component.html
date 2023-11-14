@@ -1,0 +1,38 @@
+   
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <canvas
+            baseChart
+            class="chart"
+            [data]="pieChartData"
+            [type]="pieChartType"
+            [options]="pieChartOptions"
+            >
+            </canvas>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <canvas
+            baseChart
+            class="chart"
+            [data]="pieChartData"
+            [type]="pieChartType"
+            [options]="pieChartOptions" style="width: 50%;"
+            >
+            </canvas>
+        </div>
+    </div>
+
+    
+    <div class="col-lg-6">
+        <div class="card">
+           <a  (click)="changeLabels()"> Change Labels</a>
+        </div>
+    </div>
+</div>
+
+     
+   

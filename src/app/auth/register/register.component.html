@@ -1,86 +1,132 @@
-<div class=" register-page">
-    <div class="register-box">
-      <div class="register-logo">
-        <a href="../../index2.html"><b>Admin</b>LTE</a>
+<div class="login-page" style="background-image: url('../../../assets/background-1.jpg');">
+  <div class="register-box"  style="">
+
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary" style="background-color: rgb(234, 243, 250, 0.9);">
+      <div class="card-header text-center">
+        <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
       </div>
-    
-      <div class="card">
-        <div class="card-body register-card-body">
-          <p class="login-box-msg">Register a new membership</p>
-    
-          <form action="../../index.html" method="post">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Full name">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-user"></span>
-                </div>
+      <div class="card-body">
+        <p class="login-box-msg">- Registrar-se -</p>
+  
+        <form [formGroup]="myForm" class="needs-validation"  novalidate>
+
+          <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+            <input type="text" class="form-control" placeholder="Nome" formControlName="firstName" required [ngStyle]="( validField('firstName')) ? {'border':'1px solid red'}:{}" >
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa fa-user"></i>
               </div>
             </div>
-            <div class="input-group mb-3">
-              <input type="email" class="form-control" placeholder="Email">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-envelope"></span>
-                </div>
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input type="password" class="form-control" placeholder="Password">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-lock"></span>
-                </div>
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input type="password" class="form-control" placeholder="Retype password">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-lock"></span>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-8">
-                <div class="icheck-primary">
-                  <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-                  <label for="agreeTerms">
-                   I agree to the <a href="#">terms</a>
-                  </label>
-                </div>
-              </div>
-              <!-- /.col -->
-              <div class="col-4">
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
-              </div>
-              <!-- /.col -->
-            </div>
-          </form>
-    
-          <div class="social-auth-links text-center">
-            <p>- OR -</p>
-            <a href="#" class="btn btn-block btn-primary">
-              <i class="fab fa-facebook mr-2"></i>
-              Sign up using Facebook
-            </a>
-            <a href="#" class="btn btn-block btn-danger">
-              <i class="fab fa-google-plus mr-2"></i>
-              Sign up using Google+
-            </a>
+            <div *ngIf="validField('firstName')" class="invalid" > Dado obrigatório </div>
           </div>
+
+          <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+            <input type="text" class="form-control" placeholder="Sobrenome" formControlName="lastName"  required [ngStyle]="( validField('lastName')) ? {'border':'1px solid red'}:{}">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa fa-user"></i>
+              </div>
+            </div>
+            <div *ngIf="validField('lastName')" class="invalid" > Dado obrigatório </div>
+          </div>
+
+          <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+            <input type="email" class="form-control" placeholder="Email" formControlName="email" required [ngStyle]="( validField('email')) ? {'border':'1px solid red'}:{}">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+            <div *ngIf="validField('email')" class="invalid" > Dado obrigatório </div>
+
+          </div>
+
+          <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+            <div class="input-group date" >
+              <input type="text"
+                placeholder="Data de nascimento"
+                class="form-control datetimepicker-input"
+                bsDatepicker
+                [bsValue]="bsValue"
+                [minDate]="minDate"
+                [maxDate]="maxDate"
+                [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
+                formControlName="birthday" required [ngStyle]="( validField('birthday')) ? {'border':'1px solid red'}:{}">
+              <div class="input-group-append"  >
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+            <div *ngIf="validField('birthday')" class="invalid" > Dado obrigatório </div>
+
+          </div>
+          
+          
+
+         <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Telefone" formControlName="phone" required [ngStyle]="( validField('phone')) ? {'border':'1px solid red'}:{}">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM144 448c0 8.8 7.2 16 16 16h64c8.8 0 16-7.2 16-16s-7.2-16-16-16H160c-8.8 0-16 7.2-16 16zM304 64H80V384H304V64z"/></svg>
+              </div>
+            </div> 
+            <div *ngIf="validField('phone')" class="invalid" > Dado obrigatório </div>
+
+          </div> 
+
+          <!-- sede -->
+        <p class="login-box-msg"> - Sede -</p>
+
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Nome da sede" formControlName="headquartersName" required [ngStyle]="( validField('headquartersName')) ? {'border':'1px solid red'}:{}">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa fa-user "></i>
+              </div>
+            </div>
+            <div *ngIf="validField('headquartersName')" class="invalid" > Dado obrigatório </div>
+
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Cidade da sede" formControlName="city" required [ngStyle]="( validField('city')) ? {'border':'1px solid red'}:{}">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa fa-user "></i>
+              </div>
+            </div>
+            <div *ngIf="validField('city')" class="invalid" > Dado obrigatório </div>
+
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="País da sede" formControlName="country" required [ngStyle]="( validField('country')) ? {'border':'1px solid red'}:{}">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa fa-user "></i>
+              </div>
+            </div>
+            <div *ngIf="validField('country')" class="invalid" > Dado obrigatório </div>
+          </div>
+ 
+
     
-          <a href="login.html" class="text-center">I already have a membership</a>
-        </div>
-        <!-- /.form-box -->
-      </div><!-- /.card -->
+        </form>
+
+    
+  
+         <div style="display: flex; align-items: end; justify-content: end; margin-top: 30px;" >
+            
+            <span class="mb-0" > <a routerLink="../register" class="text-center" (click)="register()"> <i class="fa fa-user"></i> Registrar-se</a> </span>
+            &nbsp; &nbsp;
+            <span class="mb-0"> <a href="register.html" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Recuperar senha</a> </span>
+
+         </div>
+  
+      </div>
+      <!-- /.card-body -->
     </div>
-    <!-- /.register-box -->
-    
-    <!-- jQuery -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../../dist/js/adminlte.min.js"></script>
-</div>
+    <!-- /.card -->
+  </div>
+</div>  

@@ -4,17 +4,20 @@ import { RouterModule, Routes } from '@angular/router';
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProgressComponent } from './progress/progress.component';
+import { Graphic1Component } from './graphic1.component';
+import { UsersComponent } from './users/users.component';
 
 
 const routes: Routes = [
 
   {
-    path: '',
+    path: 'dashboard',
     component: PagesComponent,
     children:[
-       { path: 'dashboard',  component: DashboardComponent },
+       { path: '',  component: DashboardComponent },
        { path: 'progress',  component: ProgressComponent },
-       { path: '',  redirectTo: '/dashboard', pathMatch: 'full' },
+       { path: 'graphics',  component: Graphic1Component },
+       { path: 'usuarios',  component: UsersComponent },
    ]
   },
   
