@@ -1,10 +1,15 @@
 <div class="row">
     <div class="col-lg-12">
+       
         <div class="card" style="padding: 20px;">
 
-            <h3 style="margin-bottom: 40px;">Clientes</h3>
+            <div class="card-tools mb-5" style="width: 80px; margin-left: auto;" >
+                <button type="button" class="btn btn-primary btn-block" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-plus"></i> Novo
+                </button>
+            </div>
+            
             <table datatable class="row-border hover">
-
 
                 <thead>
                     <tr>
@@ -16,14 +21,14 @@
                 <tbody>
                     <!-- Ejemplo 1: Activo -->
                     <tr>
-                        <td>Cliente 1</td>
+                        <td><a routerLink="/dashboard/editar-clientes/1"> Cliente 1 </a></td>
                         <td>cliente1@example.com</td>
                         <td> <span class="badge badge-success right" style="padding: 8px 20px 8px 20px;">Ativo</span></td>
                     </tr>
 
                     <!-- Ejemplo 2: Inactivo -->
                     <tr>
-                        <td>Cliente 2</td>
+                        <td><a routerLink="/dashboard/editar-clientes/2"> Cliente 2 </a></td>
                         <td>cliente2@example.com</td>
                         <td> <span class="badge badge-danger right" style="padding: 8px 15px 8px 15px;">Inativo</span></td>
 
@@ -31,7 +36,7 @@
 
                     <!-- Ejemplo 3: Activo -->
                     <tr>
-                        <td>Cliente 3</td>
+                        <td><a routerLink="/dashboard/editar-clientes/3"> Cliente 3 </a></td>
                         <td>cliente3@example.com</td>
                         <td> <span class="badge badge-success right" style="padding: 8px 20px 8px 20px;">Ativo</span></td>
 
@@ -39,7 +44,7 @@
 
                     <!-- Ejemplo 4: Inactivo -->
                     <tr>
-                        <td>Cliente 4</td>
+                        <td><a routerLink="/dashboard/editar-clientes/4"> Cliente 4</a></td>
                         <td>cliente4@example.com</td>
                         <td> <span class="badge badge-success right" style="padding: 8px 20px 8px 20px;">Ativo</span></td>
 
@@ -47,7 +52,7 @@
 
                     <!-- Ejemplo 5: Activo -->
                     <tr>
-                        <td>Cliente 5</td>
+                        <td><a routerLink="/dashboard/editar-clientes/6"> Cliente 6 </a></td>
                         <td>cliente5@example.com</td>
                         <td> <span class="badge badge-success right" style="padding: 8px 20px 8px 20px;">Ativo</span></td>
 
@@ -55,7 +60,7 @@
 
                     <!-- Ejemplo 6: Inactivo -->
                     <tr>
-                        <td>Cliente 6</td>
+                        <td> <a routerLink="/dashboard/editar-clientes/7"> Cliente 7 </a> </td>
                         <td>cliente6@example.com</td>
                         <td> <span class="badge badge-success right" style="padding: 8px 20px 8px 20px;">Ativo</span></td>
 
@@ -63,7 +68,7 @@
 
                     <!-- Ejemplo 7: Activo -->
                     <tr>
-                        <td>Cliente 7</td>
+                        <td> <a routerLink="/dashboard/editar-clientes/8"> Cliente 8 </a> </td>
                         <td>cliente7@example.com</td>
                         <td> <span class="badge badge-success right" style="padding: 8px 20px 8px 20px;">Ativo</span></td>
 
@@ -71,17 +76,22 @@
 
                     <!-- Ejemplo 8: Inactivo -->
                     <tr>
-                        <td>Cliente 8</td>
+                        <td> <a routerLink="/dashboard/editar-clientes/9"> Cliente 9 </a> </td>
                         <td>cliente8@example.com</td>
                         <td> <span class="badge badge-danger right" style="padding: 8px 15px 8px 15px;">Inativo</span></td>
                     </tr>
 
                     <!-- Ejemplo 9: Activo -->
                     <tr>
-                        <td>Cliente 9</td>
+                        <td> <a routerLink="/dashboard/editar-clientes/10"> Cliente 10 </a> </td>
                         <td>cliente9@example.com</td>
                         <td> <span class="badge badge-success right" style="padding: 8px 20px 8px 20px;">Ativo</span></td>
+                    </tr>
 
+                    <tr>
+                        <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
+                        <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
+                        <td style="visibility: hidden;"> zzzzzzzzzzz</td>
                     </tr>
 
                 

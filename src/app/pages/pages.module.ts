@@ -11,6 +11,8 @@ import { UsersComponent } from './users/users.component';
 import { RouterModule } from '@angular/router';
 import { ClientsComponent } from './clients/clients.component';
 import { DataTablesModule } from "angular-datatables";
+import { EditClientComponent } from './edit-client/edit-client.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
 
 
 
@@ -22,7 +24,9 @@ import { DataTablesModule } from "angular-datatables";
     PagesComponent,
     Graphic1Component,
     UsersComponent,
-    ClientsComponent
+    ClientsComponent,
+    EditClientComponent,
+    EditUserComponent
   ],
   exports: [
     DashboardComponent,

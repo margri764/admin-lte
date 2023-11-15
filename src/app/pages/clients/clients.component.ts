@@ -8,7 +8,7 @@ import { ADTSettings } from 'angular-datatables/src/models/settings';
 })
 export class ClientsComponent implements OnInit {
 
-  dtOptions: ADTSettings = {};
+  dtOptions: DataTables.Settings = {};
   
 
   constructor() { }
@@ -16,25 +16,7 @@ export class ClientsComponent implements OnInit {
   ngOnInit(): void {
 
     this.dtOptions = {
-      ajax: 'data/data.json',
-      columns: [
-        {
-          title: 'Id (Money)',
-          data: 'id',
-          // ngPipeInstance: this.pipeCurrencyInstance,
-          ngPipeArgs: ['USD','symbol']
-        },
-        {
-          title: 'First name',
-          data: 'firstName',
-          // ngPipeInstance: this.pipeInstance
-        },
-        {
-          title: 'Last name',
-          data: 'lastName',
-          // ngPipeInstance: this.pipeInstance
-        }
-      ]
+      pagingType: 'full_numbers'
     };
   }
 
