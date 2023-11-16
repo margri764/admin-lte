@@ -10,6 +10,7 @@ import { ClientsComponent } from './clients/clients.component';
 import { EditClientComponent } from './edit-client/edit-client.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { NewUserComponent } from './new-user/new-user.component';
+import { NewClientComponent } from './new-client/new-client.component';
 
 
 const routes: Routes = [
@@ -25,7 +26,8 @@ const routes: Routes = [
               { path: 'clientes',  component: ClientsComponent , data:{ title:"Clientes"}},
               { path: 'editar-clientes/:id',  component: EditClientComponent , data:{ title:"Editar Clientes"}},
               { path: 'editar-usuario/:id',  component: EditUserComponent , data:{ title:"Editar Usuário"}},
-              { path: 'novo-usuario',  component: NewUserComponent , data:{ title:"Novo  Usuário"}},
+              { path: 'novo-usuario',  component: NewUserComponent , data:{ title:"Novo Usuário"}},
+              { path: 'novo-cliente',  component: NewClientComponent , data:{ title:"Novo Cliente"}},
             ]
   }
 

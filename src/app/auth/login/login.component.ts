@@ -10,7 +10,10 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   myForm!: FormGroup;
+  myForm2!: FormGroup;
+  myFormCode!: FormGroup;
   submitted : boolean = false;
+  showLogin: boolean = true;
 
 
   constructor(
@@ -28,19 +31,35 @@ export class LoginComponent implements OnInit {
       password:  [ '', [Validators.required]],
   
     });
+
+    this.myForm2 = this.fb.group({
+      name:     [ '', [Validators.required] ],
+      ordem:     [ '', [Validators.required] ],
+      email2:     [ '', [Validators.required] ],
+      subject:     [ '', [Validators.required] ],
+      message:     [ '', [Validators.required] ],
+      sendEmail:     [ false, [Validators.required] ],
+  
+    });
+
+    this.myFormCode = this.fb.group({
+      code:     [ '', [Validators.required] ],
+  
+    });
     
 
   }
 
   login(){
+
+    this.showLogin = false;
     this.submitted = true;
-    if ( this.myForm.invalid ) {
-      this.myForm.markAllAsTouched();
-      return;
-    }
+    // if ( this.myForm.invalid ) {
+    //   this.myForm.markAllAsTouched();
+    //   return;
+    // }
 
-    this.router.navigateByUrl('/dashboard')
-
+    // this.router.navigateByUrl('/dashboard')
     
   }
 

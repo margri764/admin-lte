@@ -1,5 +1,6 @@
-<div class="login-page" style="background-image: url('../../../assets/background-1.jpg');">
-  <div class="login-box" >
+<div class="login-page" style="background-image: url('../../../assets/background-1.jpg');" >
+  <div class="login-box" *ngIf="showLogin">
+
     <!-- /.login-logo -->
     <div class="card card-outline card-primary" style="background-color: rgb(234, 243, 250, 0.9);">
       <div class="card-header text-center">
@@ -8,46 +9,171 @@
       <div class="card-body">
         <p class="login-box-msg">Login</p>
   
-        <form [formGroup]="myForm" class="needs-validation"  novalidate  [autocomplete]="false">
+        <form [formGroup]="myForm" class="needs-validation"  novalidate  [autocomplete]="false" >
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
             <input type="email" class="form-control" placeholder="Email" required [ngStyle]="( validField('email')) ? {'border':'1px solid red'}:{}" formControlName="email">
             <div class="input-group-append">
               <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
+                <span class="fas fa-envelope" style="color: rgb(0, 123, 255);"></span>
               </div>
             </div>
             <div *ngIf="validField('email')" class="invalid" > Dado obrigatório </div>
-
           </div>
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
             <input type="password" class="form-control" placeholder="Password" required [ngStyle]="( validField('password')) ? {'border':'1px solid red'}:{}" formControlName="password">
             <div class="input-group-append">
               <div class="input-group-text">
-                <span class="fas fa-lock"></span>
+                <span class="fas fa-lock" style="color: rgb(0, 123, 255);"></span>
               </div>
             </div>
             <div *ngIf="validField('password')" class="invalid" > Dado obrigatório </div>
-
           </div>
 
-          <button type="button" class="btn btn-primary btn-block" (click)="login()"> Aceitar</button>
-
+          <button type="button" class="btn btn-primary btn-block shadow"  data-toggle="modal" data-target="#modalCode" (click)="login()"> Aceitar</button>
          
         </form>
   
-         <div style="display: flex; align-items: end; justify-content: end; margin-top: 30px;" >
-            
-            <span class="mb-0" > <a routerLink="../register" class="text-center"> <i class="fa fa-user"></i> Registrar-se</a> </span>
-            &nbsp; &nbsp;
-            <span class="mb-0"> <a href="register.html" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Recuperar senha</a> </span>
+        <div class="d-flex flex-column align-items-end" style="margin-top: 30px;">
+         
+            <div >
+                <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fa fa-user"></i> Registrar-se</a> </span>
+                &nbsp; &nbsp;
+                <span class="mb-0"> <a href="register.html" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Recuperar senha</a> </span>
+            </div>    
 
+            <div >
+              <button type="button" class="btn btn-primary shadow mt-5" style="" data-toggle="modal" data-target="#exampleModalCenter">
+                Entre em contato conosco
+              </button>
+            </div>
          </div>
-  
+    
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95;">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle"> Entre em contato conosco </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+             
+              <form [formGroup]="myForm2" class="needs-validation"  novalidate  [autocomplete]="false">
+
+                <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+                  <label class="text w-100"> Nome </label>
+                  <input type="text" class="form-control"  required [ngStyle]="( validField('name')) ? {'border':'1px solid red'}:{}" formControlName="name">
+                  <div *ngIf="validField('name')" class="invalid" > Dado obrigatório </div>
+                </div>
+
+                <div class="input-group mb-3 mt-1" >
+                  <label class="text w-100" > Ordem </label>
+                  <select class="form-control select2 col-12 w-100" formControlName="ordem" >
+                    <option selected="selected"></option>
+                    <option>Ordem primeira</option>
+                    <option>Ordem segunda</option>
+                    <option>Outro</option>
+                   
+                  </select>
+                </div>
+
+                <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+                  <label class="text w-100"> Digite seu email</label>
+                  <input type="email" class="form-control"  required [ngStyle]="( validField('email2')) ? {'border':'1px solid red'}:{}" formControlName="email2">
+                  <div *ngIf="validField('email2')" class="invalid" > Dado obrigatório </div>
+                </div>
+
+                <!-- <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+                  <label class="text w-100"> Assunto </label>
+                  <input type="text" class="form-control"  required [ngStyle]="( validField('subject')) ? {'border':'1px solid red'}:{}" formControlName="subject">
+                  <div *ngIf="validField('name')" class="invalid" > Dado obrigatório </div>
+                </div> -->
+
+                <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+                  <label class="text w-100"> Assunto </label>
+                    <textarea class="form-control " formControlName="subject"></textarea>
+                  <div *ngIf="validField('subject')" class="invalid" > Dado obrigatório </div>
+
+                </div>
+      
+               
+              </form>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary btn-block shadow"> Enviar</button>
+
+            </div>
+
+            <div class="custom-control custom-switch d-flex flex-column align-items-start mb-4" style="margin-left: 18px;">
+              <input type="checkbox" class="custom-control-input " id="customSwitch1" >
+              <label class="custom-control-label cursor" for="customSwitch1"> Envie-me uma cópia para o meu email </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+         
+        
       </div>
       <!-- /.card-body -->
     </div>
     <!-- /.card -->
   </div>
 </div>  
+
+ <!-- Modal Code -->
+ <div class="modal fade" id="modalCode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content" style="background-color: rgb(234, 243, 250, 0.9);">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="exampleModalCenterTitle"> Login </h5> -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       
+        <form [formGroup]="myFormCode" class="needs-validation"  novalidate  [autocomplete]="false">
+
+          <div class="alert alert-success alert-dismissible" style="font-size: 0.9em;">
+            <h5><i class="icon fas fa-check"></i> Código de acceso enviado!</h5>
+             Um NOVO código de acceso foi enviado para o seu e-mail. 
+            <p> (Cada vez que for acessar a página, será enviado um código diferente). </p>
+          </div>
+
+          <div class="input-group mb-3" >
+            <label class="text w-100"> Insira este código no quadro abaixo para continuar </label>
+              <textarea class="form-control " formControlName="code" [ngStyle]="( validField('code')) ? {'border':'1px solid red'}:{}" ></textarea>
+            <div *ngIf="validField('code')" class="invalid" > Dado obrigatório </div>
+
+          </div>
+
+         
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-block shadow"> Continuar</button>
+        <div class="d-flex flex-column align-items-end mb-3" style="margin-top: 30px;">
+     
+          <div >
+            <span class="mb-0" style="margin-right: 15px;"> <a href="register.html" class="text-center">  <i class="fas fa-window-close" style="margin-right: 2px;"></i>  Cancelar</a> </span>
+            <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fas fa-reply-all fa-flip-horizontal"></i>         
+              Reenviar</a> </span>
+            &nbsp; &nbsp;
+        </div>  
+       </div>
+      </div>
+
+  
+   
+    </div>
+  </div>
+</div>
+  

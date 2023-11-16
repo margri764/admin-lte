@@ -15,7 +15,7 @@
             <input type="text" class="form-control" placeholder="Nome" formControlName="firstName" required [ngStyle]="( validField('firstName')) ? {'border':'1px solid red'}:{}" >
             <div class="input-group-append">
               <div class="input-group-text">
-                <i class="fa fa-user"></i>
+                <i class="fa fa-user" style="color: rgb(0, 123, 255);"></i>
               </div>
             </div>
             <div *ngIf="validField('firstName')" class="invalid" > Dado obrigatório </div>
@@ -25,7 +25,7 @@
             <input type="text" class="form-control" placeholder="Sobrenome" formControlName="lastName"  required [ngStyle]="( validField('lastName')) ? {'border':'1px solid red'}:{}">
             <div class="input-group-append">
               <div class="input-group-text">
-                <i class="fa fa-user"></i>
+                <i class="fa fa-user" style="color: rgb(0, 123, 255);"></i>
               </div>
             </div>
             <div *ngIf="validField('lastName')" class="invalid" > Dado obrigatório </div>
@@ -35,7 +35,7 @@
             <input type="email" class="form-control" placeholder="Email" formControlName="email" required [ngStyle]="( validField('email')) ? {'border':'1px solid red'}:{}">
             <div class="input-group-append">
               <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
+                <span class="fas fa-envelope" style="color: rgb(0, 123, 255);"></span>
               </div>
             </div>
             <div *ngIf="validField('email')" class="invalid" > Dado obrigatório </div>
@@ -54,7 +54,7 @@
                 [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
                 formControlName="birthday" required [ngStyle]="( validField('birthday')) ? {'border':'1px solid red'}:{}">
               <div class="input-group-append"  >
-                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                <div class="input-group-text"><i class="fa fa-calendar" style="color: rgb(0, 123, 255);"></i></div>
               </div>
             </div>
             <div *ngIf="validField('birthday')" class="invalid" > Dado obrigatório </div>
@@ -67,7 +67,7 @@
             <input type="text" class="form-control" placeholder="Telefone" formControlName="phone" required [ngStyle]="( validField('phone')) ? {'border':'1px solid red'}:{}">
             <div class="input-group-append">
               <div class="input-group-text">
-                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM144 448c0 8.8 7.2 16 16 16h64c8.8 0 16-7.2 16-16s-7.2-16-16-16H160c-8.8 0-16 7.2-16 16zM304 64H80V384H304V64z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM144 448c0 8.8 7.2 16 16 16h64c8.8 0 16-7.2 16-16s-7.2-16-16-16H160c-8.8 0-16 7.2-16 16zM304 64H80V384H304V64z" style="color: rgb(0, 123, 255);"/></svg>
               </div>
             </div> 
             <div *ngIf="validField('phone')" class="invalid" > Dado obrigatório </div>
@@ -80,33 +80,19 @@
 
           <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Nome da sede" formControlName="headquartersName" required [ngStyle]="( validField('headquartersName')) ? {'border':'1px solid red'}:{}">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <i class="fa fa-user "></i>
-              </div>
-            </div>
+        
             <div *ngIf="validField('headquartersName')" class="invalid" > Dado obrigatório </div>
 
           </div>
 
           <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Cidade da sede" formControlName="city" required [ngStyle]="( validField('city')) ? {'border':'1px solid red'}:{}">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <i class="fa fa-user "></i>
-              </div>
-            </div>
             <div *ngIf="validField('city')" class="invalid" > Dado obrigatório </div>
 
           </div>
 
           <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="País da sede" formControlName="country" required [ngStyle]="( validField('country')) ? {'border':'1px solid red'}:{}">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <i class="fa fa-user "></i>
-              </div>
-            </div>
             <div *ngIf="validField('country')" class="invalid" > Dado obrigatório </div>
           </div>
  
@@ -120,7 +106,7 @@
             
             <span class="mb-0" > <a routerLink="../register" class="text-center" (click)="register()"> <i class="fa fa-user"></i> Registrar-se</a> </span>
             &nbsp; &nbsp;
-            <span class="mb-0"> <a href="register.html" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Recuperar senha</a> </span>
+            <span class="mb-0"> <a routerLink="/login" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Já tenho registro </a> </span>
 
          </div>
   
