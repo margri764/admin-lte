@@ -9,6 +9,7 @@ import { UsersComponent } from './users/users.component';
 import { ClientsComponent } from './clients/clients.component';
 import { EditClientComponent } from './edit-client/edit-client.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { NewUserComponent } from './new-user/new-user.component';
 
 
 const routes: Routes = [
@@ -20,10 +21,11 @@ const routes: Routes = [
               { path: '',  component: DashboardComponent, data:{ title:"Dashboard"}},
               { path: 'progress',  component: ProgressComponent , data:{ title:"Progress"}},
               { path: 'graphics',  component: Graphic1Component , data:{ title:"Graficas"}},
-              { path: 'usuarios',  component: UsersComponent , data:{ title:"Usuarios"}},
+              { path: 'usuarios',  component: UsersComponent , data:{ title:"Usuários"}},
               { path: 'clientes',  component: ClientsComponent , data:{ title:"Clientes"}},
               { path: 'editar-clientes/:id',  component: EditClientComponent , data:{ title:"Editar Clientes"}},
-              { path: 'editar-usuario/:id',  component: EditUserComponent , data:{ title:"Editar Usuario"}},
+              { path: 'editar-usuario/:id',  component: EditUserComponent , data:{ title:"Editar Usuário"}},
+              { path: 'novo-usuario',  component: NewUserComponent , data:{ title:"Novo  Usuário"}},
             ]
   }
 

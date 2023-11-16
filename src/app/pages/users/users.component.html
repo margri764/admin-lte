@@ -4,8 +4,8 @@
         <div class="card" style="padding: 20px;">
 
             <div class="card-tools mb-5" style="width: 80px; margin-left: auto;" >
-                <button type="button" class="btn btn-primary btn-block" data-card-widget="collapse" title="Collapse">
-                <i class="fas fa-plus"></i> Novo
+                <button type="button" class="btn btn-primary btn-block shadow" data-card-widget="collapse" title="Collapse" routerLink="/dashboard/novo-usuario">
+                <i class="fas fa-plus "></i> Novo
                 </button>
             </div>
             
@@ -14,11 +14,8 @@
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>Email</th>
-                        <th>tipo</th>
-                        <th>Grupos</th>
-                        <th>Sede</th>
-                        <th>Status</th>
+                        <th>Endereço de email</th>
+                        <th>Ativo</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,38 +23,26 @@
                     <tr>
                         <td><a routerLink="/dashboard/editar-usuario/1"> Cliente 1 </a></td>
                         <td>cliente1@example.com</td>
-                        <td>Usuário</td>
-                        <td>Ordem I - Geral</td>
-                        <td>Nossa Senhora da Reconquista</td>
-                        <td> <span class="badge badge-success right" style="padding: 8px 20px 8px 20px;">Ativo</span></td>
+                        <td> <span class="badge badge-success right" style="padding: 8px 10px 8px 10px;">Sim</span></td>
                     </tr>
 
                     <tr>
                         <td><a routerLink="/dashboard/editar-clientes/2">Cliente 2</a></td>
                         <td>cliente2@example.com</td>
-                        <td>Usuario</td>
-                        <td>Ordem II - Específico</td>
-                        <td>Santa Maria</td>
-                        <td><span class="badge badge-success right" style="padding: 8px 20px 8px 20px;">Activo</span></td>
+                        <td><span class="badge badge-success right" style="padding: 8px 10px 8px 10px;">Sim</span></td>
                       </tr>
                   
                       <!-- Cliente 3 -->
                       <tr>
                         <td><a routerLink="/dashboard/editar-clientes/3">Cliente 3</a></td>
                         <td>cliente3@example.com</td>
-                        <td>Administrador</td>
-                        <td>Ordem III - General</td>
-                        <td>São José</td>
-                        <td><span class="badge badge-warning right" style="padding: 8px 20px 8px 20px;">Inactivo</span></td>
+                        <td><span class="badge badge-danger right" style="padding: 8px 10px 8px 10px;">Não</span></td>
                       </tr>
 
                    
                     <tr>
-                        <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzz</td>
-                        <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzz</td>
-                        <td style="visibility: hidden;"> zzzzzzzzzzz</td>
-                        <td style="visibility: hidden;"> zzzzzzzzzzz</td>
-                        <td style="visibility: hidden;"> zzzzzzzzzzz</td>
+                        <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
+                        <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
                         <td style="visibility: hidden;"> zzzzzzzzzzz</td>
                     </tr>
 

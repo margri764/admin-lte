@@ -13,6 +13,7 @@ import { ClientsComponent } from './clients/clients.component';
 import { DataTablesModule } from "angular-datatables";
 import { EditClientComponent } from './edit-client/edit-client.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { NewUserComponent } from './new-user/new-user.component';
 
 
 
@@ -26,7 +27,8 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     UsersComponent,
     ClientsComponent,
     EditClientComponent,
-    EditUserComponent
+    EditUserComponent,
+    NewUserComponent
   ],
   exports: [
     DashboardComponent,

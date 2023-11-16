@@ -1,0 +1,17 @@
+
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Establecer la altura de la vista completa */
+  }
+  
+  .content-wrapper {
+    flex: 1; /* Hacer que la sección de contenido ocupe el espacio disponible */
+    overflow-y: auto; /* Permitir desplazamiento vertical en la sección de contenido */
+  }
+  
+  .container-fluid {
+    padding: 20px; /* Ajusta el espaciado según tus necesidades */
+  }
+  
