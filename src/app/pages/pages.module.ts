@@ -15,7 +15,8 @@ import { EditClientComponent } from './edit-client/edit-client.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { NewUserComponent } from './new-user/new-user.component';
 import { NewClientComponent } from './new-client/new-client.component';
-
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 
 
@@ -45,6 +46,9 @@ import { NewClientComponent } from './new-client/new-client.component';
     RouterModule,
     DataTablesModule,
     NgChartsModule.forRoot(),
+    NgxDropzoneModule,
+    PdfViewerModule
+
   ]
 })
 export class PagesModule { }
