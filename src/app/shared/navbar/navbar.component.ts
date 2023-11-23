@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SessionService } from '../services/session/session.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,9 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  sessionTimeRemaining!: number;
 
-  ngOnInit(): void {
+  constructor(
+              private sessionService : SessionService
+  )
+   {
+      this.sessionService.startSession();
+   }
+  
+  
+   ngOnInit(): void {
+
+    this.sessionService.getClock().subscribe((timeRemaining: number) => {
+      this.sessionTimeRemaining = timeRemaining;
+      if(timeRemaining === 0){
+      this.sessionService.startSession();
+
+      }
+    });
   }
 
 }

@@ -17,6 +17,9 @@ import { NewUserComponent } from './new-user/new-user.component';
 import { NewClientComponent } from './new-client/new-client.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { AlarmsComponent } from './alarms/alarms/alarms.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 
 
@@ -31,7 +34,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     EditClientComponent,
     EditUserComponent,
     NewUserComponent,
-    NewClientComponent
+    NewClientComponent,
+    AlarmsComponent
   ],
   exports: [
     DashboardComponent,
@@ -44,8 +48,10 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     CommonModule,
     SharedModule,
     RouterModule,
+    ReactiveFormsModule,
     DataTablesModule,
     NgChartsModule.forRoot(),
+    BsDatepickerModule.forRoot(),
     NgxDropzoneModule,
     PdfViewerModule
 

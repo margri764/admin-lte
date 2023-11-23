@@ -28,6 +28,7 @@ selectedPdfSrc: any = null;
 pdfSrcList: any[] = [];
 loadingPdf: boolean = false;
 selectedFile: CustomFile | null = null;
+success: any;
 
 
 
@@ -43,6 +44,7 @@ selectedFile: CustomFile | null = null;
     
 
     onSelect(event: any): void {
+
       const addedFiles: File[] = event.addedFiles;
   
       for (const file of addedFiles) {
@@ -91,7 +93,6 @@ fileName: string = '';
       if(this.pdfSrcList[index]){
         setTimeout( ()=>{
             this.selectedPdfSrc = this.pdfSrcList[index];
-            console.log(this.selectedPdfSrc);
             this.selectedFile = this.files[index];
             this.fileName = name;
           }, 200)

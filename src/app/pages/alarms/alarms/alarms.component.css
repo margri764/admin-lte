@@ -1,0 +1,41 @@
+.customCards1{
+    background: rgb(42,148,198);
+    background: linear-gradient(90deg, rgba(42,148,198,1) 35%, rgba(0,212,255,1) 100%);
+    height: 130px;
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: rgb(255, 255, 255);
+}
+
+.customCards2{
+    background: rgb(188,42,198);
+    background: linear-gradient(90deg, rgba(188,42,198,1) 35%, rgba(244,0,255,1) 100%);
+    height: 130px;
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: rgb(255, 255, 255);
+
+}
+
+.separator{
+    border: 3px solid white; 
+    height: 60px; 
+    width: 2px; 
+    opacity: 0.89; 
+    margin-left: 20px; 
+    margin-right: 20px;
+}
+
+.customTHead{
+    background: rgb(42,148,198);
+    background: linear-gradient(90deg, rgba(42,148,198,1) 35%, rgba(0,212,255,1) 100%);
+    border-radius: 7px;
+    height: 45px;
+    margin-bottom: 20px;
+}
+
+.card{
+   background-color:rgb(206, 197, 206, 0.2); 
+   border-radius: 10px; 
+   border-color: rgb(255, 255, 255);
+}

@@ -3,11 +3,15 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">{{title}}</h1>
+              <i class="far fa-bell" style="font-size: 2em;" *ngIf="alarmes"></i> 
+              <i class="far fa-user" style="font-size: 1.8em;" *ngIf="usuarios"></i>
+              <i class="fa fa-users" style="font-size: 1.8em;" *ngIf="clientes"></i>
+              <span class="font" style="font-size: 2em;margin-left: 20px;">{{title}}</span>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a routerLink="/">{{firstPath}}</a></li>
+              
                 <li class="breadcrumb-item" *ngIf="title.toLowerCase().trim() !== 'dashboard' && title.trim() !== ''">{{ title }}</li>
 
               </ol>

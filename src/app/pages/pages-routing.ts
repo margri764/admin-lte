@@ -11,6 +11,7 @@ import { EditClientComponent } from './edit-client/edit-client.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { NewUserComponent } from './new-user/new-user.component';
 import { NewClientComponent } from './new-client/new-client.component';
+import { AlarmsComponent } from './alarms/alarms/alarms.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,7 @@ const routes: Routes = [
               { path: 'editar-usuario/:id',  component: EditUserComponent , data:{ title:"Editar Usuário"}},
               { path: 'novo-usuario',  component: NewUserComponent , data:{ title:"Novo Usuário"}},
               { path: 'novo-cliente',  component: NewClientComponent , data:{ title:"Novo Cliente"}},
+              { path: 'alarmes',  component: AlarmsComponent , data:{ title:"Alarmes"}},
             ]
   }
 

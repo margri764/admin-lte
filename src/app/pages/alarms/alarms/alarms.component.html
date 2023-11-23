@@ -1,0 +1,214 @@
+<div class="row">
+
+  <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt-1" data-toggle="modal" data-target="#modalNova">
+
+    <div class="d-flex shadow justify-content-center align-items-center customCards1" (mouseover)="toggleHover(true)" (mouseout)="toggleHover(false)">
+  
+      <div class="d-flex justify-content-center align-items-center" style="width: 160px; height: 130px;" >
+      
+        <i class="far fa-calendar-alt " [ngClass]="{'animate__animated animate__flipInX': isHovered}"  style="font-size: 60px; opacity: 0.89; color: white;"></i>
+
+        <div class="separator"></div>
+        
+        <div class="d-flex align-items-center" [ngClass]="{'animate__animated animate__flipInX': isHovered}" >
+          <span style="color: white; opacity: 0.89; ">Nova alarm</span>
+        </div>
+      
+      </div>
+    
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt-1" (mouseover)="toggleHover2(true)" (mouseout)="toggleHover2(false)">
+
+    <div class="d-flex shadow justify-content-center align-items-center customCards2" >
+  
+      <div class="d-flex ustify-content-center align-items-center" style="width: 160px; height: 130px;" >
+      
+        <i class="fas fa-list-ul" style="font-size: 60px; opacity: 0.89; color: white;" [ngClass]="{'animate__animated animate__flipInX': isHovered2}"></i>
+
+        <div class="separator"></div>
+        
+        <div class="d-flex align-items-center " [ngClass]="{'animate__animated animate__flipInX': isHovered2}">
+          <span style="color: white; opacity: 0.89; ">Lista</span>
+        </div>
+      
+      </div>
+    
+    </div>
+  </div>
+
+  
+ 
+</div>
+
+
+<div class="row mt-5">
+    <div class="col-lg-12">
+       
+        <div class="card" style="padding: 12px; padding-top: 20px;">
+
+          <div class="customTHead w-100 shadow"></div>
+
+            <table datatable class="row-border hover font" dt-options="dtOptions" style="font-size: 0.9em;">
+
+                <thead class="">
+                    <tr >
+                        <th>Nome</th>
+                        <th>Endereço de email</th>
+                        <th>Descrição</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a routerLink="/dashboard/editar-usuario/1"> Pedro Oliveira </a></td>
+                        <td>pedro@example.com</td>
+                        <td>A carteira de motorista vence</td>
+                        <td>23 de Janeiro de 2023</td>
+                    </tr>
+
+                    <tr>
+                      <td><a routerLink="/dashboard/editar-usuario/1">Pedro Oliveira</a></td>
+                      <td>pedro@example.com</td>
+                      <td>O prazo de validade da minha habilitação está chegando ao fim</td>
+                      <td>5 de Novembro de 2023</td>
+                    </tr>
+                    <tr>
+                      <td><a routerLink="/dashboard/editar-usuario/2">Ana Silva</a></td>
+                      <td>ana@example.com</td>
+                      <td>Aniversário</td>
+                      <td>14 de Março  de 2023</td>
+                    </tr>
+                    <tr>
+                      <td><a routerLink="/dashboard/editar-usuario/3">João Costa</a></td>
+                      <td>joao@example.com</td>
+                      <td>A carteira de motorista vence</td>
+                      <td>5 de Novembro de 2023</td>
+                    </tr>
+                    <tr>
+                      <td><a routerLink="/dashboard/editar-usuario/4">Fernanda Pereira</a></td>
+                      <td>fernanda@example.com</td>
+                      <td>A carteira de motorista vence</td>
+                      <td>5 de Novembro de 2023</td>
+                    </tr>
+                    <tr>
+                      <td><a routerLink="/dashboard/editar-usuario/5">Maria Santos</a></td>
+                      <td>maria@example.com</td>
+                      <td>A carteira de motorista vence</td>
+                      <td>5 de Novembro de 2023</td>
+
+                    </tr>
+
+                   
+                    <tr>
+                        <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
+                        <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
+                        <td style="visibility: hidden;"> zzzzzzzzzzz</td>
+                        <td style="visibility: hidden;"> zzzzzzzzzzz</td>
+                    </tr>
+
+                
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+ <!-- Modal Code -->
+ <div class="modal fade font" id="modalNova" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="font-size: 0.9em;" >
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content" style="background-color: rgb(234, 243, 250);">
+        <div class="modal-header">
+          <!-- <h5 class="modal-title" id="exampleModalCenterTitle"> Login </h5> -->
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+         
+          <form [formGroup]="myForm" class="needs-validation "  novalidate  [autocomplete]="false" >
+  
+            <div class="input-group mb-3" >
+              <label class="text w-100 "> Selecione o usuário </label>
+              <div class="input-group mb-3">
+                <input type="text" class="form-control"  formControlName="user" required [ngStyle]="( validField('user')) ? {'border':'1px solid red'}:{}" (blur)="onUserBlur()">
+                <div *ngIf="validField('user')" class="invalid" > Dado obrigatório </div>
+              </div>
+            </div>
+
+            <div class="input-group mb-3" >
+              <label class="text w-100"> Selecione um grupo </label>
+              <div class="input-group mb-3">
+                <input type="text" class="form-control"  formControlName="user" required [ngStyle]="( validField('user')) ? {'border':'1px solid red'}:{}">
+                <div *ngIf="validField('user')" class="invalid" > Dado obrigatório </div>
+              </div>
+            </div>
+
+            <div class="input-group mb-4" >
+              <label class="text w-100"> Nome do alarme </label>
+              <div class="input-group mb-3">
+                <input type="text" class="form-control"  formControlName="reminder" required [ngStyle]="( validField('reminder')) ? {'border':'1px solid red'}:{}">
+                <div *ngIf="validField('reminder')" class="invalid" > Dado obrigatório </div>
+              </div>
+            </div>
+
+            <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+              <div class="input-group date" >
+                <input type="text"
+                  placeholder="Data do alarme"
+                  class="form-control datetimepicker-input"
+                  bsDatepicker
+                  [bsValue]="bsValue"
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
+                  formControlName="alarmDate" required [ngStyle]="( validField('alarmDate')) ? {'border':'1px solid red'}:{}">
+                <div class="input-group-append"  >
+                  <div class="input-group-text"><i class="fa fa-calendar" style="color: rgb(0, 123, 255);"></i></div>
+                </div>
+              </div>
+              <div *ngIf="validField('alarmDate')" class="invalid" > Dado obrigatório </div>
+  
+            </div>
+
+            <div class="input-group mb-3 mt-5" >
+                  <label class="text w-100" > Antecedência do Lembrete </label>
+                  <select class="form-control select2 col-12 w-100" formControlName="reminderLeadTime" >
+                    <option selected="selected"></option>
+                    <option>No mesmo dia</option>
+                    <option>7 dias antes</option>
+                    <option>15 dias antes</option>
+                  </select>
+            </div>
+
+            <div class="custom-control custom-switch d-flex flex-column align-items-start mb-4" style="margin-left: 18px;">
+              <input type="checkbox" class="custom-control-input " id="customSwitch1" >
+              <label class="custom-control-label cursor" for="customSwitch1"> Excluir do alarme o usuário <b style="color: blue;">{{user}}</b> </label>
+            </div>
+  
+           
+          </form>
+  
+        </div>
+        <div class="modal-footer ">
+
+          <button type="button" class="btn btn-primary btn-block shadow mt-3"> Criar alarme</button>
+          <div class="d-flex flex-column align-items-end mb-3" style="margin-top: 30px;">
+       
+            <!-- <div >
+              <span class="mb-0" style="margin-right: 15px;"> <a href="register.html" class="text-center">  <i class="fas fa-window-close" style="margin-right: 2px;"></i>  Cancelar</a> </span>
+              <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fas fa-reply-all fa-flip-horizontal"></i>         
+                Reenviar</a> </span>
+              &nbsp; &nbsp;
+          </div>   -->
+         </div>
+        </div>
+  
+    
+     
+      </div>
+    </div>
+  </div>
+    
