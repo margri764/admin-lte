@@ -1,4 +1,4 @@
-<div class="login-page" style="background-image: url('../../../assets/background-1.jpg');" >
+<div class="login-page"  >
   <div class="login-box" *ngIf="showLogin">
 
     <!-- /.login-logo -->
@@ -30,10 +30,11 @@
             </div>
             <div *ngIf="validField('password')" class="invalid" > Dado obrigatório </div>
           </div>
-
-          <button type="button" class="btn btn-primary btn-block shadow"  data-toggle="modal" data-target="#modalCode" (click)="login()"> Aceitar</button>
+          <!-- data-toggle="modal" data-target="#modalCode" -->
+          <button type="button" class="btn btn-primary btn-block shadow" (click)="login()" > Aceitar</button>
          
         </form>
+        <!-- data-toggle="modal" data-target="#modalCode" -->
   
         <div class="d-flex flex-column align-items-end" style="margin-top: 30px;">
          
@@ -49,15 +50,16 @@
               </button>
             </div>
          </div>
+     
     
 
-      <!-- Modal -->
+      <!-- Modal contact us -->
       <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95;">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalCenterTitle"> Entre em contato conosco </h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <button type="button" #closebutton  class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -67,13 +69,13 @@
 
                 <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
                   <label class="text w-100"> Nome </label>
-                  <input type="text" class="form-control"  required [ngStyle]="( validField('name')) ? {'border':'1px solid red'}:{}" formControlName="name">
-                  <div *ngIf="validField('name')" class="invalid" > Dado obrigatório </div>
+                  <input type="text" class="form-control"  required [ngStyle]="( validField('fullName')) ? {'border':'1px solid red'}:{}" formControlName="fullName">
+                  <div *ngIf="validField('fullName')" class="invalid" > Dado obrigatório </div>
                 </div>
 
                 <div class="input-group mb-3 mt-1" >
                   <label class="text w-100" > Ordem </label>
-                  <select class="form-control select2 col-12 w-100" formControlName="ordem" >
+                  <select class="form-control select2 col-12 w-100" formControlName="headquarter" >
                     <option selected="selected"></option>
                     <option>Ordem primeira</option>
                     <option>Ordem segunda</option>
@@ -84,8 +86,8 @@
 
                 <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
                   <label class="text w-100"> Digite seu email</label>
-                  <input type="email" class="form-control"  required [ngStyle]="( validField('email2')) ? {'border':'1px solid red'}:{}" formControlName="email2">
-                  <div *ngIf="validField('email2')" class="invalid" > Dado obrigatório </div>
+                  <input type="email" class="form-control"  required [ngStyle]="( validField('userEmail')) ? {'border':'1px solid red'}:{}" formControlName="userEmail">
+                  <div *ngIf="validField('userEmail')" class="invalid" > Dado obrigatório </div>
                 </div>
 
                 <!-- <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
@@ -101,19 +103,20 @@
 
                 </div>
       
-               
+                <!-- <div class="custom-control custom-switch d-flex flex-column align-items-start mb-4" style="margin-left: 18px;">
+                  <input type="checkbox" class="custom-control-input " id="customSwitch1" formControlName="sendEmail" >
+                  <label class="custom-control-label cursor" for="customSwitch1"> Envie-me uma cópia para o meu email </label>
+                </div>
+                -->
               </form>
 
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary btn-block shadow"> Enviar</button>
+              <button type="button" class="btn btn-primary btn-block shadow" (click)="contactUs()" *ngIf="!isSending"> Enviar</button>
+              <button type="button" class="btn btn-primary btn-block shadow"  *ngIf="isSending"> Enviando...</button>
 
             </div>
 
-            <div class="custom-control custom-switch d-flex flex-column align-items-start mb-4" style="margin-left: 18px;">
-              <input type="checkbox" class="custom-control-input " id="customSwitch1" >
-              <label class="custom-control-label cursor" for="customSwitch1"> Envie-me uma cópia para o meu email </label>
-            </div>
           </div>
         </div>
       </div>
@@ -176,4 +179,86 @@
     </div>
   </div>
 </div>
+  
+
+ <!-- Modal Code -->
+ <div class="modal fade" id="modalCode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content" style="background-color: rgb(234, 243, 250, 0.9);">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="exampleModalCenterTitle"> Login </h5> -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       
+        <form [formGroup]="myFormCode" class="needs-validation"  novalidate  [autocomplete]="false">
+
+          <div class="alert alert-success alert-dismissible" style="font-size: 0.9em;">
+            <h5><i class="icon fas fa-check"></i> Código de acceso enviado!</h5>
+             Um NOVO código de acceso foi enviado para o seu e-mail. 
+            <p> (Cada vez que for acessar a página, será enviado um código diferente). </p>
+          </div>
+
+          <div class="input-group mb-3" >
+            <label class="text w-100"> Insira este código no quadro abaixo para continuar </label>
+              <textarea class="form-control " formControlName="code" [ngStyle]="( validField('code')) ? {'border':'1px solid red'}:{}" ></textarea>
+            <div *ngIf="validField('code')" class="invalid" > Dado obrigatório </div>
+
+          </div>
+
+         
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-block shadow"> Continuar</button>
+        <div class="d-flex flex-column align-items-end mb-3" style="margin-top: 30px;">
+     
+          <div >
+            <span class="mb-0" style="margin-right: 15px;"> <a href="register.html" class="text-center">  <i class="fas fa-window-close" style="margin-right: 2px;"></i>  Cancelar</a> </span>
+            <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fas fa-reply-all fa-flip-horizontal"></i>         
+              Reenviar</a> </span>
+            &nbsp; &nbsp;
+        </div>  
+       </div>
+      </div>
+
+  
+   
+    </div>
+  </div>
+</div>
+
+
+<!-- toasts -->
+  <div id="custom-toast" class="alert alert-warning alert-dismissible animate__animated animate__fadeIn font" *ngIf="noVerified" style="width: 380px; font-size: 0.9em;">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Email não verificado!</h5>
+    Enviamos um email de confirmação. Precisa que enviemos novamente?
+    <p class="cursor mt-1" style="color: blue;" (click)="reSendEmailPassword()">Reenviar</p>
+  </div>
+
+  <div id="custom-toast" class="alert alert-warning alert-dismissible animate__animated animate__fadeIn font" *ngIf="noRole" style="width: 380px; font-size: 0.9em;">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Usuário sem função!</h5>
+    Nossos administradores estão em processo de atribuir uma função a você.
+    <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#exampleModalCenter">Entre em contato conosco</p>
+  </div>
+
+  <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font" *ngIf="successContactUs" style="width: 380px; font-size: 0.9em;">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Sucesso!</h5>
+    Em breve entraremos em contato
+    <!-- <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#exampleModalCenter">Entre em contato conosco</p> -->
+  </div>
+
+
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div> 
+
   
