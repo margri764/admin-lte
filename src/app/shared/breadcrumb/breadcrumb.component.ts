@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, NavigationEnd, Router, RouterEvent } from '@angular/router';
-import { filter, map, pairwise, take } from 'rxjs';
+import { distinctUntilChanged, filter, map, pairwise, take } from 'rxjs';
 import { __values } from 'tslib';
+import { AppState } from '../redux/app.reducer';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -16,14 +18,18 @@ export class BreadcrumbComponent implements OnInit {
   alarmes : boolean = false;
   usuarios : boolean = false;
   clientes : boolean = false;
+  user:any;
+  
 
   constructor(
                 private router : Router,
+           
+  //               private errorService : ErrorService,
+  //               private localStorageService : LocalstorageService,
+  //               private cookieService : CookieService,
+  //               private authService : AuthService,
   ) { 
   
-
-   
-
     this.router.events.pipe(
       filter(event => event instanceof ActivationEnd)
     ).subscribe((event) => {
@@ -36,14 +42,13 @@ export class BreadcrumbComponent implements OnInit {
         if(title !== undefined){
           this.title = activationEndEvent.snapshot.data['title'];
         }
-
-
-      });
-  
+    });
     
   }
 
   ngOnInit(): void {
+
+  
 
   }
 

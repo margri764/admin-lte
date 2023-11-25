@@ -12,13 +12,13 @@
         <form [formGroup]="myForm" class="needs-validation"  novalidate>
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
-            <input type="text" class="form-control" placeholder="Nome" formControlName="firstName" required [ngStyle]="( validField('firstName')) ? {'border':'1px solid red'}:{}" >
+            <input type="text" class="form-control" placeholder="Nome" formControlName="name" required [ngStyle]="( validField('name')) ? {'border':'1px solid red'}:{}" >
             <div class="input-group-append">
               <div class="input-group-text">
                 <i class="fa fa-user" style="color: rgb(0, 123, 255);"></i>
               </div>
             </div>
-            <div *ngIf="validField('firstName')" class="invalid" > Dado obrigatório </div>
+            <div *ngIf="validField('name')" class="invalid" > Dado obrigatório </div>
           </div>
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
@@ -61,7 +61,6 @@
 
           </div>
           
-          
 
          <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Telefone" formControlName="phone" required [ngStyle]="( validField('phone')) ? {'border':'1px solid red'}:{}">
@@ -77,23 +76,22 @@
           <!-- sede -->
         <p class="login-box-msg"> - Sede -</p>
 
-
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Nome da sede" formControlName="headquartersName" required [ngStyle]="( validField('headquartersName')) ? {'border':'1px solid red'}:{}">
+            <input type="text" class="form-control" placeholder="Nome da sede" formControlName="headquarter" required [ngStyle]="( validField('headquarter')) ? {'border':'1px solid red'}:{}">
         
-            <div *ngIf="validField('headquartersName')" class="invalid" > Dado obrigatório </div>
+            <div *ngIf="validField('headquarter')" class="invalid" > Dado obrigatório </div>
 
           </div>
 
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Cidade da sede" formControlName="city" required [ngStyle]="( validField('city')) ? {'border':'1px solid red'}:{}">
-            <div *ngIf="validField('city')" class="invalid" > Dado obrigatório </div>
+            <input type="text" class="form-control" placeholder="Cidade da sede" formControlName="headquarterCity" required [ngStyle]="( validField('headquarterCity')) ? {'border':'1px solid red'}:{}">
+            <div *ngIf="validField('headquarterCity')" class="invalid" > Dado obrigatório </div>
 
           </div>
 
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="País da sede" formControlName="country" required [ngStyle]="( validField('country')) ? {'border':'1px solid red'}:{}">
-            <div *ngIf="validField('country')" class="invalid" > Dado obrigatório </div>
+            <input type="text" class="form-control" placeholder="País da sede" formControlName="headquarterCountry" required [ngStyle]="( validField('headquarterCountry')) ? {'border':'1px solid red'}:{}">
+            <div *ngIf="validField('headquarterCountry')" class="invalid" > Dado obrigatório </div>
           </div>
  
 
@@ -116,3 +114,22 @@
     <!-- /.card -->
   </div>
 </div>  
+
+
+  <!-- success contact-us -->
+  <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font" *ngIf="!succesSignup" style="width: 380px; font-size: 0.9em;">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Sucesso!</h5>
+    Enviamos um e-mail de verificação, por favor, acesse o link.
+    <!-- <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#exampleModalCenter">Entre em contato conosco</p> -->
+  </div>
+
+
+  
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div> 
+
+  

@@ -42,10 +42,24 @@ export class AuthService {
                           this.cookieService.set('token',token);
                           this.user = user;
                           this.store.dispatch(authActions.setUser({user}));
-                          const userToLS = { name: user.nmae, lastName:user.lastName};
+                          const userToLS = { name: user.name, lastName:user.lastName, role:user.role};
                           this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
                       }           
-                    console.log("from login Service: ",token);
+                    
+                }  
+      ),            
+      map( res => {console.log("from login Service: ",res);return res} )
+    )
+  }
+
+  signUp(body:User){
+    
+    return this.http.post<any>(`${this.baseUrl}api/auth/signUp`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                     
+                    console.log("from signUp Service: ",res);
                 }  
       ),            
       map( res => res )
@@ -74,6 +88,32 @@ export class AuthService {
     .pipe(
       tap( ( res) =>{
                     console.log("from contactUs service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+  validateEmail(body: any){
+
+    return this.http.post<any>(`${this.baseUrl}api/auth/validateEmail`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from validateEmail service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+  adminCompleteRegister(email:string, role:string){
+
+    return this.http.post<any>(`${this.baseUrl}api/auth/adminCompleteRegister?role=${role}`, email) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from adminCompleteRegister service: ",res);
                 }  
       ),            
       map( res => res )

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ErrorService } from '../services/error/error.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+              private errorService : ErrorService
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  logout(){
+    setTimeout(()=>{ this.errorService.logout(); },600)
+    
   }
 
 }

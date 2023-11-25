@@ -12,6 +12,28 @@ body .bs-datepicker-container .bs-datepicker-head {
     margin-left: 5px;
   }
 
+  #custom-toast {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    // opacity: 0.87 !important;
+  }
+  
+
+  @media (max-width: 576px) {
+  
+    #custom-toast {
+      position: fixed;
+      bottom: 0px;
+      right: 0px;
+      padding: 15px;
+      border-radius: 10px;
+      transform: scale(0.94);
+    }
+  }
+
   @media (min-width: 576px) {
     .register-box {
       width: 500px;

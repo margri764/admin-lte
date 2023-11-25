@@ -32,15 +32,7 @@ export class DashboardComponent implements OnInit {
   this.errorService.closeIsLoading$.subscribe((emmited)=>{if(emmited){this.isLoading = false}})
 
     
-  this.store.select('auth')
-  .pipe(
-  filter( ({user})=>  user != null && user != undefined),
-  distinctUntilChanged((prev, curr) => prev.user === curr.user)
-  ).subscribe(
-  ({user})=>{
-  this.user = { name:user?.name, lastName: user?.lastName} ;
-  this.isLoading = false;
-  })
+  
   }
 
 }

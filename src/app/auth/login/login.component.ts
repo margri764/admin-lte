@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { saveDataLS, saveDataSS } from 'src/app/shared/storage';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ProgressComponent } from 'src/app/pages/progress/progress.component';
 
 
 @Component({
@@ -14,6 +16,7 @@ import { ErrorService } from 'src/app/shared/services/error/error.service';
 export class LoginComponent implements OnInit {
 
   @ViewChild('closebutton') closebutton! : ElementRef;
+  @ViewChild('closeNoVerifiedEmail') closeNoVerifiedEmail! : ElementRef;
 
   myForm!: FormGroup;
   myForm2!: FormGroup;
@@ -25,28 +28,26 @@ export class LoginComponent implements OnInit {
   noRole : boolean = false;
   successContactUs : boolean = false;
   isSending : boolean = false;
+  successResendPass : boolean = false;
 
 
   constructor(
               private fb : FormBuilder,
               private authService : AuthService,
               private router : Router,
-              private errorService : ErrorService
+              private errorService : ErrorService,
+              private modalService: NgbModal
   ) {
-
-  
      
    }
 
-    
 
   ngOnInit(): void {
 
 
-
-
-
     this.errorService.noVerifiedError$.subscribe( (emmited)=>{ if(emmited){  setTimeout(()=>{  this.isLoading = false; this.noVerified = true; },1000)}  })
+
+    // si tiene verficado el email pero falta que se le asigne un role. Muestro Toast cona aviso("Usuário sem função")
     this.errorService.noRoleError$.subscribe( (emmited)=>{ if(emmited){  setTimeout(()=>{  this.isLoading = false; this.noRole = true; },1000)}  })
 
     this.myForm = this.fb.group({
@@ -67,12 +68,10 @@ export class LoginComponent implements OnInit {
       code:     [ '', [Validators.required] ],
   
     });
-    
 
   }
 
   login(){
-
 
     if ( this.myForm.invalid ) {
       this.myForm.markAllAsTouched();
@@ -92,16 +91,17 @@ export class LoginComponent implements OnInit {
           //         saveDataSS('logged', true);
           //       }
 
-                this.isLoading=false;
-                this.router.navigateByUrl('/home');}});
+                this.isLoading = false;
+                this.router.navigateByUrl('dashboard');}
+              });
 
     // this.router.navigateByUrl('/dashboard')
     
   }
 
+  // usario no verificado, toast con reenvio de email con password
   reSendEmailPassword(){
     const email = this.myForm.get('email')?.value;
-    console.log(email);
     if(email === undefined || email === '' || email === null){
       return
     }
@@ -110,11 +110,14 @@ export class LoginComponent implements OnInit {
       ({success})=>{
         if(success){
           this.isLoading = false;
+          this.successResendPass = true;
+          this.noVerified = false;
         }
       })
 
   }
 
+//entre em contato con nosotros
   contactUs(){
     this.isSending= true;
     this.authService.contactUs(this.myForm2.value).subscribe( 
@@ -122,7 +125,7 @@ export class LoginComponent implements OnInit {
         if(success){
 
           setTimeout(()=>{
-            // this.isSending = false;
+            // asi cierro el modal
             this.closebutton.nativeElement.click();
           },1000)
 
@@ -140,11 +143,15 @@ export class LoginComponent implements OnInit {
 
   }
 
-  validField(field: string) {
+  //reinicio el boolea por si se cancela el toast
+  closeToast(){
+    this.noRole = false;
+   }
+
+   validField(field: string) {
     const control = this.myForm.get(field);
     return control && control.errors && control.touched;
   }
-
   
 
 }

@@ -14,7 +14,8 @@ export class User {
         public phone: string,
         public validateEmail: string,
         public password: string,
-        public status: number
+        public status: number,
+        public role: string,
         )
         {}
   

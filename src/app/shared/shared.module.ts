@@ -31,6 +31,8 @@ import { StoreModule } from '@ngrx/store';
     HomeComponent,
     FooterComponent,
     BreadcrumbComponent,
+    ValidateEmailComponent
+
   ],
   imports: [
     CommonModule,

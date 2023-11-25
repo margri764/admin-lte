@@ -28,18 +28,20 @@ export class AppComponent {
 
 ){
 
-const token = this.cookieService.get('token');
-const userLS = getDataLS('user');
-const logged = getDataLS("logged"); 
-const loggedSS = getDataSS("logged"); 
+  // ojo con el verificar-email!! xq sino cuando entro me redirecciona al login
 
-if(token !== '' && userLS === undefined){
-this.router.navigateByUrl('/login');
-}
+// const token = this.cookieService.get('token');
+// const userLS = getDataLS('user');
+// const logged = getDataLS("logged"); 
+// const loggedSS = getDataSS("logged"); 
 
-if(logged === undefined && loggedSS === undefined ){
-this.router.navigateByUrl('/login');
-}
+// if(token !== '' && userLS === undefined){
+// this.router.navigateByUrl('/login');
+// }
+
+// if(logged === undefined && loggedSS === undefined ){
+// this.router.navigateByUrl('/login');
+// }
 
 
 }

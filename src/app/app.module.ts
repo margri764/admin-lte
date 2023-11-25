@@ -33,7 +33,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     AppComponent,
     NoPageFoundComponent
 
-
   ],
   imports: [
     BrowserModule,
