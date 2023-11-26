@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { User } from 'src/app/shared/models/user.models';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import * as moment from 'moment';
+import { ErrorService } from 'src/app/shared/services/error/error.service';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -22,22 +24,20 @@ export class RegisterComponent implements OnInit {
 
   constructor(
               private fb : FormBuilder,
-              private authService : AuthService
+              private authService : AuthService,
+              private errorService : ErrorService
   ) {
 
-      // Establecer la fecha máxima como 50 años después de la fecha actual
       this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
-
-      // Establecer la fecha mínima como 100 años antes de la fecha actual
       this.minDate.setFullYear(this.bsValue.getFullYear() - 100);
-      
-      // Inicializar bsRangeValue con la fecha actual y la fecha máxima
       this.bsRangeValue = [this.bsValue, this.maxDate];
         
    }
 
   ngOnInit(): void {
 
+    this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
+    
     this.myForm = this.fb.group({
       name:     [ '', [Validators.required] ],
       lastName:  [ '', [Validators.required]],
@@ -48,12 +48,27 @@ export class RegisterComponent implements OnInit {
       headquarterCity:  [ '', [Validators.required]],
       headquarterCountry:  [ '', [Validators.required]],
     });
+
+    // this.myForm = this.fb.group({
+    //   name:     [ 'marcelo', [Validators.required] ],
+    //   lastName:  [ 'griotti', [Validators.required]],
+    //   email:  [ 'margri764@gmail.com', [Validators.required]],
+    //   birthday:  [ '2023-11-11', [Validators.required]],
+    //   phone:  [ 'dfdf', [Validators.required]],
+    //   headquarter:  [ 'aa', [Validators.required]],
+    //   headquarterCity:  [ 'bb', [Validators.required]],
+    //   headquarterCountry:  [ 'cc', [Validators.required]],
+    // });
+    
     
 
   }
 
   register(){
-    this.submitted = true;
+
+    this.errorService.close$.next(true);
+    this.errorService.close$.next(false);
+    
     if ( this.myForm.invalid ) {
       this.myForm.markAllAsTouched();
       return;
@@ -72,7 +87,8 @@ export class RegisterComponent implements OnInit {
     this.authService.signUp(body).subscribe( 
       ( {success} )=>{
           if(success){
-              this.isLoading = false;
+            setTimeout(()=>{ this.isLoading = false; },700)
+              
               this.succesSignup = true;
           }
     })

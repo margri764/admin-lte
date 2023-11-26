@@ -116,20 +116,20 @@
 </div>  
 
 
-  <!-- success contact-us -->
-  <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font" *ngIf="!succesSignup" style="width: 380px; font-size: 0.9em;">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Sucesso!</h5>
-    Enviamos um e-mail de verificação, por favor, acesse o link.
-    <!-- <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#exampleModalCenter">Entre em contato conosco</p> -->
+<!-- success contact-us -->
+<div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font" *ngIf="succesSignup" >
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <h5 style="font-size: 1.2em;"><i class="icon fas fa-check"></i> Sucesso!</h5>
+  Enviamos um e-mail de verificação, por favor, acesse o link.
+  <!-- <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#exampleModalCenter">Entre em contato conosco</p> -->
+</div>
+
+
+
+<div class="loading-overlay" *ngIf="isLoading">
+  <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >
+    <span class="sr-only">Loading...</span>
   </div>
-
-
-  
-  <div class="loading-overlay" *ngIf="isLoading">
-    <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >
-      <span class="sr-only">Loading...</span>
-    </div>
-  </div> 
+</div> 
 
   

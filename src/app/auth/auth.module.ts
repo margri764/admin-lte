@@ -11,6 +11,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthRoutingModule } from './auth-routing';
+import { ResendPasswordComponent } from './resend-password/resend-password.component';
 
 
 
@@ -18,6 +19,7 @@ import { AuthRoutingModule } from './auth-routing';
   declarations: [
     LoginComponent,
     RegisterComponent,
+    ResendPasswordComponent,
   ],
   exports: [
     LoginComponent,

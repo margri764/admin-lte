@@ -61,7 +61,6 @@ export class BreadcrumbComponent implements OnInit {
   //             { path: 'novo-cliente',  component: NewClientComponent , data:{ title:"Novo Cliente"}},
 
   changeIcons( url : string){
-console.log(url);
     switch (url) {
 
       

@@ -18,7 +18,8 @@ body .bs-datepicker-container .bs-datepicker-head {
     right: 20px;
     padding: 15px;
     border-radius: 10px;
-    // opacity: 0.87 !important;
+    width: 350px; 
+    font-size: 0.85em;
   }
   
 
@@ -27,10 +28,11 @@ body .bs-datepicker-container .bs-datepicker-head {
     #custom-toast {
       position: fixed;
       bottom: 0px;
-      right: 0px;
+      left: 50%;
+      transform: translateX(-50%);
       padding: 15px;
       border-radius: 10px;
-      transform: scale(0.94);
+      width: 350px; 
     }
   }
 

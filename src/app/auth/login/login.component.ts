@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { saveDataLS, saveDataSS } from 'src/app/shared/storage';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ProgressComponent } from 'src/app/pages/progress/progress.component';
+import { delay } from 'rxjs';
 
 
 @Component({
@@ -21,14 +20,19 @@ export class LoginComponent implements OnInit {
   myForm!: FormGroup;
   myForm2!: FormGroup;
   myFormCode!: FormGroup;
+  myFormResendPass!: FormGroup;
+  myFormResend!: FormGroup;
   submitted : boolean = false;
   showLogin: boolean = true;
-  noVerified : boolean = false;
   isLoading : boolean = false;
+  isSending : boolean = false;
+
+  noVerified : boolean = false;
   noRole : boolean = false;
   successContactUs : boolean = false;
-  isSending : boolean = false;
   successResendPass : boolean = false;
+  showResendPass : boolean = false;
+  successResendVerify : boolean = false;
 
 
   constructor(
@@ -36,7 +40,6 @@ export class LoginComponent implements OnInit {
               private authService : AuthService,
               private router : Router,
               private errorService : ErrorService,
-              private modalService: NgbModal
   ) {
      
    }
@@ -44,8 +47,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
 
-    this.errorService.noVerifiedError$.subscribe( (emmited)=>{ if(emmited){  setTimeout(()=>{  this.isLoading = false; this.noVerified = true; },1000)}  })
+
+    this.errorService.status400VerifyError$.pipe(delay(1000)).subscribe( (emmited)=>{ if(emmited){ this.isLoading = false; this.noVerified = true; }  })
+
 
     // si tiene verficado el email pero falta que se le asigne un role. Muestro Toast cona aviso("Usuário sem função")
     this.errorService.noRoleError$.subscribe( (emmited)=>{ if(emmited){  setTimeout(()=>{  this.isLoading = false; this.noRole = true; },1000)}  })
@@ -64,14 +70,30 @@ export class LoginComponent implements OnInit {
   
     });
 
+    
+    this.myFormResendPass = this.fb.group({
+       resendEmail:  [ '', [Validators.required] ],
+  
+    });
+
     this.myFormCode = this.fb.group({
       code:     [ '', [Validators.required] ],
   
     });
 
+    this.myFormResend = this.fb.group({
+      resendEmail:     [ '', [Validators.required] ],
+  
+    });
+
+
   }
 
   login(){
+
+   this.changeModalsStates(),
+   this.errorService.close$.next(true);
+   this.errorService.close$.next(false);
 
     if ( this.myForm.invalid ) {
       this.myForm.markAllAsTouched();
@@ -97,6 +119,39 @@ export class LoginComponent implements OnInit {
 
     // this.router.navigateByUrl('/dashboard')
     
+  }
+
+  // por si pide una reenvio de contraseña y todavia no esta verficado  
+verifyEmail(){
+  
+  this.errorService.close$.next(true);
+  this.errorService.close$.next(false);
+
+  if ( this.myFormResend.invalid ) {
+    this.myFormResend.markAllAsTouched();
+    return
+  }
+  this.isLoading = true
+  const email = this.myFormResend.get("resendEmail")?.value;
+    
+  this.authService.verifyEmail(email).subscribe(
+    ( {success} )=>{
+      if(success){
+        setTimeout(()=>{ 
+          this.isLoading = false; 
+          this.successResendVerify = true 
+          this.noVerified = false;
+          this.successResendPass = false;
+          this.showResendPass = false;
+        },700);
+      }
+    })
+  }
+
+
+
+  openToastResend(){
+    this.showResendPass = true;
   }
 
   // usario no verificado, toast con reenvio de email con password
@@ -148,10 +203,25 @@ export class LoginComponent implements OnInit {
     this.noRole = false;
    }
 
+   changeModalsStates(){
+      this.noVerified = false;
+      this.noRole = false;
+      this.successContactUs = false;
+      this.successResendPass = false;
+      this.showResendPass = false;
+   }
+
    validField(field: string) {
     const control = this.myForm.get(field);
     return control && control.errors && control.touched;
   }
+
+  
+  validFieldResend(field: string) {
+    const control = this.myFormResend.get(field);
+    return control && control.errors && control.touched;
+  }
+  
   
 
 }

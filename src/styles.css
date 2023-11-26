@@ -90,3 +90,14 @@ body .bs-datepicker-container .bs-datepicker-head {
   align-items: center;
   z-index: 999;
 }
+
+.fs-8{
+  font-size: 0.8em;
+}
+
+.fs-9{
+  font-size: 0.9em;
+}
+.fs-10{
+  font-size: 1em;
+}

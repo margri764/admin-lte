@@ -19,8 +19,10 @@
   right: 20px;
   padding: 15px;
   border-radius: 10px;
-  // opacity: 0.87 !important;
+  width: 380px;
 }
+
+
 
 
 @media (max-width: 576px) {
@@ -31,8 +33,10 @@
     right: 0px;
     padding: 15px;
     border-radius: 10px;
-    transform: scale(0.94);
+    left: 50%;
+    transform: translateX(-50%);
   }
+
 }
 
 

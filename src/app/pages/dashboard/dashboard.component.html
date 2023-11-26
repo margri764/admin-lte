@@ -66,7 +66,7 @@
         <h3 class="card-title">Pedidos de registro
         </h3>
         <div class="card-tools float-right">
-            <small class="badge badge-danger">2</small>
+            <small class="badge badge-danger">{{reqLength}}</small>
         </div>
       </div>
       <!-- /.card-header -->
@@ -77,27 +77,17 @@
               <th style="width: 10px">#</th>
               <th>Nome</th>
               <th>Data</th>
-              <!-- <th style="width: 40px">Label</th> -->
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td>Marcelo Griotti</td>
-              <td>
-                11/09/2023
-              </td>
+            <tr *ngFor="let request of reqRegister; let i = index" [routerLink]="['editar-usuario/', request.iduser]" class="cursor">
+              <td>{{ i + 1 }}</td>
+              <td>{{ request.name }} {{ request.lastName }}</td>
+              <td>{{ request.date | date }}</td>
             </tr>
-            <tr>
-              <td></td>
-              <td>Pedro Alvarado</td>
-              <td>
-                17/09/2023
-              </td>
-            </tr>
-           
           </tbody>
         </table>
+        
       </div>
       <!-- /.card-body -->
     </div>

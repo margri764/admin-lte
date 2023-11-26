@@ -1,9 +1,9 @@
 
-<div class="row mt-4"  >
+<div class="row mt-4 font fs-10"  >
 
-  <div class="col-sm-6 col-lg-12">
+  <div class="col-12">
 
-      <div class="card card-primary card-outline card-outline-tabs ">
+      <div class="card card-primary card-outline card-outline-tabs fs-9">
         <div class="card-header p-0 border-bottom-0">
           <div class="ml-auto">
               <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
@@ -34,14 +34,14 @@
               <div class="row">
                   <div class="col-8">
 
-                          <div class="row">
+                      <form [formGroup]="myForm" class="needs-validation mt-1"  novalidate  [autocomplete]="false" >
 
+                          <div class="row">
+                          
                               <div class="input-group mt-3 col-4"  >
                                 <label class="text w-100" > Ordem </label>
                                 <select class="form-control select2 " formControlName="ordem" >
-                                  <option selected="selected"></option>
-                                  <option>Alaska</option>
-                                  <option>California</option>
+                                  <option *ngFor="let ord of ordem" [value]="ord"> {{ user.ordem }} </option>
                                 </select>
                               </div>      
                           
@@ -65,7 +65,7 @@
 
                             <div class="input-group mb-3 mt-3 col-sm-6">
                               <label class="text w-100" > Data de nascimineto  </label>
-                              <input type="text" class="form-control"  required  formControlName="date">
+                              <input type="text" class="form-control"  required  formControlName="birthday">
                             </div>
                           </div>
 
@@ -83,73 +83,47 @@
 
                               <div class="input-group mb-3 mt-3 col-6">
                                 <label class="text w-100" > Residência atual </label>
-                                <input type="email" class="form-control"  required  formControlName="actualAdress">
+                                <input type="email" class="form-control"  required  formControlName="actualAddress">
                               </div>
 
                           </div>
 
-                          <div class="row mt-3">
-                            <div style="border-top: 2px solid rgb(203, 203, 203); width: 100%; padding-top: 5px;"><p>Sede</p></div>
+                          <div class="row mt-3 font">
+                            <div style="border-top: 2px solid rgb(203, 203, 203); width: 100%; padding-top: 5px; margin-left: 10px;">
+                              <p>Sede</p>
+                            </div>
 
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100" > País da sede </label>
-                                <select class="form-control select2 col-12 w-100" formControlName="country" >
-                                  <option selected="selected"></option>
-                                  <option>Alaska</option>
-                                  <option>California</option>
-                                  <option>Delaware</option>
-                                  <option>Tennessee</option>
-                                  <option>Texas</option>
-                                  <option>Washington</option>
-                                </select>
+                                <input type="text" class="form-control"  required  formControlName="headquarterCountry">
                               </div>
 
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100"> Cidade da sede </label>
-                                <select class="form-control select2 col-12 w-100" formControlName="country" >
-                                  <option selected="selected"></option>
-                                  <option>Alaska</option>
-                                  <option>California</option>
-                                  <option>Delaware</option>
-                                  <option>Tennessee</option>
-                                  <option>Texas</option>
-                                  <option>Washington</option>
-                                </select>
+                                  <input type="text" class="form-control"  required  formControlName="headquarterCity">
                               </div>
-                          </div>
+                              </div>
                                             
-                          <div class="row mt-3">
+                          <div class="row mt-3" >
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100"> Nome da sede </label>
-                                <select class="form-control select2 col-12 w-100" formControlName="country" >
-                                  <option selected="selected"></option>
-                                  <option>Alaska</option>
-                                  <option>California</option>
-                                  <option>Delaware</option>
-                                  <option>Tennessee</option>
-                                  <option>Texas</option>
-                                  <option>Washington</option>
-                                </select>
+                                <input type="text" class="form-control"  required  formControlName="headquarterName">
                               </div>
+                            </div>
 
-                        
-
-                        
-
+                              <div class="input-group mb-3 mt-3" >
+                                <button type="button" class="btn btn-primary shadow fs-10"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
+                                <button type="button" class="btn btn-danger shadow fs-10"  style="margin-left: 30px;"> <i class="fas fa-trash"></i> &nbsp; Excluir</button>
+                              </div>
+                              
                               <!-- <div class="input-group mb-3 mt-3" >
                                 <label style="margin-left: 0px;">Condição</label>
                                 <div class="" style="margin-left: 30px;">
                                     <input type="checkbox"  checked data-bootstrap-switch data-off-color="danger" data-on-color="success"   >
                                 </div>
                               </div> -->
-
                                   
-                              <div class="input-group mb-3 mt-3" >
-                                <button type="button" class="btn btn-primary shadow" style="width: 110px;" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
-                                <button type="button" class="btn btn-danger shadow"  style="width: 100px; margin-left: 30px;"> <i class="fas fa-trash"></i> &nbsp; Excluir</button>
-                              </div>
-                                  
-                          </div>
+                      </form>    
                                   
                   </div>
                   
@@ -271,7 +245,7 @@
                   <!-- Primer radio (arriba) -->
                   <div class="form-group clearfix">
                     <div class="icheck-success d-inline">
-                      <input type="radio" name="r3" checked id="radioSuccess1">
+                      <input type="radio" name="r3"  id="radioSuccess1" (change)="handleRoleChange('admin')">
                       <label for="radioSuccess1"> Administrador </label>
                     </div>
                   </div>
@@ -283,8 +257,8 @@
                   <!-- Segundo radio (abajo) -->
                   <div class="form-group clearfix">
                     <div class="icheck-success d-inline">
-                      <input type="radio" name="r3" id="radioSuccess2">
-                      <label for="radioSuccess2"> Editor </label>
+                      <input type="radio" name="r3" id="radioSuccess2" (change)="handleRoleChange('user')">
+                      <label for="radioSuccess2"> Usúario </label>
                     </div>
                   </div>
                 </div>

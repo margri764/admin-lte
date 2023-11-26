@@ -8,6 +8,16 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import * as authActions from 'src/app/shared/redux/auth.actions'
 
+interface response  {
+  emmited: boolean,
+  msg: string
+}
+
+interface response401Credentials  {
+  emmited: boolean,
+  msg: string,
+  remainingAttempts: number
+}
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +27,16 @@ export class ErrorService {
   private baseUrl = environment.baseUrl;
   phone : boolean = false;
   
-  close$ = new BehaviorSubject<boolean>(false) //quiero a ce cierren todos los modals cuando se produce un error de servidor 
+  close$ = new BehaviorSubject<boolean>(false) ;//quiero a ce cierren todos los modals cuando se produce un error de servidor 
   authDelTempOrder$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   closeIsLoading$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   noVerifiedError$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   noRoleError$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   labelInvalidCredential$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  status400Error$ : EventEmitter<response> = new EventEmitter<response>; 
+  status429Error$ : EventEmitter<response> = new EventEmitter<response>; 
+  status400VerifyError$ : EventEmitter<response> = new EventEmitter<response>; 
+  status401Credentials$ : EventEmitter<response401Credentials> = new EventEmitter<response401Credentials>; 
   
   constructor(
               private store : Store <AppState>,
@@ -53,6 +67,36 @@ export class ErrorService {
       return of(null);
     }
 
+    if (error.status === 401 && error.error.message === "Credenciais incorretas") {
+       this.status401Credentials$.emit( {emmited:true, msg:error.error.message, remainingAttempts: error.error.remainingAttempts } )
+      this.closeIsLoading$.emit(true);
+       return of(null);
+    }
+
+    if (error.status === 401 && error.error.message === 'Usuário não encontrado' ) {
+
+      this.closeIsLoading$.emit(true);
+       this.status429Error$.emit({emmited:true, msg: error.error.message });
+     return of(null);
+   }
+   if (error.status === 500 && error.error.error === 'Usuário não encontrado' ) {
+
+    this.closeIsLoading$.emit(true);
+     this.status429Error$.emit({emmited:true, msg: error.error.message });
+   return of(null);
+ }
+
+
+ 
+ 
+
+    if (error.status === 429 && error.error.message === "Você excedeu o limite de 3 tentativas de login. Por favor, aguarde 1 minutos antes de tentar novamente") {
+      this.status429Error$.emit( {emmited:true, msg:error.error.message } )
+     this.closeIsLoading$.emit(true);
+      return of(null);
+   }
+
+
 
     if (error.status === 401) {
       this.logout();
@@ -62,6 +106,7 @@ export class ErrorService {
       // this.closeIsLoading$.emit(true);
       return of(null);
     }
+
 
 
     
@@ -84,25 +129,36 @@ export class ErrorService {
       return of(null);
     }
 
-        if (error.status === 400 && error.error.errors && Array.isArray(error.error.errors)) {
-        const errors = error.error.errors;
-        const errorMessages = errors.map((errorObj: any) => errorObj.msg);
-        const errorMessage = errorMessages.join("\n");
-        this.openGenericMsgAlert(errorMessage );
-        return of(null);
-      }
 
-    
+    if (error.status === 400 && error.error.errors && Array.isArray(error.error.errors)) {
+    const errors = error.error.errors;
+    const errorMessages = errors.map((errorObj: any) => errorObj.msg);
+    const errorMessage = errorMessages.join("\n");
+    this.openGenericMsgAlert(errorMessage );
+    return of(null);
+  }
+
+
+    if (error.status === 400 && error.error.message === "E-mail já em uso. Por favor, escolha um diferente" ) {
+     this.closeIsLoading$.emit(true);
+      this.status400Error$.emit({emmited:true, msg: error.error.message });
+      return of(null);
+    }
+
+    if (error.status === 400 && error.error.message === "Usuário não verificado" ) {
+      this.closeIsLoading$.emit(true);
+       this.status400VerifyError$.emit({emmited:true, msg: error.error.message });
+       return of(null);
+     }
+       
+      
 
     if (error.status === 400 && error.error.message === "Usuário sem função" ) {
         this.noRoleError$.emit(true);
         return of(null);
     }
-    if (error.status === 400 && error.error.message === "eu e-mail não foi verificado" ) {
-        this.noVerifiedError$.emit(true);
-        return of(null);
-    }
 
+ 
     if (error.status === 400) {
         this.openGenericMsgAlert(error.error.message);
         this.closeIsLoading$.emit(true);
@@ -124,12 +180,12 @@ export class ErrorService {
   }
 
   logout(){
-          sessionStorage.removeItem("token");
           this.close$.next(true);
           this.close$.next(false);
           localStorage.removeItem("logged");
           localStorage.removeItem("user");
           this.store.dispatch(authActions.unSetUser());
+          this.cookieService.delete('token');
           this.router.navigateByUrl('login'); 
             
   }

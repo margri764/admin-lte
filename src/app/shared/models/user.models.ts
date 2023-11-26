@@ -8,14 +8,17 @@ export class User {
         public lastName: string,
         public email: string,
         public birthday: string, 
-        public headquarter: string,
+        public headquarterName:string,
         public headquarterCity: string,
         public headquarterCountry: string,
         public phone: string,
+        public ordem: string,
         public validateEmail: string,
         public password: string,
         public status: number,
         public role: string,
+        public country: string,
+        public actualAddress: string,
         )
         {}
   

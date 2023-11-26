@@ -17,19 +17,28 @@ export class DashboardComponent implements OnInit {
 
   user:any;
   isLoading : boolean = false;
+  reqRegister : any;
+  reqLength: number = 0;
 
   constructor(
                 public router : Router,
-                private store : Store <AppState>,
                 private errorService : ErrorService,
+                private store : Store <AppState>,
+                private authService : AuthService,
                 private localStorageService : LocalstorageService,
                 private cookieService : CookieService,
-                private authService : AuthService,
   ) { }
 
   ngOnInit(): void {
 
-  this.errorService.closeIsLoading$.subscribe((emmited)=>{if(emmited){this.isLoading = false}})
+  this.errorService.closeIsLoading$.subscribe((emmited)=>{if(emmited){this.isLoading = false}});
+      this.authService.getRequestedPermissions().subscribe(
+        ({success, requests})=>{
+          if(success){
+            this.reqRegister = requests;
+            this.reqLength = requests.length;
+          }
+        })
 
     
   

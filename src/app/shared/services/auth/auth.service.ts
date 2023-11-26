@@ -67,7 +67,6 @@ export class AuthService {
   }
 
   resendPasword(email: string){
-
     const body = {email}
   
     return this.http.post<any>(`${this.baseUrl}api/auth/resendPassword`, body) 
@@ -107,9 +106,25 @@ export class AuthService {
     )
   }
 
+  verifyEmail( email: string){
+
+    const body = { email}
+
+    return this.http.post<any>(`${this.baseUrl}api/auth/verifyEmail`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from verifyEmail service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
   adminCompleteRegister(email:string, role:string){
 
-    return this.http.post<any>(`${this.baseUrl}api/auth/adminCompleteRegister?role=${role}`, email) 
+    const body = {email}
+    return this.http.post<any>(`${this.baseUrl}api/auth/adminCompleteRegister?role=${role}`, body) 
     
     .pipe(
       tap( ( res) =>{
@@ -119,6 +134,20 @@ export class AuthService {
       map( res => res )
     )
   }
+
+  getRequestedPermissions(){
+
+    return this.http.get<any>(`${this.baseUrl}api/auth/checkRegistrationPermission`) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getRequestedPermissions service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
 
   
 

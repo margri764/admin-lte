@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import 'bootstrap-switch';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { UserService } from 'src/app/shared/services/user/user.service';
+import { User } from 'src/app/shared/models/user.models';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 
 // interface CustomFile extends File {
@@ -21,7 +26,8 @@ interface CustomFile extends File {
 
 export class EditUserComponent implements OnInit {
 
-
+myForm! : FormGroup;
+countryForm! : FormGroup;
 files: File[] = [];
 pdfSrc :any;
 selectedPdfSrc: any = null;
@@ -29,17 +35,57 @@ pdfSrcList: any[] = [];
 loadingPdf: boolean = false;
 selectedFile: CustomFile | null = null;
 success: any;
+fileName: string = '';
+user! : User;
+
+ordem :any[] = ["Diaconos","Pastor" ]
+default: string = '';
 
 
+  constructor(
+                private activatedRoute : ActivatedRoute,
+                private authService : AuthService,
+                private userService : UserService,
+                private fb : FormBuilder
+) { 
 
-  constructor() { }
+this.activatedRoute.params.subscribe(
+({id})=>{ this.getUserById(id) });
+
+}
+
 
   ngOnInit(): void {
+
+
+    this.myForm = this.fb.group({
+      ordem: [ '', [Validators.required] ],
+      name:  ['', [Validators.required]],
+      lastName:  [ '', [Validators.required]],
+      phone:  [ '', [Validators.required]],
+      birthday:  [ '', [Validators.required]],
+      email:  [ '', [Validators.required]],
+      nationality:  [ '', [Validators.required]],
+      actualAddress:  [ '', [Validators.required]],
+      headquarterCountry:  [ '', [Validators.required]],
+      headquarterCity:  [ '', [Validators.required]],
+      headquarterName:  [ '', [Validators.required]],
+
+  
+    });
+
+    
+
 
     $("input[data-bootstrap-switch]").each(function() {
       $(this).bootstrapSwitch('state',  $(this).prop('checked'));
     });
 
+    }
+
+    onSave(){
+
+      console.log(this.myForm.value);
     }
     
 
@@ -86,7 +132,7 @@ success: any;
       reader.readAsDataURL(file);
     }
     
-fileName: string = '';
+
 
     onViewClick( name:string, index: number): void {
 
@@ -99,4 +145,49 @@ fileName: string = '';
       }
       
     }
+
+    getUserById( id:string ){
+      this.userService.getUserById( id ).subscribe(
+        ( {success, user} )=>{
+          if(success){
+            this.user = user;
+            this.initialForm();
+          }
+        })
+    }
+
+    validField(field: string) {
+      const control = this.myForm.get(field);
+      return control && control.errors && control.touched;
+    }
+
+    initialForm(){
+      this.myForm = this.fb.group({
+        ordem: [ this.user?.headquarterName, [Validators.required] ],
+        name:  [this.user?.name, [Validators.required]],
+        lastName:  [ this.user?.lastName, [Validators.required]],
+        phone:  [ this.user?.phone, [Validators.required]],
+        birthday:  [ this.user?.birthday, [Validators.required]],
+        email:  [ this.user?.email, [Validators.required]],
+        nationality:  [ this.user?.country, [Validators.required]],
+        actualAddress:  [ this.user?.actualAddress, [Validators.required]],
+        headquarterCountry:  [ this.user?.headquarterCountry, [Validators.required]],
+        headquarterCity:  [ this.user?.headquarterCity, [Validators.required]],
+        headquarterName:  [ this.user?.headquarterName, [Validators.required]],
+  
+    
+      });
+    }
+
+    handleRoleChange( value:string ){
+      console.log(value);
+
+      const email = this.myForm.get('email')?.value;
+
+      this.authService.adminCompleteRegister( email, value ).subscribe
+      ( ({success})=>{
+
+      })
+    }
+  
 }

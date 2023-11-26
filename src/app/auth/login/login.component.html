@@ -4,7 +4,7 @@
     <!-- /.login-logo -->
     <div class="card card-outline card-primary" style="background-color: rgb(234, 243, 250, 0.9);">
       <div class="card-header text-center">
-        <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+        <span class="h1"><b>Admin</b>LTE</span>
       </div>
       <div class="card-body">
         <p class="login-box-msg">Login</p>
@@ -34,18 +34,17 @@
           <button type="button" class="btn btn-primary btn-block shadow" (click)="login()" > Aceitar</button>
          
         </form>
-        <!-- data-toggle="modal" data-target="#modalCode" -->
   
         <div class="d-flex flex-column align-items-end" style="margin-top: 30px;">
-         
+          
             <div >
                 <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fa fa-user"></i> Registrar-se</a> </span>
                 &nbsp; &nbsp;
-                <span class="mb-0"> <a href="register.html" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Recuperar senha</a> </span>
+                <span class="mb-0"> <a  routerLink="/resend-password" href="" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Recuperar senha</a> </span>
             </div>    
 
             <div >
-              <button type="button" class="btn btn-primary shadow mt-5" style="" data-toggle="modal" data-target="#modalContactUs">
+              <button type="button" class="btn btn-primary shadow mt-5" (click)="changeModalsStates()" data-toggle="modal" data-target="#modalContactUs">
                 Entre em contato conosco
               </button>
             </div>
@@ -100,12 +99,6 @@
               <div *ngIf="validField('userEmail')" class="invalid" > Dado obrigatório </div>
             </div>
 
-            <!-- <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
-              <label class="text w-100"> Assunto </label>
-              <input type="text" class="form-control"  required [ngStyle]="( validField('subject')) ? {'border':'1px solid red'}:{}" formControlName="subject">
-              <div *ngIf="validField('name')" class="invalid" > Dado obrigatório </div>
-            </div> -->
-
             <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
               <label class="text w-100"> Assunto </label>
                 <textarea class="form-control " formControlName="subject"></textarea>
@@ -113,11 +106,6 @@
 
             </div>
   
-            <!-- <div class="custom-control custom-switch d-flex flex-column align-items-start mb-4" style="margin-left: 18px;">
-              <input type="checkbox" class="custom-control-input " id="customSwitch1" formControlName="sendEmail" >
-              <label class="custom-control-label cursor" for="customSwitch1"> Envie-me uma cópia para o meu email </label>
-            </div>
-            -->
           </form>
 
         </div>
@@ -130,7 +118,6 @@
       </div>
     </div>
   </div>
-
 
  <!-- Modal Code -->
  <div class="modal fade" id="modalCode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
@@ -182,17 +169,43 @@
   </div>
 </div>
 
-
-
-<!-- no verified email -->
-  <div id="custom-toast" class="alert alert-warning alert-dismissible animate__animated animate__fadeIn font" *ngIf="noVerified" style="width: 380px; font-size: 0.9em;">
+  <!-- no verified email -->
+  <div id="custom-toast" class="alert alert-warning alert-dismissible animate__animated animate__fadeIn font" *ngIf="noVerified">
     <button type="button" class="close"#closeNoVerifiedEmail  data-dismiss="alert" aria-hidden="true">&times;</button>
-    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Email não verificado!</h5>
-    Enviamos um email de confirmação. Precisa que enviemos novamente?
-    <p class="cursor mt-1" style="color: blue;" (click)="reSendEmailPassword()">Reenviar</p>
-    <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#modalCode">Digite a senha</p>
+    <h5 class="fs-10"><i class="icon fas fa-exclamation-triangle"></i> Email não verificado!</h5>
+    <span class="fs-8" >Já enviamos um email de confirmação. Precisa que enviemos novamente?</span>
+
+    <form [formGroup]="myFormResend" class="needs-validation mt-1"  novalidate  [autocomplete]="false" >
+  
+        <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+          <input type="email" class="form-control fs-8" placeholder="Email" required [ngStyle]="( validFieldResend('resendEmail')) ? {'border':'1px solid red'}:{}" formControlName="resendEmail">
+          <div class="input-group-append">
+            <div class="input-group-text fs-8">
+              <span class="fas fa-envelope" style="color: rgb(0, 123, 255);"></span>
+            </div>
+          </div>
+          <div *ngIf="validFieldResend('resendEmail')" class="invalid fs-8" > Dado obrigatório </div>
+        </div>
+        
+        <button type="button" class="btn btn-primary shadow fs-9 w-100" (click)="verifyEmail()" >
+            Enviar
+        </button>
+    
+      </form>
+
 
   </div>
+
+  
+  <!-- success verify email -->
+  <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font " *ngIf="successResendVerify">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
+    <span class="fs-8 w-100"> Email enviado com sucesso!!.</span>
+    <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span>
+    
+  </div>
+    
 
   <!-- no role -->
   <div id="custom-toast" class="alert alert-warning alert-dismissible animate__animated animate__fadeIn font" *ngIf="noRole" style="width: 380px; font-size: 0.9em;">
@@ -209,15 +222,6 @@
     Em breve entraremos em contato
     <!-- <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#exampleModalCenter">Entre em contato conosco</p> -->
   </div>
-
-  <!-- success resend password -->
-  <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font" *ngIf="successResendPass" style="width: 380px; font-size: 0.9em;">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Sucesso!</h5>
-    Em breve entraremos em contato
-    <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#modalCode">Digite a senha</p>
-  </div>
-
 
 
   <div class="loading-overlay" *ngIf="isLoading">
