@@ -44,7 +44,7 @@ export class UserService {
 
   getDocByUserId( id:string ){
 
-    return this.http.get<any>(`${this.baseUrl}api/document/getDocumentByUserId/${id}`) 
+    return this.http.get<any>(`${this.baseUrl}api/document/getDocByUserId/${id}`) 
     
     .pipe(
       tap( ( res) =>{
@@ -54,6 +54,36 @@ export class UserService {
       map( res => res )
     )
   }
+
+  getDocumentById( id:string ){
+
+    return this.http.get<any>(`${this.baseUrl}api/document/getDocumentById/${id}`) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getDocumentById service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+  uploadDocument( id:any , file:any){
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<any>(`${this.baseUrl}api/document/uploadDocument/${id}`, formData) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from uploadDocument service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
 
 
 

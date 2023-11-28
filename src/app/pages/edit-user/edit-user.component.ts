@@ -28,15 +28,20 @@ export class EditUserComponent implements OnInit {
 
 myForm! : FormGroup;
 countryForm! : FormGroup;
-files: File[] = [];
+files: File [] = [];
+backFiles: any[] = [];
 pdfSrc :any;
 selectedPdfSrc: any = null;
 pdfSrcList: any[] = [];
+pdfSrcBackList: any[] = [];
 loadingPdf: boolean = false;
 selectedFile: CustomFile | null = null;
 success: any;
 fileName: string = '';
 user! : User;
+arrDocument : any []=[];
+successDocUpload : boolean = false;
+
 
 ordem :any[] = ["Diaconos","Pastor" ]
 default: string = '';
@@ -73,10 +78,6 @@ this.activatedRoute.params.subscribe(
     });
 
 
-
-    
-
-
     $("input[data-bootstrap-switch]").each(function() {
       $(this).bootstrapSwitch('state',  $(this).prop('checked'));
     });
@@ -87,7 +88,6 @@ this.activatedRoute.params.subscribe(
 
       console.log(this.myForm.value);
     }
-    
 
     onSelect(event: any): void {
 
@@ -117,7 +117,7 @@ this.activatedRoute.params.subscribe(
       }
     }
 
-    readAndShowPDF(file: File): void {
+    readAndShowPDF(file: any): void {
 
       const reader = new FileReader();
       this.loadingPdf = true;
@@ -135,35 +135,48 @@ this.activatedRoute.params.subscribe(
       console.log(reader);
     }
 
-    //con esta funcion traigo los documentos q el usuario tiene en BD
-    readAndShowPDFFromBack(fileContent: any): void {
-      this.files.push(fileContent);
-      const buffer = this.fileContentToBuffer(fileContent);
-      const blob = new Blob([buffer], { type: 'application/pdf' });
-    
-      const reader = new FileReader();
-      this.loadingPdf = true;
-    
-      reader.onload = (e) => {
-        const base64Data = e.target?.result as string;
-        const downloadLink = base64Data;
-    
-        this.pdfSrcList.push({ preview: base64Data, downloadLink });
-        this.loadingPdf = false;
-      };
-    
-      reader.readAsDataURL(blob);
-    
-      console.log("reader:", reader);
-    }
-    
     fileContentToBuffer(fileContent: any): Uint8Array {
       if (fileContent && fileContent.data && Array.isArray(fileContent.data)) {
         return new Uint8Array(fileContent.data);
       }
       return new Uint8Array();
     }
+
+    // no pude lograr q ande asi-----------------------------------------------------------
+    //con esta funcion traigo los documentos q el usuario tiene en BD
+    readAndShowPDFFromBack(fileContents: any[]): void {
+
+      this.backFiles = fileContents;
     
+      fileContents.forEach((fileContent) => {
+        
+        const buffer = this.fileBackContentToBuffer(fileContent);
+        const blob = new Blob([buffer], { type: 'application/pdf' });
+    
+        const reader = new FileReader();
+        // this.loadingPdf = true;
+    
+        reader.onload = (e) => {
+          const base64Data = e.target?.result as string;
+          const downloadLink = base64Data;
+    
+          this.pdfSrcBackList.push({ preview: base64Data, downloadLink });
+          this.loadingPdf = false;
+        };
+    
+        reader.readAsDataURL(blob);
+      });
+    }
+    
+    fileBackContentToBuffer(fileContent: any): Uint8Array {
+      if ( Array.isArray(fileContent.hash.data)) {
+        console.log('ddd');
+        return new Uint8Array(fileContent.hash.data);
+      }
+   
+      return new Uint8Array();
+    }
+    // no pude lograr q ande asi-----------------------------------------------------------
 
 
     onViewClick( name:string, index: number): void {
@@ -184,23 +197,55 @@ this.activatedRoute.params.subscribe(
           if(success){
             this.user = user;
             this.initialForm();
-            this.getDocByUserId(user.id);
+            this.getDocByUserId(user.iduser);
           }
         })
     }
 
-    getDocByUserId( id:string ){
+    getDocByUserId( id:any ){
 
-      this.userService.getDocByUserId(id).subscribe(
-        ( {fileContent} )=>{
-          this.readAndShowPDFFromBack(fileContent)
-        });
+     this.userService.getDocByUserId(id).subscribe(
+     ( {document} )=>{
+      this.arrDocument = document;
+      //  this.readAndShowPDFFromBack(document);
+     });
+
 
     }
 
+    downloadPdf(files: any) {
+      if (files && files.filePath) {
+        // Obtén el nombre del archivo desde la ruta
+        const fileName = files.filePath.split('\\').pop() || files.name;
+    
+        // Crea un enlace temporal
+        const link = document.createElement('a');
+        
+        // Configura el enlace con la ruta del archivo
+        link.href = files.filePath;
+    
+        // Configura la propiedad de descarga con el nombre del archivo original
+        link.download = fileName;
+    
+        // Abre el enlace en una nueva pestaña
+        link.target = '_blank';
+    
+        // Simula un clic en el enlace para iniciar la descarga
+        link.click();
+      }
+    }
+    uploadDocument( file:any ){
 
+      this.userService.uploadDocument(this.user.iduser, file).subscribe(
+        ( {success} )=>{
+          if(success){
+            this.getDocByUserId( this.user.iduser );
+            this.successDocUpload = true;
+            this.files = [];
+          }
+        })
+    }
 
-       
 
     validField(field: string) {
       const control = this.myForm.get(field);
@@ -236,4 +281,7 @@ this.activatedRoute.params.subscribe(
       })
     }
   
+    closeToast(){
+      this.successDocUpload = false;
+    }
 }

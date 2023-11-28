@@ -38,12 +38,12 @@
 
                           <div class="row">
                           
-                              <div class="input-group mt-3 col-4"  >
+                              <!-- <div class="input-group mt-3 col-4"  >
                                 <label class="text w-100" > Ordem </label>
                                 <select class="form-control select2 " formControlName="ordem" >
                                   <option *ngFor="let ord of ordem" [value]="ord"> {{ user.ordem }} </option>
                                 </select>
-                              </div>      
+                              </div>       -->
                           
                                 <div class="input-group mt-4 col-4" >
                                     <span class="text w-100"> <b>Nome</b> </span>
@@ -187,56 +187,72 @@
             </div>
 
             <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents">
-                <!-- <div class="row">
-                   <button type="button" class="btn btn-primary shadow d-flex ml-auto mt-3"> <i class="fas fa-upload"></i> &nbsp; Subir documentos</button>
-                 </div> -->
+              
+              <div class="row mt-3">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let file of files; let i = index">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <pdf-viewer [src]="pdfSrcList[i]?.preview" [render-text]="true" [original-size]="false" style="width: 100%; height: 200px"></pdf-viewer>
+                      <a class="w-100 mt-3">{{ file.name }}</a>
+                    </div>
+                    <div class="text-white d-flex justify-content-around align-items-center p-2" style="background-color: rgb(10, 120, 255);">
 
-                <ngx-dropzone (change)="onSelect($event)" >
-                  <ngx-dropzone-label>Arraste e solte os arquivos aqui ou clique para selecionar.</ngx-dropzone-label>
-                </ngx-dropzone>
+                      <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; " (click)="onRemove(file)"></i>
+                      <!-- <a href="{{pdfSrcList[i]?.downloadLink}}" download="{{file.name}}" style="color: white; text-decoration: none; ">
+                        <i class="fas fa-download"></i>
+                      </a> -->
+                      <i class="fas fa-eye" style="cursor: pointer; text-align: center; font-size: 18px; " (click)="onViewClick(file.name, i)" data-toggle="modal" data-target="#viewModal"></i>
 
-                <div class="row mt-3">
-                  <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let file of files; let i = index">
-                    <div class="card mb-3">
-                      <div class="card-body">
-                        <pdf-viewer [src]="pdfSrcList[i]?.preview" [render-text]="true" [original-size]="false" style="width: 100%; height: 200px"></pdf-viewer>
-                        <a class="w-100 mt-3">{{ file.name }}</a>
-                      </div>
-                      <div class="text-white d-flex justify-content-around align-items-center p-2" style="background-color: rgb(10, 120, 255);">
+                      <i class="fas fa-upload" style="cursor: pointer; text-align: center; font-size: 18px; " (click)="uploadDocument(file)" ></i>
 
-                        <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; " (click)="onRemove(file)"></i>
-                        <a href="{{pdfSrcList[i]?.downloadLink}}" download="{{file.name}}" style="color: white; text-decoration: none; ">
-                          <i class="fas fa-download"></i>
-                        </a>
-                        <i class="fas fa-eye" style="cursor: pointer; text-align: center; font-size: 18px; " (click)="onViewClick(file.name, i)" data-toggle="modal" data-target="#viewModal"></i>
-
-                      </div>
                     </div>
                   </div>
                 </div>
-                
-<!-- 
-                <div  class="row mt-3" >
-                  <div class="col-4" *ngFor="let file of files; let i = index">
-                    <div class="card">
-                      <div class="card-body ">
-                        <pdf-viewer [src]="pdfSrcList[i]?.preview" [render-text]="true" [original-size]="false" style="width: 100%; height: 300px"></pdf-viewer>
+              </div>
 
-                        <a class="w-100 mt-3" style="margin-top: 50px;">{{ file.name }}</a> 
-                        
-                      </div>
-                      <div class="card-footer text-white d-flex justify-content-between align-items-center col-12" style="background-color: rgb(10, 120, 255);">
-                          <i class="fas fa-trash col-4" style="cursor: pointer; text-align: center; font-size: 18px;" (click)="onRemove(file)"></i>
 
-                          <a href="{{pdfSrcList[i]?.downloadLink}}" download="{{file.name}}" style="color: white; text-decoration: none;">
-                            <i class="fas fa-download"></i> 
-                          </a>
+                <ngx-dropzone (change)="onSelect($event)"  >
+                  <ngx-dropzone-label>Arraste e solte os arquivos aqui ou clique para selecionar.</ngx-dropzone-label>
+                </ngx-dropzone>
 
-                          <i class="fas fa-eye col-4" style="cursor: pointer; text-align: center; font-size: 18px;" (click)="onViewClick(file.name, i)" data-toggle="modal" data-target="#viewModal"></i>
-                       </div>
-                      </div>
-                    </div>
-                </div> -->
+                <div class="card pd-20 mt-5">
+
+                  <!-- <div class="card-tools mb-5 " style="width: 80px; margin-left: auto;" >
+                      <button type="button" class="btn btn-primary btn-block shadow" data-card-widget="collapse" title="Collapse" routerLink="/dashboard/novo-usuario">
+                      <i class="fas fa-plus "></i> Novo
+                      </button>
+                  </div> -->
+                  
+                  <table datatable class="row-border hover font" style="font-size: 0.9em;">
+      
+                      <thead>
+                          <tr>
+                              <th>Nome</th>
+                              <th>Data</th>
+                              <th>Baixar</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <!-- Ejemplo 1: Activo -->
+                          <tr *ngFor="let doc of arrDocument ">
+                              <td> {{ doc.originalName }} </td>
+                              <td> {{ doc.timestamp}} </td>
+                              <td> <span class="badge badge-success right cursor shadow" style="padding: 6px 8px 6px 8px;" (click)="downloadPdf(doc)"> <i class="fas fa-cloud-download-alt" style="font-size: 16px;"> </i> </span> &nbsp; <span class="badge badge-danger right cursor shadow" style="padding: 6px 8px 6px 8px; " (click)="downloadPdf(doc)"> <i class="fas fa-trash-alt" style="font-size: 16px;"> </i> </span></td>
+                          </tr>
+      
+<!--                          
+                          <tr>
+                              <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
+                              <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
+                              <td style="visibility: hidden;"> zzzzzzzzzzz</td>
+                          </tr> -->
+      
+                      
+                      </tbody>
+                  </table>
+              </div>
+
+
             </div>
 
             <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles">
@@ -312,101 +328,19 @@
 </div>
 
 
-
-
-
-
-
-<!-- <div class="row mt-4"  >
-
-  <div class="col-sm-6 col-lg-12">
-
-      <div class="card card-primary card-outline card-outline-tabs ">
-        <div class="card-header p-0 border-bottom-0 " >
-          <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Dados</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false"> Roles </a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="card-body">
-          <div class="tab-content" id="custom-tabs-four-tabContent " >
-            <div class="tab-pane fade show active  " id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
-
-              <div class="row">
-                  <div class="col-lg-8">
-                  
-                      <div class="input-group mb-3 col-12 mt-3" >
-
-                        <div class="input-group mb-3 mt-1 col-8">
-                          <label class="text w-100" > Nome </label>
-                          <input type="email" class="form-control" placeholder="Nome" required  formControlName="nome">
-                        </div>
-
-                        <div class="input-group mb-3 mt-1 col-4 text-start " >
-                          <label class="text w-100">Status</label>
-                          <div class="">
-                              <input type="checkbox"  checked data-bootstrap-switch data-off-color="danger" data-on-color="success"   >
-                          </div>
-                      </div>
-
-                        <div class="input-group mb-3 mt-2 col-8">
-                            <label class="text w-100" > Email </label>
-                            <input type="email" class="form-control" placeholder="Email" required  formControlName="email">
-                        </div>
-
-                      
-      
-                      </div>
-                 
-                  </div>
-                  
-              </div>
-
-        
-            </div>
-
-            <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
-           
-              <div class="row mt-5">
-                <div class="col-sm-6">
-                  <div class="form-group clearfix">
-                    <div class="icheck-success d-inline">
-                      <input type="radio" name="r3" checked id="radioSuccess1">
-                      <label for="radioSuccess1"> Administrador </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group clearfix">
-                    <div class="icheck-success d-inline">
-                      <input type="radio" name="r3" id="radioSuccess2">
-                      <label for="radioSuccess2"> Editor </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-
-            </div>
-            <div class="input-group mb-3 col-12 mt-3" >
-              <button type="button" class="btn btn-primary shadow" style="width: 110px; margin-left: 7px;" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
-              <button type="button" class="btn btn-danger shadow"  style="width: 100px; margin-left: 30px;"> <i class="fas fa-trash"></i> &nbsp; Excluir</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
+ <!-- success upload -->
+ <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font " *ngIf="successDocUpload">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
+  <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
+  <span class="fs-8 w-100"> Documento enviado com sucesso!!.</span>
+  <!-- <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span> -->
+  
 </div>
- -->
+  
+
+
+
+
+
 
 
