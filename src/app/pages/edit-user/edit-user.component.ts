@@ -70,9 +70,9 @@ this.activatedRoute.params.subscribe(
       headquarterCountry:  [ '', [Validators.required]],
       headquarterCity:  [ '', [Validators.required]],
       headquarterName:  [ '', [Validators.required]],
-
-  
     });
+
+
 
     
 
@@ -97,6 +97,7 @@ this.activatedRoute.params.subscribe(
         this.readAndShowPDF(file);
         this.files.push(file);
       }
+      console.log(this.files);
 
     }
   
@@ -130,6 +131,37 @@ this.activatedRoute.params.subscribe(
       };
     
       reader.readAsDataURL(file);
+
+      console.log(reader);
+    }
+
+    //con esta funcion traigo los documentos q el usuario tiene en BD
+    readAndShowPDFFromBack(fileContent: any): void {
+      this.files.push(fileContent);
+      const buffer = this.fileContentToBuffer(fileContent);
+      const blob = new Blob([buffer], { type: 'application/pdf' });
+    
+      const reader = new FileReader();
+      this.loadingPdf = true;
+    
+      reader.onload = (e) => {
+        const base64Data = e.target?.result as string;
+        const downloadLink = base64Data;
+    
+        this.pdfSrcList.push({ preview: base64Data, downloadLink });
+        this.loadingPdf = false;
+      };
+    
+      reader.readAsDataURL(blob);
+    
+      console.log("reader:", reader);
+    }
+    
+    fileContentToBuffer(fileContent: any): Uint8Array {
+      if (fileContent && fileContent.data && Array.isArray(fileContent.data)) {
+        return new Uint8Array(fileContent.data);
+      }
+      return new Uint8Array();
     }
     
 
@@ -152,9 +184,23 @@ this.activatedRoute.params.subscribe(
           if(success){
             this.user = user;
             this.initialForm();
+            this.getDocByUserId(user.id);
           }
         })
     }
+
+    getDocByUserId( id:string ){
+
+      this.userService.getDocByUserId(id).subscribe(
+        ( {fileContent} )=>{
+          this.readAndShowPDFFromBack(fileContent)
+        });
+
+    }
+
+
+
+       
 
     validField(field: string) {
       const control = this.myForm.get(field);

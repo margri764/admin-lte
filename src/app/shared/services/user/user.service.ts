@@ -42,6 +42,20 @@ export class UserService {
     )
   }
 
+  getDocByUserId( id:string ){
+
+    return this.http.get<any>(`${this.baseUrl}api/document/getDocumentByUserId/${id}`) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getDocByUserId service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+
 
 
 }
