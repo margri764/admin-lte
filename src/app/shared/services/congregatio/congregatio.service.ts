@@ -38,8 +38,8 @@ export class CongregatioService {
     return this.http.get<any>(`${this.baseUrl}api/congregatio/searchUserCongregatio?querySearch=${query}`) 
     
     .pipe(
-      tap( ( res) =>{
-                    console.log("from searchUserCongregatio service: ",res);
+      tap( ( {users}) =>{
+                    console.log("from searchUserCongregatio service: ",users);
                 }  
       ),            
       map( res => res )

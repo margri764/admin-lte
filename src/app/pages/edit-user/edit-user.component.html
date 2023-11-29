@@ -52,13 +52,13 @@
                                 </button>
                             </div>
                           
-                                <!-- <div class="input-group mt-4 col-4" >
-                                    <span class="text w-100"> <b>Nome</b> </span>
+                                 <div class="input-group mt-3 mb-3  col-6" >
+                                    <span class="text w-100" > <b>Nome</b> </span>
                                     <input type="text" class="form-control " required  formControlName="name" >
-                                </div>    -->
+                                </div>    
                                   
-                                <div class="input-group  mt-3 col-4">
-                                    <label class="text w-100" >Sobrenome</label>
+                                <div class="input-group mt-3 mb-3  col-6">
+                                    <label class="text w-100">Sobrenome</label>
                                     <input type="text" class="form-control"  required  formControlName="lastName">
                                 </div>
                           </div>
@@ -400,24 +400,30 @@
     <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95;">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalCenterTitle"> Use % para pesquisas complexas</h5>
+          <div class="modal-header" style="padding: 20px;">
+            <h5 class="modal-title font" id="exampleModalCenterTitle"> Busca por nome ou sobrenome</h5>
         
           </div>
           <div class="modal-body">
            
             <form [formGroup]="myFormSearch" class="needs-validation"  novalidate  [autocomplete]="false">
   
-              <div class="input-group mb-3" >
-                  <input type="email" class="form-control" placeholder="Busca no Congregatio"  name="itemSearch" formControlName="itemSearch">
+              <div class="input-group mb-3 font" >
+                  <input type="text" class="form-control" placeholder="Busca no Congregatio"  name="itemSearch" formControlName="itemSearch" style="height: 50px;">
                   <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-search" style="color: rgb(0, 123, 255);"></span>
+                    <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
+                      <span class="fas fa-search" style="color: white"></span>
                     </div>
                   </div>
       
                 </div>
             </form>
+
+            <div *ngIf="mostrarSugerencias">
+                <div *ngFor="let item of suggested" (click)="selectUser(item)">
+                      <div class="boxSelection mt-1 font"> {{ item.Nome }} </div>
+                </div>
+            </div>
   
           </div>
           <div class="modal-footer">

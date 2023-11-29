@@ -104,7 +104,7 @@ phone : boolean = false;
     });
 
     this.debouncer
-    .pipe(debounceTime(1000))
+    .pipe(debounceTime(700))
     .subscribe( valor => {
 
       this.sugerencias(valor);
@@ -400,8 +400,6 @@ close(){
 }
 
 
-
-
 teclaPresionada(){
   // this.noMatches = false;
   this.debouncer.next( this.itemSearch );  
@@ -412,19 +410,15 @@ sugerencias(value : string){
     this.spinner = true;
     this.itemSearch = value;
     this.mostrarSugerencias = true;  
-    // const valueSearch = value.toUpperCase();
     this.congregatioService.searchUserCongregatio(value)
     .subscribe ( ( {users} )=>{
       console.log(users);
-      if(users.length !== 0){
-        // this.arrArticlesSugested = articulos;
-        this.suggested = users.splice(0,10);
+      if(users.length === 0){
           this.spinner = false;
-        }else{
-          this.spinner = false;
-          // this.noMatches = true;
           this.myForm.get('itemSearch')?.setValue('');
-        }
+      }else{
+        this.suggested = users;
+      }
       }
     )
 }
@@ -442,4 +436,8 @@ Search( item: any ){
   },500)
 }
   // search
+
+  selectUser( user:any ){
+    console.log(user);
+  }
 }

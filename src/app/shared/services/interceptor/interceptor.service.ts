@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
@@ -26,7 +26,6 @@ export class InterceptorService {
   
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
   
-  
   let token;
   
   
@@ -45,6 +44,9 @@ export class InterceptorService {
   
     return next.handle( authRequest )
     .pipe(
+      // tap((event) => {
+      //   console.log(event);
+      // }),
       catchError((error : HttpErrorResponse ) => this.errorHandle(error) )
     );
   }
