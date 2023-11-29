@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as $ from 'jquery';
 import 'bootstrap-switch';
 import { ActivatedRoute } from '@angular/router';
@@ -6,11 +6,11 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
 import { User } from 'src/app/shared/models/user.models';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subject, debounceTime } from 'rxjs';
+import { CongregatioService } from 'src/app/shared/services/congregatio/congregatio.service';
 
 
-// interface CustomFile extends File {
-//   previewUrl?: string;
-// }
+// TENGO Q VER SI FUNCIONA EN PRODUCCION PROVEER LA RUTA A MI SERVIDOR PARA SERVIR UN PDF
 
 interface CustomFile extends File {
   previewUrl?: string;
@@ -26,7 +26,13 @@ interface CustomFile extends File {
 
 export class EditUserComponent implements OnInit {
 
+  // start search
+  @Output() onDebounce: EventEmitter<string> = new EventEmitter();
+  @Output() onEnter   : EventEmitter<string> = new EventEmitter();
+  debouncer: Subject<string> = new Subject();
+
 myForm! : FormGroup;
+myFormSearch! : FormGroup;
 countryForm! : FormGroup;
 files: File [] = [];
 backFiles: any[] = [];
@@ -40,27 +46,69 @@ success: any;
 fileName: string = '';
 user! : User;
 arrDocument : any []=[];
-successDocUpload : boolean = false;
-
-
+showSuccess : boolean = false;
+msg:string = '';
+isLoading : boolean = false;
+askDelDocument : boolean = false;
 ordem :any[] = ["Diaconos","Pastor" ]
 default: string = '';
+selectedPdfBack : any;
 
+// start search
+itemSearch : string = '';
+mostrarSugerencias: boolean = false;
+sugested : string= "";
+suggested : any[] = [];
+spinner : boolean = false;
+fade : boolean = false;
+search : boolean = true;
+product  : any[] = [];
+clients : any []=[];
+arrClient : any []=[];
+clientFound : any = null;
+isClientFound : boolean = false;
+labelNoFinded : boolean = false;
+phone : boolean = false;
+
+// end search
 
   constructor(
                 private activatedRoute : ActivatedRoute,
                 private authService : AuthService,
                 private userService : UserService,
-                private fb : FormBuilder
+                private fb : FormBuilder,
+                private congregatioService : CongregatioService
 ) { 
 
-this.activatedRoute.params.subscribe(
-({id})=>{ this.getUserById(id) });
+        this.activatedRoute.params.subscribe(
+        ({id})=>{ this.getUserById(id) });
+
+        this.myFormSearch = this.fb.group({
+          itemSearch:  [ '',  ],
+        });   
 
 }
 
 
   ngOnInit(): void {
+
+    this.myFormSearch.get('itemSearch')?.valueChanges.subscribe(newValue => {
+      this.itemSearch = newValue;
+
+      if(this.itemSearch !== ''){
+         this.teclaPresionada();
+      }else{
+        this.suggested = [];
+        this.spinner= false;
+      }
+    });
+
+    this.debouncer
+    .pipe(debounceTime(1000))
+    .subscribe( valor => {
+
+      this.sugerencias(valor);
+    });
 
 
     this.myForm = this.fb.group({
@@ -102,19 +150,19 @@ this.activatedRoute.params.subscribe(
     }
   
     onRemove(file: File): void {
-      const index = this.files.indexOf(file);
-      if (index !== -1) {
-        this.files.splice(index, 1);
-  
-        // Puedes restablecer la fuente de pdf-viewer si no hay más archivos
-        // if (this.files.length === 0) {
-        //   this.pdfSrc = null;
-        // }
 
-        if (this.selectedPdfSrc === this.pdfSrcList[index]) {
-          this.selectedPdfSrc = null;
-        }
-      }
+      this.userService.authDelDocument$.subscribe( (emmited)=>{ 
+        if(emmited){
+            const index = this.files.indexOf(file);
+            if (index !== -1) {
+              this.files.splice(index, 1);
+        
+              if (this.selectedPdfSrc === this.pdfSrcList[index]) {
+                this.selectedPdfSrc = null;
+              }
+            }
+          }
+        })
     }
 
     readAndShowPDF(file: any): void {
@@ -178,7 +226,6 @@ this.activatedRoute.params.subscribe(
     }
     // no pude lograr q ande asi-----------------------------------------------------------
 
-
     onViewClick( name:string, index: number): void {
 
       if(this.pdfSrcList[index]){
@@ -188,27 +235,53 @@ this.activatedRoute.params.subscribe(
             this.fileName = name;
           }, 200)
       }
+
+
+      //    if(this.arrDocument[index]){
+      //   setTimeout( ()=>{
+      //       this.selectedPdfSrc = this.arrDocument[index];
+      //       console.log(  this.selectedPdfSrc);
+      //       this.selectedFile = this.files[index];
+      //       this.fileName = name;
+      //     }, 200)
+      // }
       
     }
 
     getUserById( id:string ){
+
+      this.isLoading = false;
       this.userService.getUserById( id ).subscribe(
         ( {success, user} )=>{
           if(success){
             this.user = user;
             this.initialForm();
             this.getDocByUserId(user.iduser);
+            this.isLoading = true;
+
           }
         })
     }
 
+fileNameBack : string = '';
+
+    onView( doc:any ){
+
+      console.log(doc);
+      this.selectedPdfBack = doc.filePath;
+      this.fileNameBack = 'Teste 1';
+    }
+
     getDocByUserId( id:any ){
 
-     this.userService.getDocByUserId(id).subscribe(
-     ( {document} )=>{
-      this.arrDocument = document;
-      //  this.readAndShowPDFFromBack(document);
-     });
+      this.isLoading = true;
+      this.userService.getDocByUserId(id).subscribe(
+      ( {document} )=>{
+        this.arrDocument = document;
+        this.isLoading = false;
+  
+
+      });
 
 
     }
@@ -234,18 +307,19 @@ this.activatedRoute.params.subscribe(
         link.click();
       }
     }
+
     uploadDocument( file:any ){
 
       this.userService.uploadDocument(this.user.iduser, file).subscribe(
         ( {success} )=>{
           if(success){
             this.getDocByUserId( this.user.iduser );
-            this.successDocUpload = true;
+            this.showSuccess = true;
+            this.msg = "Documento enviado com sucesso!!."
             this.files = [];
           }
         })
     }
-
 
     validField(field: string) {
       const control = this.myForm.get(field);
@@ -280,8 +354,92 @@ this.activatedRoute.params.subscribe(
 
       })
     }
+
+    continue(){
+        this.userService.authDelDocument$.emit( true );
+    }
+
+    deleteDocById( doc:any){
+
+      this.userService.authDelDocument$.subscribe( (emmited)=>{ 
+        if(emmited){
+
+          this.isLoading = true;
+          this.userService.deleteDocById( doc.iddocument ).subscribe(
+            ( {success} )=>{
+                if(success){
+                  this.msg = "Documento removido com sucesso";
+                  this.getDocByUserId( this.user.iduser );
+                  this.isLoading = false;
+                }
+            })
+        } 
+      })
+     
+    }
+
+    closeModal(){
+
+    }
   
     closeToast(){
-      this.successDocUpload = false;
+      this.showSuccess = false;
+      this.msg = '';
     }
+
+    // search
+close(){
+  this.mostrarSugerencias = false;
+  this.itemSearch = '';
+  this.suggested = [];
+  this.spinner= false;
+  this.myForm.get('itemSearch')?.setValue('');
+  // this.noMatches = false;
+  this.clientFound= null;
+  this.isClientFound = false;
+}
+
+
+
+
+teclaPresionada(){
+  // this.noMatches = false;
+  this.debouncer.next( this.itemSearch );  
+};
+
+
+sugerencias(value : string){
+    this.spinner = true;
+    this.itemSearch = value;
+    this.mostrarSugerencias = true;  
+    // const valueSearch = value.toUpperCase();
+    this.congregatioService.searchUserCongregatio(value)
+    .subscribe ( ( {users} )=>{
+      console.log(users);
+      if(users.length !== 0){
+        // this.arrArticlesSugested = articulos;
+        this.suggested = users.splice(0,10);
+          this.spinner = false;
+        }else{
+          this.spinner = false;
+          // this.noMatches = true;
+          this.myForm.get('itemSearch')?.setValue('');
+        }
+      }
+    )
+}
+  
+Search( item: any ){
+  setTimeout(()=>{
+    this.mostrarSugerencias = true;
+    this.spinner = false;
+    this.fade = false;
+    this.clientFound = item;
+    this.isClientFound = true;
+    this.myForm.get('itemSearch')?.setValue('');
+    this.suggested = [];
+    // this.noMatches = false;
+  },500)
+}
+  // search
 }

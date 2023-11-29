@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { AppState } from '../../redux/app.reducer';
 import { Store } from '@ngrx/store';
 import { CookieService } from 'ngx-cookie-service';
@@ -14,6 +14,9 @@ import { LocalstorageService } from '../localstorage/localstorage.service';
   providedIn: 'root'
 })
 export class UserService {
+
+  authDelDocument$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+
 
 
   token : string = '';
@@ -55,7 +58,7 @@ export class UserService {
     )
   }
 
-  getDocumentById( id:string ){
+  getDocumentById( id:any ){
 
     return this.http.get<any>(`${this.baseUrl}api/document/getDocumentById/${id}`) 
     
@@ -84,6 +87,18 @@ export class UserService {
     )
   }
 
+  deleteDocById( id:any ){
+
+    return this.http.patch<any>(`${this.baseUrl}api/document/deleteDocById/${id}`, null) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from deleteDocById service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
 
 
 

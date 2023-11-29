@@ -44,11 +44,18 @@
                                   <option *ngFor="let ord of ordem" [value]="ord"> {{ user.ordem }} </option>
                                 </select>
                               </div>       -->
+                              <div class="input-group mt-4 col-12">
+                                <span class="text mb-3 w-100"> <b>Nome</b> </span>
+                                <input type="text" class="form-control" >
+                                <button type="button" class="btn btn-primary btn-block" style="width: 150px; font-size: 1em; line-height: 20px;" data-toggle="modal" data-target="#modalCongregatio" >
+                                  <i class="fas fa-search"></i> &nbsp; Congregatio
+                                </button>
+                            </div>
                           
-                                <div class="input-group mt-4 col-4" >
+                                <!-- <div class="input-group mt-4 col-4" >
                                     <span class="text w-100"> <b>Nome</b> </span>
                                     <input type="text" class="form-control " required  formControlName="name" >
-                                </div>   
+                                </div>    -->
                                   
                                 <div class="input-group  mt-3 col-4">
                                     <label class="text w-100" >Sobrenome</label>
@@ -197,7 +204,7 @@
                     </div>
                     <div class="text-white d-flex justify-content-around align-items-center p-2" style="background-color: rgb(10, 120, 255);">
 
-                      <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; " (click)="onRemove(file)"></i>
+                      <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; " data-toggle="modal" data-target="#modalAskDelDocument" (click)="onRemove(file)"></i>
                       <!-- <a href="{{pdfSrcList[i]?.downloadLink}}" download="{{file.name}}" style="color: white; text-decoration: none; ">
                         <i class="fas fa-download"></i>
                       </a> -->
@@ -229,15 +236,17 @@
                           <tr>
                               <th>Nome</th>
                               <th>Data</th>
-                              <th>Baixar</th>
+                              <th class="text-center">Baixar</th>
                           </tr>
                       </thead>
                       <tbody>
                           <!-- Ejemplo 1: Activo -->
-                          <tr *ngFor="let doc of arrDocument ">
-                              <td> {{ doc.originalName }} </td>
+                          <tr *ngFor="let doc of arrDocument, index as i ">
+                              <td (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack"> {{ doc.originalName }} </td>
                               <td> {{ doc.timestamp}} </td>
-                              <td> <span class="badge badge-success right cursor shadow" style="padding: 6px 8px 6px 8px;" (click)="downloadPdf(doc)"> <i class="fas fa-cloud-download-alt" style="font-size: 16px;"> </i> </span> &nbsp; <span class="badge badge-danger right cursor shadow" style="padding: 6px 8px 6px 8px; " (click)="downloadPdf(doc)"> <i class="fas fa-trash-alt" style="font-size: 16px;"> </i> </span></td>
+                              <td class="text-center"> 
+                                  <span class="badge badge-success right cursor shadow" style="padding: 6px 8px 6px 8px;" (click)="downloadPdf(doc)"> <i class="fas fa-cloud-download-alt" style="font-size: 16px;"> </i> </span> &nbsp; <span class="badge badge-danger right cursor shadow" style="padding: 6px 8px 6px 8px; " data-toggle="modal" data-target="#modalAskDelDocument" (click)="deleteDocById(doc)"> <i class="fas fa-trash-alt" style="font-size: 16px;"> </i> </span>
+                              </td>
                           </tr>
       
 <!--                          
@@ -291,7 +300,6 @@
 </div>
 
 <!-- Modal Preview -->
-
 <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl justify-content-center" role="document"> 
     <div class="modal-content">
@@ -303,11 +311,6 @@
       </div>
       <div class="modal-body" >
 
-        <div *ngIf="loadingPdf" class="text-center">
-          <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-        </div>
         <div *ngIf="!loadingPdf">
           <div class="embed-responsive embed-responsive-16by9">
             <pdf-viewer [src]="selectedPdfSrc?.preview" [render-text]="true" [original-size]="false" class="embed-responsive-item"></pdf-viewer>
@@ -328,17 +331,112 @@
 </div>
 
 
+<!-- Modal Preview Back -->
+<div class="modal fade" id="viewModalBack" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl justify-content-center" role="document"> 
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewModalLabel"> <a>{{fileNameBack}}</a> </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" >
+
+        <div *ngIf="!loadingPdf">
+          <div class="embed-responsive embed-responsive-16by9">
+            <pdf-viewer [src]="selectedPdfBack" [render-text]="true" [original-size]="false" class="embed-responsive-item"></pdf-viewer>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+
+
+        <a [href]="selectedPdfBack" download="{{fileNameBack}}">
+          <i class="fas fa-download"></i> Baixar
+        </a>
+        <!-- Botones y acciones del pie del modal -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
  <!-- success upload -->
- <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font " *ngIf="successDocUpload">
+ <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font " *ngIf="showSuccess">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
   <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
-  <span class="fs-8 w-100"> Documento enviado com sucesso!!.</span>
+  <span class="fs-8 w-100"> </span>
   <!-- <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span> -->
   
 </div>
+
+  <!-- ask delete document -->
+  <!-- Modal contact us -->
+  <div class="modal fade" id="modalAskDelDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.85;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <i class="fas fa-exclamation-triangle" style="color: red; font-size: 40px;"></i>
+          <button type="button" #closebutton  class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+           <h6 class="font">¡Tem certeza de que deseja excluir este documento?</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-block shadow" (click)="continue()" data-dismiss="modal" aria-label="Close"> Continuar</button>
+          <!-- <button type="button" class="btn btn-primary btn-block shadow"  *ngIf="isSending"> Enviando...</button> -->
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+    <!-- Modal Congregatio-->
+    <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95;">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle"> Use % para pesquisas complexas</h5>
+        
+          </div>
+          <div class="modal-body">
+           
+            <form [formGroup]="myFormSearch" class="needs-validation"  novalidate  [autocomplete]="false">
+  
+              <div class="input-group mb-3" >
+                  <input type="email" class="form-control" placeholder="Busca no Congregatio"  name="itemSearch" formControlName="itemSearch">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-search" style="color: rgb(0, 123, 255);"></span>
+                    </div>
+                  </div>
+      
+                </div>
+            </form>
+  
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close"> Sair</button>
+          </div>
+  
+        
+        </div>
+      </div>
+    </div>
   
 
 
+
+<div class="loading-overlay" *ngIf="isLoading">
+  <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >
+    <span class="sr-only">Loading...</span>
+  </div>
+</div> 
 
 
 
