@@ -22,6 +22,9 @@
                   <li class="nav-item">
                       <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#roles" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Roles</a>
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-profile-alarm" data-toggle="pill" href="#alarm" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Alarmes</a>
+                </li>
               </ul>
           </div>
          </div>
@@ -128,11 +131,17 @@
                               </div>
                             </div>
 
-                              <div class="input-group mb-3 mt-3" >
-                                <button type="button" class="btn btn-primary shadow fs-10"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
-                                <button type="button" class="btn btn-danger shadow fs-10"  style="margin-left: 30px;"> <i class="fas fa-trash"></i> &nbsp; Excluir</button>
-                              </div>
-                              
+                            <div class="input-group mb-3 mt-3" >
+                              <button type="button" class="btn btn-primary shadow fs-10"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
+
+                              <button type="button" class="btn btn-danger shadow fs-10"  style="margin-left: 30px;"> <i class="fas fa-trash"></i> &nbsp; Excluir</button>
+
+                              <button type="button" class="btn btn-success shadow fs-10"  style="margin-left: 30px;" (click)="activeAccount('1')" *ngIf="myForm.get('active')?.value === 0"> <i class="fas fa-check-circle" ></i> &nbsp; Ativar</button>
+
+                              <button type="button" class="btn btn-warning shadow fs-10"  style="margin-left: 30px; color: white;" (click)="activeAccount('0')" *ngIf="myForm.get('active')?.value === 1"> <i class="fas fa-check-circle" ></i> &nbsp; Desativar</button>
+                            </div>
+
+                        
                               <!-- <div class="input-group mb-3 mt-3" >
                                 <label style="margin-left: 0px;">Condição</label>
                                 <div class="" style="margin-left: 30px;">
@@ -148,17 +157,17 @@
 
                     <div class="card card-primary card-outline col-12"> 
                             <div class="card-body box-profile">
-                            <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle"
-                                    src="assets/img/user4-128x128.jpg"
-                                    alt="User profile picture">
-                            </div>
+                              <div class="text-center">
+                                  <img class="profile-user-img img-fluid" [src]="pathImg" alt="Foto do Perfil do Usuário">
+                              </div>
+                           
 
-                            <h3 class="profile-username text-center">Nina Mcintire</h3>
+                            <h5 class="font fs-11 mt-3 text-center" *ngIf="user.fullName !== '' "> {{ user.fullName }} </h5>
+                            <h5 class="font fs-11 mt-3 text-center" *ngIf="user.fullName === '' "> {{ user.name }} {{ user.lastName }} </h5>
 
-                            <p class="text-muted text-center">Software Engineer</p>
+                            <!-- <p class="font fs-10 mt-3 text-center" style="color: gray;">Software Engineer</p> -->
 
-                            <ul class="list-group list-group-unbordered mb-3">
+                            <!-- <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
                                 <b>Followers</b> <a class="float-right">1,322</a>
                                 </li>
@@ -170,7 +179,7 @@
                                 </li>
                             </ul>
 
-                            <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                            <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a> -->
                             </div>
                     </div> 
                     
@@ -240,7 +249,7 @@
                       </button>
                   </div> -->
                   
-                  <table datatable class="row-border hover font" style="font-size: 0.9em;">
+                  <table datatable [dtOptions]="dtOptions" class="row-border hover font" style="font-size: 0.9em;">
       
                       <thead>
                           <tr>
@@ -252,7 +261,7 @@
                       <tbody>
                           <!-- Ejemplo 1: Activo -->
                           <tr *ngFor="let doc of arrDocument, index as i ">
-                              <td (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack"> {{ doc.originalName }} </td>
+                              <td class="cursor selected" (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack"> {{ doc.originalName }} </td>
                               <td> {{ doc.timestamp}} </td>
                               <td class="text-center"> 
                                   <span class="badge badge-success right cursor shadow" style="padding: 6px 8px 6px 8px;" (click)="downloadPdf(doc)"> <i class="fas fa-cloud-download-alt" style="font-size: 16px;"> </i> </span> &nbsp; <span class="badge badge-danger right cursor shadow" style="padding: 6px 8px 6px 8px; " data-toggle="modal" data-target="#modalAskDelDocument" (click)="deleteDocById(doc)"> <i class="fas fa-trash-alt" style="font-size: 16px;"> </i> </span>
@@ -280,7 +289,7 @@
                   <!-- Primer radio (arriba) -->
                   <div class="form-group clearfix">
                     <div class="icheck-success d-inline">
-                      <input type="radio" name="r3"  id="radioSuccess1" (change)="handleRoleChange('admin')">
+                      <input type="radio" name="r3"  id="radioSuccess1" (change)="handleRoleChange('admin')" [checked]="userRole">
                       <label for="radioSuccess1"> Administrador </label>
                     </div>
                   </div>
@@ -292,12 +301,22 @@
                   <!-- Segundo radio (abajo) -->
                   <div class="form-group clearfix">
                     <div class="icheck-success d-inline">
-                      <input type="radio" name="r3" id="radioSuccess2" (change)="handleRoleChange('user')">
+                      <input type="radio" name="r3" id="radioSuccess2" (change)="handleRoleChange('user')" [checked]="userRole">
                       <label for="radioSuccess2"> Usúario </label>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm">
+              <div class="row mt-5">
+                <div class="col-sm-6">
+                   Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum ipsum porro explicabo, ut similique quasi debitis mollitia numquam impedit asperiores fugiat vero corporis. Totam inventore ab hic dolorem nam tempore!
+               </div>
+              </div>
+              
+          
             </div>
           </div>
 
@@ -373,17 +392,8 @@
 </div>
 
 
- <!-- success upload -->
- <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font " *ngIf="showSuccess">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
-  <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
-  <span class="fs-8 w-100"> </span>
-  <!-- <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span> -->
-  
-</div>
 
   <!-- ask delete document -->
-  <!-- Modal contact us -->
   <div class="modal fade" id="modalAskDelDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.85;">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -406,54 +416,62 @@
     </div>
   </div>
 
-    <!-- Modal Congregatio-->
-    <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95;">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header" style="padding: 20px;">
-            <h5 class="modal-title font" id="exampleModalCenterTitle"> Busca por nome ou sobrenome</h5>
-        
-          </div>
-          <div class="modal-body">
-           
-            <form [formGroup]="myFormSearch" class="needs-validation"  novalidate  [autocomplete]="false">
-  
-              <div class="input-group mb-3 font" >
-                  <input type="text" class="form-control" placeholder="Busca no Congregatio"  name="itemSearch" formControlName="itemSearch" style="height: 50px;">
-                  <div class="input-group-append">
-                    <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
-                      <span class="fas fa-search" style="color: white"></span>
-                    </div>
-                  </div>
+  <!-- Modal Congregatio-->
+  <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="padding: 20px;">
+          <h5 class="modal-title font" id="exampleModalCenterTitle"> Busca por nome ou sobrenome</h5>
       
-                </div>
-            </form>
-
-            <div *ngIf="mostrarSugerencias">
-                <div *ngFor="let item of suggested" (click)="selectUser(item)">
-                      <div class="boxSelection mt-1 font"> {{ item['Nome Completo'] }} </div>
-                </div>
-            </div>
-  
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close"> Sair</button>
-          </div>
-  
-        
         </div>
+        <div class="modal-body">
+          
+          <form [formGroup]="myFormSearch" class="needs-validation"  novalidate  [autocomplete]="false">
+
+            <div class="input-group mb-3 font" >
+                <input type="text" class="form-control" placeholder="Busca no Congregatio"  name="itemSearch" formControlName="itemSearch" style="height: 50px;">
+                <div class="input-group-append">
+                  <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
+                    <span class="fas fa-search" style="color: white"></span>
+                  </div>
+                </div>
+    
+              </div>
+          </form>
+
+          <div *ngIf="mostrarSugerencias">
+              <div *ngFor="let item of suggested" (click)="selectUser(item)">
+                
+                <div class="boxSelection mt-1 font">   
+                   <img class=" img-fluid" src="https://congregatio.info/{{ item['Ruta Imagen'] }}" alt="Foto do Perfil do Usuário" width="40px">
+                  {{ item['Nome Completo'] }}</div>
+              </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close"> Sair</button>
+        </div>
+
+      
       </div>
     </div>
+  </div>
 
-
-      <!-- no link selection  -->
+  <!-- no link selection  -->
   <div id="custom-toast" class="alert alert-danger alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showLabelLinked"  >
     <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5 style="font-size: 0.9em;"><i class="icon fas fas fa-user-lock"></i> Erro</h5>
-    <p class="cursor mt-1" >Você selecionou um usuário de um banco de dados externo. É necessário escolher a opção 'Link com Congregatio'.</p>
+    <p class="cursor mt-1 fs-9" >Você selecionou um usuário de um banco de dados externo. É necessário escolher a opção 'Link com Congregatio'.</p>
   </div>
 
-  
+   <!-- success upload -->
+ <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
+  <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
+  <span class="fs-8 w-100"> {{msg}}</span>
+  <!-- <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span> -->
+</div>
 
 
 

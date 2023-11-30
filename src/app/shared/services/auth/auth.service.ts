@@ -121,14 +121,15 @@ export class AuthService {
     )
   }
 
-  adminCompleteRegister(email:string, role:string){
+  activeAccount(email:string, active:string){
 
-    const body = {email}
-    return this.http.post<any>(`${this.baseUrl}api/auth/adminCompleteRegister?role=${role}`, body) 
+    const body = { email }
+
+    return this.http.post<any>(`${this.baseUrl}api/auth/activeAccount?active=${active}`, body) 
     
     .pipe(
       tap( ( res) =>{
-                    console.log("from adminCompleteRegister service: ",res);
+                    console.log("from activeAccount service: ",res);
                 }  
       ),            
       map( res => res )

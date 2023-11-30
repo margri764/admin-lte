@@ -32,7 +32,7 @@ export class UserService {
   ) { }
 
 
-  getUserById( id:string ){
+  getUserById( id:any ){
 
     return this.http.get<any>(`${this.baseUrl}api/user/getUserById/${id}`) 
     
@@ -45,7 +45,21 @@ export class UserService {
     )
   }
 
-  getDocByUserId( id:string ){
+  getAllUsers( ){
+
+    return this.http.get<any>(`${this.baseUrl}api/user/getAllUsers`) 
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getAllUsers service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+
+  getDocByUserId( id:any ){
+    console.log(id);
 
     return this.http.get<any>(`${this.baseUrl}api/document/getDocByUserId/${id}`) 
     

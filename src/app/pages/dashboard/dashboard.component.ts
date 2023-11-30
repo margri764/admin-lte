@@ -32,6 +32,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
 
   this.errorService.closeIsLoading$.subscribe((emmited)=>{if(emmited){this.isLoading = false}});
+  
       this.authService.getRequestedPermissions().subscribe(
         ({success, requests})=>{
           if(success){

@@ -70,7 +70,6 @@ clientFound : any = null;
 isClientFound : boolean = false;
 labelNoFinded : boolean = false;
 phone : boolean = false;
-
 // end search
 
 showLabelLinked : boolean = false;
@@ -78,6 +77,17 @@ fileNameBack : string = '';
 lastSetValue: { [key: string]: any } = {};
 readonlyFields: { [key: string]: boolean } = {};
 wasLinked : boolean = false;
+userRole : boolean = false;
+role : string = '';
+stateLink : boolean = false;
+adminRole : boolean = false;
+dtOptions: any = {};
+
+userCongregatio : any;
+pathImg : string = 'assets/no-image.jpg'
+
+
+
 
   constructor(
                 private activatedRoute : ActivatedRoute,
@@ -99,6 +109,10 @@ wasLinked : boolean = false;
 
 
   ngOnInit(): void {
+
+    this.dtOptions = {
+      pagingType: 'full_numbers', // Otras opciones de configuración...
+    };
 
     this.myFormSearch.get('itemSearch')?.valueChanges.subscribe(newValue => {
       this.itemSearch = newValue;
@@ -132,13 +146,12 @@ wasLinked : boolean = false;
       headquarterCountry:  [ '', [Validators.required]],
       headquarterCity:  [ '', [Validators.required]],
       headquarterName:  [ '', [Validators.required]],
-      linkCongregatio: [ false]
+      linkCongregatio: [ false],
+      active: ['']
     });
-
 
   
     }
-
 
     onSave(){
 
@@ -147,7 +160,38 @@ wasLinked : boolean = false;
         this.showLabelLinked = true;
         return
        } 
-      console.log(this.myForm.value);
+
+       if(this.user.role === ''){
+        
+       }
+
+
+      // const body : User = {
+
+        
+
+      // }
+
+
+    alert(JSON.stringify(this.myForm.value));
+    }
+
+    activeAccount( active:any){
+
+      this.isLoading = true;
+
+      const email = this.myForm.get('email')?.value;
+
+      this.authService.activeAccount( email, active ).subscribe
+      ( ({success})=>{
+        if(success){
+          this.showSuccess = true,
+          (active === "1") ? this.msg = 'Usúario ativado com sucesso' : this.msg = 'Usúario desativado com sucesso'; 
+          setTimeout( ()=>{ this.getUserById( this.user.iduser ); this.isLoading = false;  }, 1000);
+          
+        }
+
+       })   
     }
 
     onSelect(event: any): void {
@@ -261,7 +305,7 @@ wasLinked : boolean = false;
       
     }
 
-    getUserById( id:string ){
+    getUserById( id:any ){
 
       this.isLoading = false;
       this.userService.getUserById( id ).subscribe(
@@ -270,7 +314,6 @@ wasLinked : boolean = false;
             this.user = user;
             this.initialForm();
             this.getDocByUserId(user.iduser);
-            this.isLoading = true;
 
           }
         })
@@ -282,7 +325,7 @@ wasLinked : boolean = false;
     }
 
     getDocByUserId( id:any ){
-
+      console.log(id);
       this.isLoading = true;
       this.userService.getDocByUserId(id).subscribe(
       ( {document} )=>{
@@ -354,23 +397,24 @@ wasLinked : boolean = false;
         headquarterCountry: this.user?.headquarterCountry,
         headquarterCity: this.user?.headquarterCity,
         headquarterName: this.user?.headquarterName,
-        linkCongregatio: link
+        linkCongregatio: link,
+        active: this.user.active
       });
 
        this.actualizarEstadoSwitch();
-
+       this.role = this.user.role;
+       if(this.user.role === 'user'){
+         this.userRole = true;
+       }else if(this.user.role === 'admin'){
+          this.adminRole = false;
+       }
     }
 
     handleRoleChange( value:string ){
-      console.log(value);
 
-      const email = this.myForm.get('email')?.value;
+      this.role = value;
 
-      this.authService.adminCompleteRegister( email, value ).subscribe
-      ( ({success})=>{
-
-      })
-    }
+     }
 
     continue(){
         this.userService.authDelDocument$.emit( true );
@@ -402,7 +446,8 @@ wasLinked : boolean = false;
     }
 
     // search
-close(){
+   
+    close(){
   this.mostrarSugerencias = false;
   this.itemSearch = '';
   this.suggested = [];
@@ -411,14 +456,14 @@ close(){
   // this.noMatches = false;
   this.clientFound= null;
   this.isClientFound = false;
-}
+   }
 
-teclaPresionada(){
+   teclaPresionada(){
   // this.noMatches = false;
   this.debouncer.next( this.itemSearch );  
-};
+   };
 
-sugerencias(value : string){
+   sugerencias(value : string){
     this.spinner = true;
     this.itemSearch = value;
     this.mostrarSugerencias = true;  
@@ -432,9 +477,9 @@ sugerencias(value : string){
       }
       }
     )
-}
+   }
   
-Search( item: any ){
+   Search( item: any ){
   setTimeout(()=>{
     this.mostrarSugerencias = true;
     this.spinner = false;
@@ -445,12 +490,15 @@ Search( item: any ){
     this.suggested = [];
     // this.noMatches = false;
   },500)
-}
+   }
   // search
 
 
-  selectUser(user: any){
+
+   selectUser(user: any){
     console.log(user);
+
+    this.pathImg =`https://congregatio.info/${user['Ruta Imagen']}`
   
     //back values references
     const backNome = user.Nome;
@@ -490,11 +538,10 @@ Search( item: any ){
     });
 
     this.wasLinked = true;
-  }
+   }
   
-  stateLink : boolean = false;
 
-  ngAfterViewInit() {
+   ngAfterViewInit() {
   
     // $("input[data-bootstrap-switch]").each(function() {
     //   $(this).bootstrapSwitch('state',  $(this).prop('checked'));
@@ -516,9 +563,9 @@ Search( item: any ){
     });
 
     
-  }
+   }
   
-  private actualizarEstadoSwitch() {
+   private actualizarEstadoSwitch() {
     let link = null;
   
     (this.user.linkCongregatio === 1) ? link = true : link = false;
@@ -526,7 +573,7 @@ Search( item: any ){
     $("input[data-bootstrap-switch]").bootstrapSwitch('state', link);
         
   
-  }
+   }
 }
 
   
