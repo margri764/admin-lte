@@ -39,7 +39,7 @@ export class CongregatioService {
     
     .pipe(
       tap( ( {users}) =>{
-                    console.log("from searchUserCongregatio service: ",users);
+                    console.log("from searchUserCongregatio service: ", users);
                 }  
       ),            
       map( res => res )

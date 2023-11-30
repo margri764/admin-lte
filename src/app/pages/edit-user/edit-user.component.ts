@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import * as $ from 'jquery';
 import 'bootstrap-switch';
 import { ActivatedRoute } from '@angular/router';
@@ -24,12 +24,13 @@ interface CustomFile extends File {
 })
 
 
-export class EditUserComponent implements OnInit {
+export class EditUserComponent implements OnInit, AfterViewInit  {
 
-  // start search
-  @Output() onDebounce: EventEmitter<string> = new EventEmitter();
-  @Output() onEnter   : EventEmitter<string> = new EventEmitter();
-  debouncer: Subject<string> = new Subject();
+// start search
+@Output() onDebounce: EventEmitter<string> = new EventEmitter();
+@Output() onEnter   : EventEmitter<string> = new EventEmitter();
+debouncer: Subject<string> = new Subject();
+@ViewChild('link') tuCheckbox!: ElementRef;
 
 myForm! : FormGroup;
 myFormSearch! : FormGroup;
@@ -72,20 +73,27 @@ phone : boolean = false;
 
 // end search
 
+showLabelLinked : boolean = false;
+fileNameBack : string = '';
+lastSetValue: { [key: string]: any } = {};
+readonlyFields: { [key: string]: boolean } = {};
+wasLinked : boolean = false;
+
   constructor(
                 private activatedRoute : ActivatedRoute,
                 private authService : AuthService,
                 private userService : UserService,
                 private fb : FormBuilder,
-                private congregatioService : CongregatioService
+                private congregatioService : CongregatioService,
+                private cdr: ChangeDetectorRef
 ) { 
 
-        this.activatedRoute.params.subscribe(
-        ({id})=>{ this.getUserById(id) });
+    this.activatedRoute.params.subscribe(
+    ({id})=>{ this.getUserById(id) });
 
-        this.myFormSearch = this.fb.group({
-          itemSearch:  [ '',  ],
-        });   
+    this.myFormSearch = this.fb.group({
+      itemSearch:  [ '',  ],
+    });   
 
 }
 
@@ -115,6 +123,7 @@ phone : boolean = false;
       ordem: [ '', [Validators.required] ],
       name:  ['', [Validators.required]],
       lastName:  [ '', [Validators.required]],
+      fullName:  [ '', [Validators.required]],
       phone:  [ '', [Validators.required]],
       birthday:  [ '', [Validators.required]],
       email:  [ '', [Validators.required]],
@@ -123,17 +132,21 @@ phone : boolean = false;
       headquarterCountry:  [ '', [Validators.required]],
       headquarterCity:  [ '', [Validators.required]],
       headquarterName:  [ '', [Validators.required]],
+      linkCongregatio: [ false]
     });
 
 
-    $("input[data-bootstrap-switch]").each(function() {
-      $(this).bootstrapSwitch('state',  $(this).prop('checked'));
-    });
-
+  
     }
+
 
     onSave(){
 
+      // esto es por si alguien se olvida de linkear despues de seleccionar el user de la BD congregatio
+       if(this.wasLinked && !this.stateLink){
+        this.showLabelLinked = true;
+        return
+       } 
       console.log(this.myForm.value);
     }
 
@@ -263,11 +276,7 @@ phone : boolean = false;
         })
     }
 
-fileNameBack : string = '';
-
     onView( doc:any ){
-
-      console.log(doc);
       this.selectedPdfBack = doc.filePath;
       this.fileNameBack = 'Teste 1';
     }
@@ -327,21 +336,29 @@ fileNameBack : string = '';
     }
 
     initialForm(){
-      this.myForm = this.fb.group({
-        ordem: [ this.user?.headquarterName, [Validators.required] ],
-        name:  [this.user?.name, [Validators.required]],
-        lastName:  [ this.user?.lastName, [Validators.required]],
-        phone:  [ this.user?.phone, [Validators.required]],
-        birthday:  [ this.user?.birthday, [Validators.required]],
-        email:  [ this.user?.email, [Validators.required]],
-        nationality:  [ this.user?.country, [Validators.required]],
-        actualAddress:  [ this.user?.actualAddress, [Validators.required]],
-        headquarterCountry:  [ this.user?.headquarterCountry, [Validators.required]],
-        headquarterCity:  [ this.user?.headquarterCity, [Validators.required]],
-        headquarterName:  [ this.user?.headquarterName, [Validators.required]],
-  
-    
+
+      let link = null;
+      
+      (this.user.linkCongregatio === 1) ? link = true : link = false;
+      
+      this.myForm.patchValue({
+        ordem: this.user?.headquarterName,
+        name:  this.user?.name,
+        lastName: this.user?.lastName,
+        fullName: [''],
+        phone: this.user?.phone,
+        birthday: this.user?.birthday,
+        email:   this.user?.email,
+        nationality: this.user?.country,
+        actualAddress: this.user?.actualAddress,
+        headquarterCountry: this.user?.headquarterCountry,
+        headquarterCity: this.user?.headquarterCity,
+        headquarterName: this.user?.headquarterName,
+        linkCongregatio: link
       });
+
+       this.actualizarEstadoSwitch();
+
     }
 
     handleRoleChange( value:string ){
@@ -377,13 +394,10 @@ fileNameBack : string = '';
       })
      
     }
-
-    closeModal(){
-
-    }
   
     closeToast(){
       this.showSuccess = false;
+      this.showLabelLinked = false;
       this.msg = '';
     }
 
@@ -399,12 +413,10 @@ close(){
   this.isClientFound = false;
 }
 
-
 teclaPresionada(){
   // this.noMatches = false;
   this.debouncer.next( this.itemSearch );  
 };
-
 
 sugerencias(value : string){
     this.spinner = true;
@@ -412,7 +424,6 @@ sugerencias(value : string){
     this.mostrarSugerencias = true;  
     this.congregatioService.searchUserCongregatio(value)
     .subscribe ( ( {users} )=>{
-      console.log(users);
       if(users.length === 0){
           this.spinner = false;
           this.myForm.get('itemSearch')?.setValue('');
@@ -437,7 +448,85 @@ Search( item: any ){
 }
   // search
 
-  selectUser( user:any ){
+
+  selectUser(user: any){
     console.log(user);
+  
+    //back values references
+    const backNome = user.Nome;
+    const backFullName = user['Nome Completo']
+    const backPhone = user.Telefone1
+    const backBirthday = user['Data Nacimento']
+    const backEmail = user.Email
+    const backNationality = user.Nacionalidade
+    const backActualAddress = user['Residência atual']
+    const backHeadquarterName = user['Sede onde entrou']
+  
+    // Definir los campos y sus valores iniciales (cámbialos según tu formulario)
+    const fields = [
+      { name: 'nome', backValue: backNome },
+      { name: 'fullName', backValue: backFullName },
+      { name: 'phone', backValue: backPhone },
+      { name: 'birthday', backValue: backBirthday },
+      { name: 'email', backValue: backEmail },
+      { name: 'nationality', backValue: backNationality },
+      { name: 'actualAddress', backValue: backActualAddress },
+      { name: 'headquarterName', backValue: backHeadquarterName }
+    ];
+  
+    // Iterar sobre los campos
+    fields.forEach(field => {
+      const formControl = this.myForm.get(field.name);
+  
+      if (formControl instanceof FormControl) {
+        if (field.backValue !== null && field.backValue !== undefined && field.backValue !== '') {
+          formControl.setValue(field.backValue);
+  
+          this.readonlyFields[field.name] = true;
+        } else {
+          this.readonlyFields[field.name] = false;
+        }
+      }
+    });
+
+    this.wasLinked = true;
+  }
+  
+  stateLink : boolean = false;
+
+  ngAfterViewInit() {
+  
+    // $("input[data-bootstrap-switch]").each(function() {
+    //   $(this).bootstrapSwitch('state',  $(this).prop('checked'));
+    // });
+  
+    // Inicializar Bootstrap Switch
+    $(this.tuCheckbox.nativeElement).bootstrapSwitch();
+  
+    // Suscribirte al evento switchChange del Bootstrap Switch
+    $(this.tuCheckbox.nativeElement).on('switchChange.bootstrapSwitch', (event: any, state: any) => {
+      console.log('Checkbox changed. Checked:', state);
+      this.stateLink = state;
+      if(this.wasLinked && state){
+          this.showLabelLinked = false;
+          console.log(this.showLabelLinked);
+      }
+    
+  
+    });
+
+    
+  }
+  
+  private actualizarEstadoSwitch() {
+    let link = null;
+  
+    (this.user.linkCongregatio === 1) ? link = true : link = false;
+    
+    $("input[data-bootstrap-switch]").bootstrapSwitch('state', link);
+        
+  
   }
 }
+
+  

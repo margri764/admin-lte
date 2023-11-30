@@ -6,6 +6,7 @@ export class User {
         public iduser: number, 
         public name: string,
         public lastName: string,
+        public fullName: string,
         public email: string,
         public birthday: string, 
         public headquarterName:string,
@@ -19,6 +20,7 @@ export class User {
         public role: string,
         public country: string,
         public actualAddress: string,
+        public linkCongregatio: any,
         )
         {}
   

@@ -44,22 +44,32 @@
                                   <option *ngFor="let ord of ordem" [value]="ord"> {{ user.ordem }} </option>
                                 </select>
                               </div>       -->
-                              <div class="input-group mt-4 col-12">
-                                <span class="text mb-3 w-100"> <b>Nome</b> </span>
-                                <input type="text" class="form-control" >
-                                <button type="button" class="btn btn-primary btn-block" style="width: 150px; font-size: 1em; line-height: 20px;" data-toggle="modal" data-target="#modalCongregatio" >
-                                  <i class="fas fa-search"></i> &nbsp; Congregatio
-                                </button>
-                            </div>
-                          
-                                 <div class="input-group mt-3 mb-3  col-6" >
-                                    <span class="text w-100" > <b>Nome</b> </span>
-                                    <input type="text" class="form-control " required  formControlName="name" >
+                                <div class="input-group mt-4 col-12">
+                                  <span class="text mb-3 w-100"> <b>Nome completo</b> </span>
+                                  <input type="text" class="form-control" [readonly]="readonlyFields['fullName']" formControlName="fullName" >
+                                  <button type="button" class="btn btn-primary btn-block" style="width: 150px; font-size: 1em; line-height: 20px;" data-toggle="modal" data-target="#modalCongregatio" >
+                                    <i class="fas fa-search"></i> &nbsp; Congregatio
+                                  </button>
+                                </div>
+
+                                <div class="input-group mb-3 mt-4 col-12" >
+                                  <label class="text w-100">Link com Congregatio</label>
+                                  <div class="" >
+                                      <input type="checkbox"  data-bootstrap-switch data-off-color="danger" data-on-color="success" #link >
+                                      <label class=" font fs-10" style="color: rgb(4, 171, 4); margin-left: 10px;" *ngIf="stateLink && wasLinked"> Usuário vinculado com sucesso </label>
+                                  </div>
+
+                                </div>
+
+                    
+                                 <div class="input-group mt-4 mb-3 col-6" >
+                                    <label class="text w-100"  > <b>Nome</b> </label>
+                                    <input type="text" class="form-control" [readonly]="readonlyFields['name']" formControlName="name" >
                                 </div>    
                                   
-                                <div class="input-group mt-3 mb-3  col-6">
-                                    <label class="text w-100">Sobrenome</label>
-                                    <input type="text" class="form-control"  required  formControlName="lastName">
+                                <div class="input-group mt-4 mb-3  col-6">
+                                    <label class="text w-100" >Sobrenome</label>
+                                    <input type="text" class="form-control" [readonly]="readonlyFields['lastName']" formControlName="lastName">
                                 </div>
                           </div>
 
@@ -67,12 +77,12 @@
 
                             <div class="input-group mb-3 mt-3 col-6">
                               <label class="text w-100" > Telefone  </label>
-                              <input type="email" class="form-control"  required  formControlName="phone">
+                              <input type="email" class="form-control" [readonly]=" readonlyFields['phone']" formControlName="phone">
                             </div>
 
                             <div class="input-group mb-3 mt-3 col-sm-6">
                               <label class="text w-100" > Data de nascimineto  </label>
-                              <input type="text" class="form-control"  required  formControlName="birthday">
+                              <input type="text" class="form-control" [readonly]="readonlyFields['birthday']" formControlName="birthday">
                             </div>
                           </div>
 
@@ -80,17 +90,17 @@
 
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100" >Email</label>
-                                <input type="email" class="form-control"  required  formControlName="email">
+                                <input type="email" class="form-control" [readonly]="readonlyFields['email']" formControlName="email">
                               </div>
 
                               <div class="input-group mb-3 mt-3 col-6">
                                 <label class="text w-100" > Nacionalidade </label>
-                                <input type="email" class="form-control"  required  formControlName="nationality">
+                                <input type="email" class="form-control" [readonly]="readonlyFields['nationality']" formControlName="nationality">
                               </div>
 
                               <div class="input-group mb-3 mt-3 col-6">
                                 <label class="text w-100" > Residência atual </label>
-                                <input type="email" class="form-control"  required  formControlName="actualAddress">
+                                <input type="email" class="form-control" [readonly]="readonlyFields['actualAddress']" formControlName="actualAddress">
                               </div>
 
                           </div>
@@ -102,19 +112,19 @@
 
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100" > País da sede </label>
-                                <input type="text" class="form-control"  required  formControlName="headquarterCountry">
+                                <input type="text" class="form-control" [readonly]="readonlyFields['headquarterCountry']" formControlName="headquarterCountry">
                               </div>
 
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100"> Cidade da sede </label>
-                                  <input type="text" class="form-control"  required  formControlName="headquarterCity">
+                                  <input type="text" class="form-control" [readonly]="readonlyFields['headquarterCity']" formControlName="headquarterCity">
                               </div>
                               </div>
                                             
                           <div class="row mt-3" >
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100"> Nome da sede </label>
-                                <input type="text" class="form-control"  required  formControlName="headquarterName">
+                                <input type="text" class="form-control"  [readonly]="readonlyFields['headquarterName']"formControlName="headquarterName">
                               </div>
                             </div>
 
@@ -421,7 +431,7 @@
 
             <div *ngIf="mostrarSugerencias">
                 <div *ngFor="let item of suggested" (click)="selectUser(item)">
-                      <div class="boxSelection mt-1 font"> {{ item.Nome }} </div>
+                      <div class="boxSelection mt-1 font"> {{ item['Nome Completo'] }} </div>
                 </div>
             </div>
   
@@ -434,6 +444,15 @@
         </div>
       </div>
     </div>
+
+
+      <!-- no link selection  -->
+  <div id="custom-toast" class="alert alert-danger alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showLabelLinked"  >
+    <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5 style="font-size: 0.9em;"><i class="icon fas fas fa-user-lock"></i> Erro</h5>
+    <p class="cursor mt-1" >Você selecionou um usuário de um banco de dados externo. É necessário escolher a opção 'Link com Congregatio'.</p>
+  </div>
+
   
 
 
