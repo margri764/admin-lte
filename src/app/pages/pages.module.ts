@@ -23,6 +23,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 
 
+
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -53,7 +54,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     NgChartsModule.forRoot(),
     BsDatepickerModule.forRoot(),
     NgxDropzoneModule,
-    PdfViewerModule
+    PdfViewerModule,
 
   ]
 })

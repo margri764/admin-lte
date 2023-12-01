@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { User } from 'src/app/shared/models/user.models';
 import { UserService } from 'src/app/shared/services/user/user.service';
-
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -8,18 +8,20 @@ import { UserService } from 'src/app/shared/services/user/user.service';
 })
 export class UsersComponent implements OnInit {
 
-  users : any []=[];
+  users : User []=[];
   isLoading : boolean = false;
-  dtOptions: any = {};
+  dtOptions: DataTables.Settings = {};
 
   constructor(
               private userService : UserService
   ) { }
 
-  ngOnInit(): void {
 
+
+  ngOnInit(): void {
+   
     this.dtOptions = {
-      pagingType: 'full_numbers', // Otras opciones de configuración...
+      pagingType: 'full_numbers'
     };
 
     this.initialUsers();

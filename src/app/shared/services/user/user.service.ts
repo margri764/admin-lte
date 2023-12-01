@@ -59,7 +59,6 @@ export class UserService {
 
 
   getDocByUserId( id:any ){
-    console.log(id);
 
     return this.http.get<any>(`${this.baseUrl}api/document/getDocByUserId/${id}`) 
     

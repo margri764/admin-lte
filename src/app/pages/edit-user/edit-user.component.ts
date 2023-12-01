@@ -17,6 +17,12 @@ interface CustomFile extends File {
   downloadLink?: string;
 }
 
+interface Event {
+  date: string;
+  description: string;
+}
+
+
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
@@ -538,7 +544,33 @@ pathImg : string = 'assets/no-image.jpg'
     });
 
     this.wasLinked = true;
+    this.user = {
+        ...user,
+         history: this.extractEventDescriptions(user['Histórico Sedes'])
+        }
+         console.log(this.user.history);
+
    }
+
+   extractEventDescriptions(input: string): string[] {
+    const descriptions: string[] = [];
+  
+    const lines = input.split(/\d{1,2}\/\d{1,2}\/\d{4}/).filter(Boolean);
+  
+    for (const line of lines) {
+      const parts = line.split('-').map(part => part.trim());
+      if (parts.length === 2) {
+        const description = parts[1];
+        descriptions.push(description);
+      }
+    }
+  
+    return descriptions;
+  }
+  
+
+  
+
   
 
    ngAfterViewInit() {

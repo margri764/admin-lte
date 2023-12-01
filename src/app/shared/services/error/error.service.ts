@@ -79,24 +79,6 @@ export class ErrorService {
        this.status429Error$.emit({emmited:true, msg: error.error.message });
      return of(null);
    }
-   if (error.status === 500 && error.error.error === 'Usuário não encontrado' ) {
-
-    this.closeIsLoading$.emit(true);
-     this.status429Error$.emit({emmited:true, msg: error.error.message });
-   return of(null);
- }
-
-
- 
- 
-
-    if (error.status === 429 && error.error.message === "Você excedeu o limite de 3 tentativas de login. Por favor, aguarde 1 minutos antes de tentar novamente") {
-      this.status429Error$.emit( {emmited:true, msg:error.error.message } )
-     this.closeIsLoading$.emit(true);
-      return of(null);
-   }
-
-
 
     if (error.status === 401) {
       this.logout();
@@ -108,14 +90,24 @@ export class ErrorService {
     }
 
 
+  if (error.status === 500 && error.error.error === 'Usuário não encontrado' ) {
+     this.closeIsLoading$.emit(true);
+     this.status429Error$.emit({emmited:true, msg: error.error.message });
+    return of(null);
+  }
 
+  if (error.status === 429 && error.error.message === "Você excedeu o limite de 3 tentativas de login. Por favor, aguarde 1 minutos antes de tentar novamente") {
+      this.status429Error$.emit( {emmited:true, msg:error.error.message } )
+     this.closeIsLoading$.emit(true);
+      return of(null);
+  }
     
-    if (error.status === 500) {
+  if (error.status === 500) {
       alert("Error en el back")
       // this.openDialogBackendDown();
       // this.closeIsLoading$.emit(true);
       return of(null);
-    }
+  }
 
      if (error.status === 403 && error.error.message==="Credenciales invalidas." ) {
       this.closeIsLoading$.emit(true);
@@ -151,7 +143,6 @@ export class ErrorService {
        return of(null);
      }
        
-      
 
     if (error.status === 400 && error.error.message === "Usuário sem função" ) {
         this.noRoleError$.emit(true);
@@ -165,7 +156,6 @@ export class ErrorService {
         return of(null);
     }
 
- 
 
     if (error.statusText === "Unknown Error" ) {
       this.closeIsLoading$.emit(true);

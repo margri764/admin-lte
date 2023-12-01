@@ -24,7 +24,11 @@
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-profile-alarm" data-toggle="pill" href="#alarm" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Alarmes</a>
-                </li>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-profile-alarm" data-toggle="pill" href="#history" role="tab" aria-controls="custom-tabs-four-history" aria-selected="false">Histórico da sede</a>
+                   </li>
+
               </ul>
           </div>
          </div>
@@ -315,8 +319,18 @@
                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum ipsum porro explicabo, ut similique quasi debitis mollitia numquam impedit asperiores fugiat vero corporis. Totam inventore ab hic dolorem nam tempore!
                </div>
               </div>
-              
-          
+            </div>
+
+            <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history">
+              <div class="row mt-5">
+                <div class="col-12">
+                
+                  <div class="boxSelection" >
+                        {{ user.history }}
+                  </div>
+
+               </div>
+              </div>
             </div>
           </div>
 

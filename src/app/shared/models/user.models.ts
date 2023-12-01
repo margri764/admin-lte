@@ -22,6 +22,8 @@ export class User {
         public actualAddress: string,
         public linkCongregatio: any,
         public active: any,
+        public img : string,
+        public history? : string
         )
         {}
   

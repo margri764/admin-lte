@@ -77,9 +77,9 @@
         <p class="login-box-msg"> - Sede -</p>
 
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Nome da sede" formControlName="headquarter" required [ngStyle]="( validField('headquarter')) ? {'border':'1px solid red'}:{}">
+            <input type="text" class="form-control" placeholder="Nome da sede" formControlName="headquarterName" required [ngStyle]="( validField('headquarter')) ? {'border':'1px solid red'}:{}">
         
-            <div *ngIf="validField('headquarter')" class="invalid" > Dado obrigatório </div>
+            <div *ngIf="validField('headquarterName')" class="invalid" > Dado obrigatório </div>
 
           </div>
 

@@ -17,7 +17,6 @@ import { NoPageFoundComponent } from './no-page-found/no-page-found.component';
 import { StoreModule } from '@ngrx/store';
 import { appReducers } from 'src/app/shared/redux/app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { EffectsModule } from '@ngrx/effects';
 
 
 

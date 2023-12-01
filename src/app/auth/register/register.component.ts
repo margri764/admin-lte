@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
       email:  [ '', [Validators.required]],
       birthday:  [ '', [Validators.required]],
       phone:  [ '', [Validators.required]],
-      headquarter:  [ '', [Validators.required]],
+      headquarterName:  [ '', [Validators.required]],
       headquarterCity:  [ '', [Validators.required]],
       headquarterCountry:  [ '', [Validators.required]],
     });
@@ -78,7 +78,7 @@ export class RegisterComponent implements OnInit {
 
     const birthdayFormatted = moment(birthday).format('YYYY-MM-DD');
     
-    const body = {
+    const body : User = {
       ...this.myForm.value,
       birthday: birthdayFormatted
     }
@@ -96,7 +96,9 @@ export class RegisterComponent implements OnInit {
   }
 
   validField( field: string ) {
-    return this.myForm.controls[field].errors && this.myForm.controls[field].touched;
+    const control = this.myForm.get(field);
+    return control && control.errors && control.touched;
+    // return this.myForm.controls[field].errors && this.myForm.controls[field].touched;
 }
 
 

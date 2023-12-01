@@ -1,11 +1,11 @@
 <div class="login-page"  >
   <div class="login-box" *ngIf="showLogin">
 
-    <!-- /.login-logo -->
     <div class="card card-outline card-primary" style="background-color: rgb(234, 243, 250, 0.9);">
       <div class="card-header text-center">
         <span class="h1"><b>Admin</b>LTE</span>
       </div>
+
       <div class="card-body">
         <p class="login-box-msg">Login</p>
   
@@ -35,32 +35,32 @@
          
         </form>
   
-        <div class="d-flex flex-column align-items-end" style="margin-top: 30px;">
+        <div class=" fs-9 col-12 font" style="margin-top: 30px; ">
           
-            <div >
-                <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fa fa-user"></i> Registrar-se</a> </span>
-                &nbsp; &nbsp;
-                <span class="mb-0"> <a  routerLink="/resend-password" href="" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Recuperar senha</a> </span>
-            </div>    
+               <div class="d-flex justify-content-end">
+                  <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fa fa-user"></i> Registrar-se</a> </span> &nbsp; &nbsp; &nbsp;
 
-            <div >
-              <button type="button" class="btn btn-primary shadow mt-5" (click)="changeModalsStates()" data-toggle="modal" data-target="#modalContactUs">
-                Entre em contato conosco
-              </button>
-            </div>
+                  <span class="mb-0"> <a  routerLink="/resend-password" href="" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Recuperar senha</a> </span>
+
+               </div>
+               <div class="col-12 d-flex justify-content-end mt-2">
+                
+                <span class="mb-0"> <a  routerLink="/resend-password" href="" class="text-center" (click)="changeModalsStates()" data-toggle="modal" data-target="#modalContactUs">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Entre em contato conosco</a> </span>
+
+               </div>
+      
+
          </div>
-     
-    
-
-  
-         
         
       </div>
       <!-- /.card-body -->
     </div>
-    <!-- /.card -->
+
   </div>
 </div>  
+
+
+
 
   <!-- Modal contact us -->
   <div class="modal fade" id="modalContactUs" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95;">
