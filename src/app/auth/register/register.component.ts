@@ -39,14 +39,14 @@ export class RegisterComponent implements OnInit {
     this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
     
     this.myForm = this.fb.group({
-      name:     [ '', [Validators.required] ],
-      lastName:  [ '', [Validators.required]],
-      email:  [ '', [Validators.required]],
-      birthday:  [ '', [Validators.required]],
-      phone:  [ '', [Validators.required]],
-      headquarterName:  [ '', [Validators.required]],
-      headquarterCity:  [ '', [Validators.required]],
-      headquarterCountry:  [ '', [Validators.required]],
+      name:     [ 'Fernando', [Validators.required] ],
+      lastName:  [ 'Griotti', [Validators.required]],
+      email:  [ 'fgriotti747@alumnos.iua.edu.ar', [Validators.required]],
+      Data_Nascimento:  [ '2003-10-10', [Validators.required]],
+      Telefone1:  [ '453454rt', [Validators.required]],
+      Nome_da_sede:  [ 'aaa', [Validators.required]],
+      Cidade_da_sede:  [ 'bbb', [Validators.required]],
+      Pais_da_sede:  [ 'ccc', [Validators.required]],
     });
 
     // this.myForm = this.fb.group({
@@ -74,16 +74,17 @@ export class RegisterComponent implements OnInit {
       return;
     }
     
-    const birthday = this.myForm.get('birthday')?.value;
+    const Data_Nascimento = this.myForm.get('birthday')?.value;
 
-    const birthdayFormatted = moment(birthday).format('YYYY-MM-DD');
+    const birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
     
     const body : User = {
       ...this.myForm.value,
-      birthday: birthdayFormatted
+      Data_Nascimento: birthdayFormatted
     }
     this.isLoading = true;
 
+    console.log(body);
     this.authService.signUp(body).subscribe( 
       ( {success} )=>{
           if(success){

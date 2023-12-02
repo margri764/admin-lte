@@ -73,23 +73,27 @@
       <div class="card-body p-0">
         <table class="table table-sm font">
           <thead>
-            <tr>
+            <tr class="fs-9">
               <th style="width: 10px">#</th>
               <th>Nome</th>
               <th>Data</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody *ngIf="reqRegister.length > 0; else noData">
             <tr *ngFor="let request of reqRegister; let i = index" [routerLink]="['editar-usuario/', request.iduser]" class="selected">
               <td>{{ i + 1 }}</td>
-              <td >{{ request.name }} {{ request.lastName }}</td>
+              <td>{{ request.Nome_Completo }}</td>
               <td>{{ request.date | date }}</td>
             </tr>
           </tbody>
+          <ng-template #noData >
+            <tr class="mt-3">
+              <td colspan="3" class="text-center" style="height: 60px; margin-top: 40px;">Sem pedidos de registros</td>
+            </tr>
+          </ng-template>
         </table>
-        
       </div>
-      <!-- /.card-body -->
+      
     </div>
     <!-- /.card -->
   </div>

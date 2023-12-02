@@ -39,7 +39,7 @@
 
             <div class="tab-pane fade show active " id="dados" role="tabpanel" aria-labelledby="dados">
               <div class="row">
-                  <div class="col-8">
+                  <div class="col-9">
 
                       <form [formGroup]="myForm" class="needs-validation mt-1"  novalidate  [autocomplete]="false" >
 
@@ -53,7 +53,7 @@
                               </div>       -->
                                 <div class="input-group mt-4 col-12">
                                   <span class="text mb-3 w-100"> <b>Nome completo</b> </span>
-                                  <input type="text" class="form-control" [readonly]="readonlyFields['fullName']" formControlName="fullName" >
+                                  <input type="text" class="form-control" [readonly]="readonlyFields['Nome_Completo'] || isLinkedToCongregatio" formControlName="Nome_Completo" >
                                   <button type="button" class="btn btn-primary btn-block" style="width: 150px; font-size: 1em; line-height: 20px;" data-toggle="modal" data-target="#modalCongregatio" >
                                     <i class="fas fa-search"></i> &nbsp; Congregatio
                                   </button>
@@ -71,12 +71,12 @@
                     
                                  <div class="input-group mt-4 mb-3 col-6" >
                                     <label class="text w-100"  > <b>Nome</b> </label>
-                                    <input type="text" class="form-control" [readonly]="readonlyFields['name']" formControlName="name" >
+                                    <input type="text" class="form-control" [readonly]="readonlyFields['name'] || isLinkedToCongregatio" formControlName="name" >
                                 </div>    
                                   
                                 <div class="input-group mt-4 mb-3  col-6">
                                     <label class="text w-100" >Sobrenome</label>
-                                    <input type="text" class="form-control" [readonly]="readonlyFields['lastName']" formControlName="lastName">
+                                    <input type="text" class="form-control" [readonly]="readonlyFields['lastName'] || isLinkedToCongregatio" formControlName="lastName">
                                 </div>
                           </div>
 
@@ -84,12 +84,12 @@
 
                             <div class="input-group mb-3 mt-3 col-6">
                               <label class="text w-100" > Telefone  </label>
-                              <input type="email" class="form-control" [readonly]=" readonlyFields['phone']" formControlName="phone">
+                              <input type="text" class="form-control" [readonly]=" readonlyFields['Telefone1'] || isLinkedToCongregatio" formControlName="Telefone1">
                             </div>
 
                             <div class="input-group mb-3 mt-3 col-sm-6">
                               <label class="text w-100" > Data de nascimineto  </label>
-                              <input type="text" class="form-control" [readonly]="readonlyFields['birthday']" formControlName="birthday">
+                              <input type="text" class="form-control" [readonly]="readonlyFields['Data_Nascimento'] || isLinkedToCongregatio" formControlName="Data_Nascimento">
                             </div>
                           </div>
 
@@ -97,17 +97,17 @@
 
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100" >Email</label>
-                                <input type="email" class="form-control" [readonly]="readonlyFields['email']" formControlName="email">
+                                <input type="email" class="form-control" [readonly]="readonlyFields['Email'] || isLinkedToCongregatio" formControlName="Email">
                               </div>
 
                               <div class="input-group mb-3 mt-3 col-6">
                                 <label class="text w-100" > Nacionalidade </label>
-                                <input type="email" class="form-control" [readonly]="readonlyFields['nationality']" formControlName="nationality">
+                                <input type="text" class="form-control" [readonly]="readonlyFields['Nacionalidade'] || isLinkedToCongregatio" formControlName="Nacionalidade">
                               </div>
 
                               <div class="input-group mb-3 mt-3 col-6">
                                 <label class="text w-100" > Residência atual </label>
-                                <input type="email" class="form-control" [readonly]="readonlyFields['actualAddress']" formControlName="actualAddress">
+                                <input type="text" class="form-control" [readonly]="readonlyFields['Residencia_atual'] || isLinkedToCongregatio" formControlName="Residencia_atual">
                               </div>
 
                           </div>
@@ -119,19 +119,19 @@
 
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100" > País da sede </label>
-                                <input type="text" class="form-control" [readonly]="readonlyFields['headquarterCountry']" formControlName="headquarterCountry">
+                                <input type="text" class="form-control" [readonly]="readonlyFields['Pais_da_sede'] || isLinkedToCongregatio" formControlName="Pais_da_sede">
                               </div>
 
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100"> Cidade da sede </label>
-                                  <input type="text" class="form-control" [readonly]="readonlyFields['headquarterCity']" formControlName="headquarterCity">
+                                  <input type="text" class="form-control" [readonly]="readonlyFields['Cidade_da_sede'] || isLinkedToCongregatio" formControlName="Cidade_da_sede">
                               </div>
                               </div>
                                             
                           <div class="row mt-3" >
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100"> Nome da sede </label>
-                                <input type="text" class="form-control"  [readonly]="readonlyFields['headquarterName']"formControlName="headquarterName">
+                                <input type="text" class="form-control"  [readonly]="readonlyFields['Nome_da_sede'] || isLinkedToCongregatio"formControlName="Nome_da_sede">
                               </div>
                             </div>
 
@@ -157,18 +157,41 @@
                                   
                   </div>
                   
-                  <div class="col-4" >
+                  <div class="col-3" >
 
-                    <div class="card card-primary card-outline col-12"> 
+                    <div class="card card-primary card-outline col-12 p-0"> 
                             <div class="card-body box-profile">
                               <div class="text-center">
-                                  <img class="profile-user-img img-fluid" [src]="pathImg" alt="Foto do Perfil do Usuário">
+                                  <img class=" img-fluid" [src]="pathImg" alt="Foto do Perfil do Usuário">
                               </div>
                            
 
-                            <h5 class="font fs-11 mt-3 text-center" *ngIf="user.fullName !== '' "> {{ user.fullName }} </h5>
-                            <h5 class="font fs-11 mt-3 text-center" *ngIf="user.fullName === '' "> {{ user.name }} {{ user.lastName }} </h5>
+                            <h5 class="font fs-11 mt-3 text-center" *ngIf="user?.Nome_Completo !== '' "> {{ user && user.Nome_Completo }} </h5>
+                            <!-- <h5 class="font fs-11 mt-3 text-center" *ngIf="user.Nome_Completo === '' "> {{ user.name }} {{ user.lastName }} </h5> -->
+                            
+                            <div class="card mt-3" *ngIf=" user?.Habito_com_capuz === 'Sim' ">
 
+                              <div class="capuz">
+                                  Hábito com capuz
+                              </div>
+                            <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
+                              <span style="width: 100%; display: inline-block;"> <b> {{ user.capuzDate ? (user.capuzDate | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+                              <span class="fs-11 " style="width: 100%; display: inline-block;"> Ecarregado </span>
+                              <span class="fs-10"> <b>{{ user.capuzManager || '-----------'}} </b></span>
+                            </div>
+                          </div>
+
+                          <div class="card mt-3" *ngIf="user?.Habito_sem_capuz === 'Sim' ">
+
+                            <div class="capuz">
+                                Hábito sem capuz
+                            </div>
+                          <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
+                            <span style="width: 100%; display: inline-block;"> <b> {{ user.semCapuzDate ? (user.semCapuzDate | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+                            <span class="fs-11 " style="width: 100%; display: inline-block;"> Ecarregado </span>
+                            <span class="fs-10"> <b>{{ user.semCapuzManager || '-----------'}} </b></span>
+                          </div>
+                        </div>
                             <!-- <p class="font fs-10 mt-3 text-center" style="color: gray;">Software Engineer</p> -->
 
                             <!-- <ul class="list-group list-group-unbordered mb-3">
@@ -315,7 +338,7 @@
 
             <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm">
               <div class="row mt-5">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum ipsum porro explicabo, ut similique quasi debitis mollitia numquam impedit asperiores fugiat vero corporis. Totam inventore ab hic dolorem nam tempore!
                </div>
               </div>
@@ -325,8 +348,9 @@
               <div class="row mt-5">
                 <div class="col-12">
                 
-                  <div class="boxSelection" >
-                        {{ user.history }}
+                  <div class="boxSelection font" style="padding: 15px;" >
+                        {{ user && user.Historico_Sedes }}
+                       <span *ngIf="user?.Historico_Sedes === '' || user?.Historico_Sedes === undefined "> Sem histórico de sede para mostrar </span> 
                   </div>
 
                </div>
@@ -408,12 +432,12 @@
 
 
   <!-- ask delete document -->
-  <div class="modal fade" id="modalAskDelDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.85;">
+  <div class="modal fade" id="modalAskDelDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.85; ">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <i class="fas fa-exclamation-triangle" style="color: red; font-size: 40px;"></i>
-          <button type="button" #closebutton  class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button"   class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -431,7 +455,8 @@
   </div>
 
   <!-- Modal Congregatio-->
-  <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95;">
+  <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95; ">
+
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header" style="padding: 20px;">
@@ -454,9 +479,9 @@
           </form>
 
           <div *ngIf="mostrarSugerencias">
-              <div *ngFor="let item of suggested" (click)="selectUser(item)">
+              <div *ngFor="let item of suggested"  (click)="selectUser(item)" >
                 
-                <div class="boxSelection mt-1 font">   
+                <div class="boxSelection mt-1 font" >   
                    <img class=" img-fluid" src="https://congregatio.info/{{ item['Ruta Imagen'] }}" alt="Foto do Perfil do Usuário" width="40px">
                   {{ item['Nome Completo'] }}</div>
               </div>
@@ -464,7 +489,7 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close"> Sair</button>
+          <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close" #closebutton > Sair</button>
         </div>
 
       

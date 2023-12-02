@@ -3,6 +3,7 @@ import { SessionService } from '../services/session/session.service';
 import { AppState } from '../redux/app.reducer';
 import { Store } from '@ngrx/store';
 import { distinctUntilChanged, filter } from 'rxjs';
+import { getDataLS } from '../storage';
 
 @Component({
   selector: 'app-navbar',
@@ -31,17 +32,21 @@ export class NavbarComponent implements OnInit {
       this.sessionService.startSession();
 
       }
+      const user = getDataLS("user");
+      if(user !== undefined){
+        this.user = { name: user?.name, role:user?.role} ;
+      }
     });
 
-    this.store.select('auth')
-    .pipe(
-    filter( ({user})=>  user != null && user != undefined),
-    distinctUntilChanged((prev, curr) => prev.user === curr.user)
-    ).subscribe(
-    ({user})=>{
-    this.user = { name:user?.name, lastName: user?.lastName, role:user?.role} ;
-    // this.isLoading = false;
-  })
+  //   this.store.select('auth')
+  //   .pipe(
+  //   filter( ({user})=>  user != null && user != undefined),
+  //   distinctUntilChanged((prev, curr) => prev.user === curr.user)
+  //   ).subscribe(
+  //   ({user})=>{
+  //   this.user = { name:user?.Nome_Completo, role:user?.role} ;
+  //   // this.isLoading = false;
+  // })
   }
 
 }

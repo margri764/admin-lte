@@ -28,11 +28,10 @@
                              </td>
                             <td >
                                 <div [routerLink]="['/dashboard/editar-usuario/', user.iduser]" >  
-                                    <label *ngIf="user.fullName !== '' " class="selected"> {{ user.fullName}} </label> 
-                                    <label *ngIf="user.fullName === '' " class="selected"> {{ user.name}}  {{ user.lastName }} </label> 
+                                    <label *ngIf="user.Nome_Completo !== '' " class="selected"> {{ user.Nome_Completo}} </label> 
                                 </div>
                             </td>
-                            <td>{{ user.email }} </td>
+                            <td>{{ user.Email }} </td>
                             <td> 
                                 <span class="badge badge-success right" style="padding: 8px 10px 8px 10px;">Sim</span>
                                 <!-- <span class="badge badge-danger right" style="padding: 8px 10px 8px 10px;">Não</span> -->

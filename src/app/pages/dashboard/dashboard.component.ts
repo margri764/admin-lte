@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
 
   user:any;
   isLoading : boolean = false;
-  reqRegister : any;
+  reqRegister : any []=[];
   reqLength: number = 0;
 
   constructor(

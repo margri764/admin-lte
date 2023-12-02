@@ -37,6 +37,7 @@ export class EditUserComponent implements OnInit, AfterViewInit  {
 @Output() onEnter   : EventEmitter<string> = new EventEmitter();
 debouncer: Subject<string> = new Subject();
 @ViewChild('link') tuCheckbox!: ElementRef;
+@ViewChild('closebutton') closebutton! : ElementRef;
 
 myForm! : FormGroup;
 myFormSearch! : FormGroup;
@@ -143,15 +144,15 @@ pathImg : string = 'assets/no-image.jpg'
       ordem: [ '', [Validators.required] ],
       name:  ['', [Validators.required]],
       lastName:  [ '', [Validators.required]],
-      fullName:  [ '', [Validators.required]],
-      phone:  [ '', [Validators.required]],
-      birthday:  [ '', [Validators.required]],
-      email:  [ '', [Validators.required]],
-      nationality:  [ '', [Validators.required]],
-      actualAddress:  [ '', [Validators.required]],
-      headquarterCountry:  [ '', [Validators.required]],
-      headquarterCity:  [ '', [Validators.required]],
-      headquarterName:  [ '', [Validators.required]],
+      Nome_Completo:  [ '', [Validators.required]],
+      Telefone1:  [ '', [Validators.required]],
+      Data_Nascimento:  [ '', [Validators.required]],
+      Email:  [ '', [Validators.required]],
+      Nacionalidade:  [ '', [Validators.required]],
+      Residencia_atual:  [ '', [Validators.required]],
+      Pais_da_sede:  [ '', [Validators.required]],
+      Cidade_da_sede:  [ '', [Validators.required]],
+      Nome_da_sede:  [ '', [Validators.required]],
       linkCongregatio: [ false],
       active: ['']
     });
@@ -170,17 +171,58 @@ pathImg : string = 'assets/no-image.jpg'
        if(this.user.role === ''){
         
        }
+      //  ordem: this.user?.headquarterName,
+      //  name:  this.user?.name,
+      //  lastName: this.user?.lastName,
+      //  fullName: [''],
+      //  phone: this.user?.phone,
+      //  birthday: this.user?.birthday,
+      //  email:   this.user?.email,
+      //  nationality: this.user?.country,
+      //  actualAddress: this.user?.actualAddress,
+      //  headquarterCountry: this.user?.headquarterCountry,
+      //  headquarterCity: this.user?.headquarterCity,
+      //  headquarterName: this.user?.headquarterName,
+      //  linkCongregatio: link,
+      //  active: this.user.active
 
 
-      // const body : User = {
-
+      const body : User = {
+        ...this.myForm.value,
+        // iduser: , 
+        // name: ,
+        // lastName: ,
+        // fullName: ,
+        // email: ,
+        // birthday: , 
+        // headquarterName:,
+        // headquarterCity: ,
+        // headquarterCountry: ,
+        // phone: ,
+        // ordem: ,
+        // validateEmail: ,
+        // password: ,
+        // status: ,
+        // role: ,
+        // country: ,
+        // actualAddress: ,
+        // linkCongregatio: ,
+        // active: ,
+        // img : ,
+        // history : ,
+        // semCapuzManager : ,
+        // semCapuzDate : ,
+        // capuzManager : ,
+        // capuzDate? : ,
+        // capuz? : ,
+        // semCapuz? : ,
         
 
-      // }
+      }
 
+    alert(JSON.stringify(body));
 
-    alert(JSON.stringify(this.myForm.value));
-    }
+  }
 
     activeAccount( active:any){
 
@@ -310,6 +352,7 @@ pathImg : string = 'assets/no-image.jpg'
       // }
       
     }
+isLinkedToCongregatio : boolean = false;
 
     getUserById( id:any ){
 
@@ -320,6 +363,9 @@ pathImg : string = 'assets/no-image.jpg'
             this.user = user;
             this.initialForm();
             this.getDocByUserId(user.iduser);
+            this.pathImg = user.img;
+            (user.linkCongregatio === 1) ? this.isLinkedToCongregatio = true : this.isLinkedToCongregatio = false; 
+
 
           }
         })
@@ -391,18 +437,18 @@ pathImg : string = 'assets/no-image.jpg'
       (this.user.linkCongregatio === 1) ? link = true : link = false;
       
       this.myForm.patchValue({
-        ordem: this.user?.headquarterName,
+        ordem: this.user?.ordem,
         name:  this.user?.name,
         lastName: this.user?.lastName,
-        fullName: [''],
-        phone: this.user?.phone,
-        birthday: this.user?.birthday,
-        email:   this.user?.email,
-        nationality: this.user?.country,
-        actualAddress: this.user?.actualAddress,
-        headquarterCountry: this.user?.headquarterCountry,
-        headquarterCity: this.user?.headquarterCity,
-        headquarterName: this.user?.headquarterName,
+        Nome_Completo: [this.user?.Nome_Completo,],
+        Telefone1: this.user?.Telefone1,
+        Data_Nascimento: this.user?.Data_Nascimento,
+        Email:   this.user?.Email,
+        Nacionalidade: this.user?.Nacionalidade,
+        Residencia_atual: this.user?.Residencia_atual,
+        Pais_da_sede: this.user?.Pais_da_sede,
+        Cidade_da_sede: this.user?.Cidade_da_sede,
+        Nome_da_sede: this.user?.Nome_da_sede,
         linkCongregatio: link,
         active: this.user.active
       });
@@ -502,7 +548,6 @@ pathImg : string = 'assets/no-image.jpg'
 
 
    selectUser(user: any){
-    console.log(user);
 
     this.pathImg =`https://congregatio.info/${user['Ruta Imagen']}`
   
@@ -546,30 +591,26 @@ pathImg : string = 'assets/no-image.jpg'
     this.wasLinked = true;
     this.user = {
         ...user,
-         history: this.extractEventDescriptions(user['Histórico Sedes'])
+         history: user['Histórico Sedes'],
+         capuzManager: user['Encarregado Com Capuz'],
+         capuzDate: user['Data Hábito Com Capuz'],
+         semCapuzManager: user['Encarregado Sem Capuz'],
+         semCapuzDate: user['Data Hábito Sem Capuz'],
+         semCapuz: user['Hábito sem capuz (s/n)'],
+         capuz: user['Hábito com capuz (s/n)'],
+         
         }
-         console.log(this.user.history);
+    
+        this.suggested = [];
+        this.myFormSearch.get('itemSearch')?.setValue('');
+        setTimeout(()=>{
+          // asi cierro el modal
+          this.closebutton.nativeElement.click();
+        },1)
+
+        console.log(this.user);
 
    }
-
-   extractEventDescriptions(input: string): string[] {
-    const descriptions: string[] = [];
-  
-    const lines = input.split(/\d{1,2}\/\d{1,2}\/\d{4}/).filter(Boolean);
-  
-    for (const line of lines) {
-      const parts = line.split('-').map(part => part.trim());
-      if (parts.length === 2) {
-        const description = parts[1];
-        descriptions.push(description);
-      }
-    }
-  
-    return descriptions;
-  }
-  
-
-  
 
   
 
@@ -590,6 +631,7 @@ pathImg : string = 'assets/no-image.jpg'
           this.showLabelLinked = false;
           console.log(this.showLabelLinked);
       }
+      (!state) ? this.isLinkedToCongregatio = false : this.isLinkedToCongregatio = true;
     
   
     });

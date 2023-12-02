@@ -52,24 +52,24 @@
                 [minDate]="minDate"
                 [maxDate]="maxDate"
                 [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
-                formControlName="birthday" required [ngStyle]="( validField('birthday')) ? {'border':'1px solid red'}:{}">
+                formControlName="Data_Nascimento" required [ngStyle]="( validField('Data_Nascimento')) ? {'border':'1px solid red'}:{}">
               <div class="input-group-append"  >
                 <div class="input-group-text"><i class="fa fa-calendar" style="color: rgb(0, 123, 255);"></i></div>
               </div>
             </div>
-            <div *ngIf="validField('birthday')" class="invalid" > Dado obrigatório </div>
+            <div *ngIf="validField('Data_Nascimento')" class="invalid" > Dado obrigatório </div>
 
           </div>
           
 
          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Telefone" formControlName="phone" required [ngStyle]="( validField('phone')) ? {'border':'1px solid red'}:{}">
+            <input type="text" class="form-control" placeholder="Telefone" formControlName="Telefone1" required [ngStyle]="( validField('Telefone1')) ? {'border':'1px solid red'}:{}">
             <div class="input-group-append">
               <div class="input-group-text">
                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM144 448c0 8.8 7.2 16 16 16h64c8.8 0 16-7.2 16-16s-7.2-16-16-16H160c-8.8 0-16 7.2-16 16zM304 64H80V384H304V64z" style="color: rgb(0, 123, 255);"/></svg>
               </div>
             </div> 
-            <div *ngIf="validField('phone')" class="invalid" > Dado obrigatório </div>
+            <div *ngIf="validField('Telefone1')" class="invalid" > Dado obrigatório </div>
 
           </div> 
 
@@ -77,21 +77,21 @@
         <p class="login-box-msg"> - Sede -</p>
 
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Nome da sede" formControlName="headquarterName" required [ngStyle]="( validField('headquarter')) ? {'border':'1px solid red'}:{}">
+            <input type="text" class="form-control" placeholder="Nome da sede" formControlName="Nome_da_sede" required [ngStyle]="( validField('Nome_da_sede')) ? {'border':'1px solid red'}:{}">
         
-            <div *ngIf="validField('headquarterName')" class="invalid" > Dado obrigatório </div>
+            <div *ngIf="validField('Nome_da_sede')" class="invalid" > Dado obrigatório </div>
 
           </div>
 
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Cidade da sede" formControlName="headquarterCity" required [ngStyle]="( validField('headquarterCity')) ? {'border':'1px solid red'}:{}">
-            <div *ngIf="validField('headquarterCity')" class="invalid" > Dado obrigatório </div>
+            <input type="text" class="form-control" placeholder="Cidade da sede" formControlName="Cidade_da_sede" required [ngStyle]="( validField('Cidade_da_sede')) ? {'border':'1px solid red'}:{}">
+            <div *ngIf="validField('Cidade_da_sede')" class="invalid" > Dado obrigatório </div>
 
           </div>
 
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="País da sede" formControlName="headquarterCountry" required [ngStyle]="( validField('headquarterCountry')) ? {'border':'1px solid red'}:{}">
-            <div *ngIf="validField('headquarterCountry')" class="invalid" > Dado obrigatório </div>
+            <input type="text" class="form-control" placeholder="Pais da sede" formControlName="Pais_da_sede" required [ngStyle]="( validField('País_da_sede')) ? {'border':'1px solid red'}:{}">
+            <div *ngIf="validField('Pais_da_sede')" class="invalid" > Dado obrigatório </div>
           </div>
  
 
