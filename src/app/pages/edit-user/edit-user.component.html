@@ -174,10 +174,22 @@
                               <div class="capuz">
                                   Hábito com capuz
                               </div>
-                            <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
-                              <span style="width: 100%; display: inline-block;"> <b> {{ user.capuzDate ? (user.capuzDate | date:'dd/MM/yyyy') : '--------' }} </b> </span>
-                              <span class="fs-11 " style="width: 100%; display: inline-block;"> Ecarregado </span>
-                              <span class="fs-10"> <b>{{ user.capuzManager || '-----------'}} </b></span>
+
+                            <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
+                              <span style="width: 100%; display: inline-block;" *ngIf="!wasLinked"> <b> {{ user.Data_Habito_Com_Capuz ? (user.Data_Habito_Com_Capuz | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+
+                            <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
+
+                              <span style="width: 100%; display: inline-block;" *ngIf="wasLinked"> <b> {{ userCongregatio['Data Hábito Com Capuz'] ? (userCongregatio['Data Hábito Com Capuz'] | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+
+                              <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
+
+                              <span class="fs-10" *ngIf="!wasLinked"> <b>{{ user.Encarregado_Com_Capuz || '-----------'}} </b></span>
+                              <span class="fs-10" *ngIf="wasLinked "> <b>{{ userCongregatio['Hábito com capuz (s/n)']
+                                || '-----------'}} </b></span>
+
+                              <!-- <span class="fs-10" *ngIf="!wasLinked"> <b>{{ user.Encarregado_Com_Capuz || '-----------'}} </b></span>
+                              <span class="fs-10" *ngIf="wasLinked "> <b>{{ userCongregatio['Encarregado Com Capuz'] || '-----------'}} </b></span> -->
                             </div>
                           </div>
 
@@ -187,9 +199,14 @@
                                 Hábito sem capuz
                             </div>
                           <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
-                            <span style="width: 100%; display: inline-block;"> <b> {{ user.semCapuzDate ? (user.semCapuzDate | date:'dd/MM/yyyy') : '--------' }} </b> </span>
-                            <span class="fs-11 " style="width: 100%; display: inline-block;"> Ecarregado </span>
-                            <span class="fs-10"> <b>{{ user.semCapuzManager || '-----------'}} </b></span>
+
+                            <span style="width: 100%; display: inline-block;" *ngIf="!wasLinked"> <b> {{ user.Data_Habito_Sem_Capuz ? (user.Data_Habito_Sem_Capuz | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+
+                            <span style="width: 100%; display: inline-block;" *ngIf="wasLinked"> <b> {{ userCongregatio['Data_Habito_Sem_Capuz'] ? (userCongregatio['Data_Habito_Sem_Capuz'] | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+
+                            <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
+
+                            <span class="fs-10"> <b>{{ user.Encarregado_Sem_Capuz || '-----------'}} </b></span>
                           </div>
                         </div>
                             <!-- <p class="font fs-10 mt-3 text-center" style="color: gray;">Software Engineer</p> -->
@@ -398,38 +415,36 @@
 </div>
 
 
-<!-- Modal Preview Back -->
-<div class="modal fade" id="viewModalBack" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl justify-content-center" role="document"> 
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="viewModalLabel"> <a>{{fileNameBack}}</a> </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" >
-
-        <div *ngIf="!loadingPdf">
-          <div class="embed-responsive embed-responsive-16by9">
-            <pdf-viewer [src]="selectedPdfBack" [render-text]="true" [original-size]="false" class="embed-responsive-item"></pdf-viewer>
-          </div>
+  <!-- Modal Preview Back -->
+  <div class="modal fade" id="viewModalBack" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl justify-content-center" role="document"> 
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewModalLabel"> <a>{{fileNameBack}}</a> </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body" >
 
-      </div>
-      <div class="modal-footer">
+          <div *ngIf="!loadingPdf">
+            <div class="embed-responsive embed-responsive-16by9">
+              <pdf-viewer [src]="selectedPdfBack" [render-text]="true" [original-size]="false" class="embed-responsive-item"></pdf-viewer>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
 
 
-        <a [href]="selectedPdfBack" download="{{fileNameBack}}">
-          <i class="fas fa-download"></i> Baixar
-        </a>
-        <!-- Botones y acciones del pie del modal -->
+          <a [href]="selectedPdfBack" download="{{fileNameBack}}">
+            <i class="fas fa-download"></i> Baixar
+          </a>
+          <!-- Botones y acciones del pie del modal -->
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-
 
   <!-- ask delete document -->
   <div class="modal fade" id="modalAskDelDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.85; ">
@@ -477,6 +492,12 @@
     
               </div>
           </form>
+          
+          <div class="d-flex justify-content-center" *ngIf="loadindCongregatio">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
 
           <div *ngIf="mostrarSugerencias">
               <div *ngFor="let item of suggested"  (click)="selectUser(item)" >
@@ -489,7 +510,7 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close" #closebutton > Sair</button>
+          <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close" #closebutton (click)="close()"> Sair</button>
         </div>
 
       
@@ -504,14 +525,13 @@
     <p class="cursor mt-1 fs-9" >Você selecionou um usuário de um banco de dados externo. É necessário escolher a opção 'Link com Congregatio'.</p>
   </div>
 
-   <!-- success upload -->
+   <!-- success upload / edition-->
  <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
   <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
   <span class="fs-8 w-100"> {{msg}}</span>
   <!-- <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span> -->
 </div>
-
 
 
 <div class="loading-overlay" *ngIf="isLoading">

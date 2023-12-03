@@ -74,7 +74,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
     
-    const Data_Nascimento = this.myForm.get('birthday')?.value;
+    const Data_Nascimento = this.myForm.get('Data_Nascimento')?.value;
 
     const birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
     

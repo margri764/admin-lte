@@ -6,8 +6,10 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
 import { User } from 'src/app/shared/models/user.models';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject, debounceTime } from 'rxjs';
+import { Subject, debounceTime, delay } from 'rxjs';
 import { CongregatioService } from 'src/app/shared/services/congregatio/congregatio.service';
+import { ErrorService } from 'src/app/shared/services/error/error.service';
+import * as moment from 'moment';
 
 
 // TENGO Q VER SI FUNCIONA EN PRODUCCION PROVEER LA RUTA A MI SERVIDOR PARA SERVIR UN PDF
@@ -90,8 +92,11 @@ stateLink : boolean = false;
 adminRole : boolean = false;
 dtOptions: any = {};
 
-userCongregatio : any;
-pathImg : string = 'assets/no-image.jpg'
+userCongregatio : any = null ;
+pathImg : string = 'assets/no-image.jpg';
+loadindCongregatio : boolean = false;
+isLinkedToCongregatio : boolean = false;
+
 
 
 
@@ -102,8 +107,8 @@ pathImg : string = 'assets/no-image.jpg'
                 private userService : UserService,
                 private fb : FormBuilder,
                 private congregatioService : CongregatioService,
-                private cdr: ChangeDetectorRef
-) { 
+                private errorService : ErrorService
+                ) { 
 
     this.activatedRoute.params.subscribe(
     ({id})=>{ this.getUserById(id) });
@@ -116,6 +121,8 @@ pathImg : string = 'assets/no-image.jpg'
 
 
   ngOnInit(): void {
+
+    this.errorService.closeIsLoading$.pipe(delay(100)).subscribe(emitted => emitted && (this.isLoading = false));
 
     this.dtOptions = {
       pagingType: 'full_numbers', // Otras opciones de configuración...
@@ -160,6 +167,15 @@ pathImg : string = 'assets/no-image.jpg'
   
     }
 
+    // const Data_Nascimento = this.myForm.get('Data_Nascimento')?.value;
+
+    // const birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
+    
+    // const body : User = {
+    //   ...this.myForm.value,
+    //   Data_Nascimento: birthdayFormatted
+    // }
+
     onSave(){
 
       // esto es por si alguien se olvida de linkear despues de seleccionar el user de la BD congregatio
@@ -168,67 +184,54 @@ pathImg : string = 'assets/no-image.jpg'
         return
        } 
 
-       if(this.user.role === ''){
+       let body = null;
+
+       if(this.isLinkedToCongregatio){
+        body = this.userCongregatio;
+        this.userService.editUserCongregatio(this.user.iduser, body).subscribe(
+          ( {success} )=>{
+              setTimeout(()=>{ this.isLoading = false },1000)
+            if(success){
+              this.showSuccess = true;
+              this.msg = 'Usúario editado com sucesso'; 
+            }
+          })
+
+       }else{
+        body = this.myForm.value;
+        this.isLoading = true;
+        const Data_Nascimento = this.myForm.get('Data_Nascimento')?.value;
+        const birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
+        body = {
+          ...body,
+          Data_Nascimento:birthdayFormatted,
+          role : this.role
+        }
+
+        //  alert(JSON.stringify(body) );
         
+        this.userService.editUserById(this.user.iduser, body).subscribe(
+          ( {success} )=>{
+              setTimeout(()=>{ this.isLoading = false },1000)
+            if(success){
+              this.showSuccess = true;
+              this.msg = 'Usúario editado com sucesso'; 
+
+            }
+          })
        }
-      //  ordem: this.user?.headquarterName,
-      //  name:  this.user?.name,
-      //  lastName: this.user?.lastName,
-      //  fullName: [''],
-      //  phone: this.user?.phone,
-      //  birthday: this.user?.birthday,
-      //  email:   this.user?.email,
-      //  nationality: this.user?.country,
-      //  actualAddress: this.user?.actualAddress,
-      //  headquarterCountry: this.user?.headquarterCountry,
-      //  headquarterCity: this.user?.headquarterCity,
-      //  headquarterName: this.user?.headquarterName,
-      //  linkCongregatio: link,
-      //  active: this.user.active
 
 
-      const body : User = {
-        ...this.myForm.value,
-        // iduser: , 
-        // name: ,
-        // lastName: ,
-        // fullName: ,
-        // email: ,
-        // birthday: , 
-        // headquarterName:,
-        // headquarterCity: ,
-        // headquarterCountry: ,
-        // phone: ,
-        // ordem: ,
-        // validateEmail: ,
-        // password: ,
-        // status: ,
-        // role: ,
-        // country: ,
-        // actualAddress: ,
-        // linkCongregatio: ,
-        // active: ,
-        // img : ,
-        // history : ,
-        // semCapuzManager : ,
-        // semCapuzDate : ,
-        // capuzManager : ,
-        // capuzDate? : ,
-        // capuz? : ,
-        // semCapuz? : ,
-        
+   
 
-      }
-
-    alert(JSON.stringify(body));
-
+    
   }
 
     activeAccount( active:any){
 
       this.isLoading = true;
 
-      const email = this.myForm.get('email')?.value;
+      const email = this.myForm.get('Email')?.value;
 
       this.authService.activeAccount( email, active ).subscribe
       ( ({success})=>{
@@ -352,7 +355,6 @@ pathImg : string = 'assets/no-image.jpg'
       // }
       
     }
-isLinkedToCongregatio : boolean = false;
 
     getUserById( id:any ){
 
@@ -361,9 +363,10 @@ isLinkedToCongregatio : boolean = false;
         ( {success, user} )=>{
           if(success){
             this.user = user;
+            
             this.initialForm();
             this.getDocByUserId(user.iduser);
-            this.pathImg = user.img;
+            this.pathImg = user.Ruta_Imagen;
             (user.linkCongregatio === 1) ? this.isLinkedToCongregatio = true : this.isLinkedToCongregatio = false; 
 
 
@@ -499,15 +502,15 @@ isLinkedToCongregatio : boolean = false;
 
     // search
    
-    close(){
-  this.mostrarSugerencias = false;
-  this.itemSearch = '';
-  this.suggested = [];
-  this.spinner= false;
-  this.myForm.get('itemSearch')?.setValue('');
-  // this.noMatches = false;
-  this.clientFound= null;
-  this.isClientFound = false;
+  close(){
+    this.mostrarSugerencias = false;
+    this.itemSearch = '';
+    this.suggested = [];
+    this.spinner= false;
+    this.myFormSearch.get('itemSearch')?.setValue('');
+    // this.noMatches = false;
+    this.clientFound= null;
+    this.isClientFound = false;
    }
 
    teclaPresionada(){
@@ -519,12 +522,14 @@ isLinkedToCongregatio : boolean = false;
     this.spinner = true;
     this.itemSearch = value;
     this.mostrarSugerencias = true;  
+    this.loadindCongregatio = true;
     this.congregatioService.searchUserCongregatio(value)
     .subscribe ( ( {users} )=>{
       if(users.length === 0){
           this.spinner = false;
           this.myForm.get('itemSearch')?.setValue('');
       }else{
+        this.loadindCongregatio = false;
         this.suggested = users;
       }
       }
@@ -545,32 +550,41 @@ isLinkedToCongregatio : boolean = false;
    }
   // search
 
+  
+  unLinkCongregatioActio(){
+
+  }
 
 
    selectUser(user: any){
 
+     console.log(user);
+
+    user = { ...user, iduser: this.user.iduser};
+    this.userCongregatio = user;
+
+
+    
     this.pathImg =`https://congregatio.info/${user['Ruta Imagen']}`
   
     //back values references
-    const backNome = user.Nome;
     const backFullName = user['Nome Completo']
     const backPhone = user.Telefone1
     const backBirthday = user['Data Nacimento']
     const backEmail = user.Email
     const backNationality = user.Nacionalidade
     const backActualAddress = user['Residência atual']
-    const backHeadquarterName = user['Sede onde entrou']
+    const backSede = user['Sede onde entrou']
   
     // Definir los campos y sus valores iniciales (cámbialos según tu formulario)
     const fields = [
-      { name: 'nome', backValue: backNome },
-      { name: 'fullName', backValue: backFullName },
-      { name: 'phone', backValue: backPhone },
-      { name: 'birthday', backValue: backBirthday },
-      { name: 'email', backValue: backEmail },
-      { name: 'nationality', backValue: backNationality },
-      { name: 'actualAddress', backValue: backActualAddress },
-      { name: 'headquarterName', backValue: backHeadquarterName }
+      { name: 'Nome_Completo', backValue: backFullName },
+      { name: 'Telefone1', backValue: backPhone },
+      { name: 'Data_Nascimento', backValue: backBirthday },
+      { name: 'Email', backValue: backEmail },
+      { name: 'Nacionalidade', backValue: backNationality },
+      { name: 'Residencia_atual', backValue: backActualAddress },
+      { name: 'Nome_da_sede', backValue: backSede }
     ];
   
     // Iterar sobre los campos
@@ -588,18 +602,20 @@ isLinkedToCongregatio : boolean = false;
       }
     });
 
+ 
+
     this.wasLinked = true;
-    this.user = {
-        ...user,
-         history: user['Histórico Sedes'],
-         capuzManager: user['Encarregado Com Capuz'],
-         capuzDate: user['Data Hábito Com Capuz'],
-         semCapuzManager: user['Encarregado Sem Capuz'],
-         semCapuzDate: user['Data Hábito Sem Capuz'],
-         semCapuz: user['Hábito sem capuz (s/n)'],
-         capuz: user['Hábito com capuz (s/n)'],
+    // this.user = {
+    //     ...user,
+    //      history: user['Histórico Sedes'],
+    //      capuzManager: user['Encarregado Com Capuz'],
+    //      capuzDate: user['Data Hábito Com Capuz'],
+    //      semCapuzManager: user['Encarregado Sem Capuz'],
+    //      semCapuzDate: user['Data Hábito Sem Capuz'],
+    //      semCapuz: user['Hábito sem capuz (s/n)'],
+    //      capuz: user['Hábito com capuz (s/n)'],
          
-        }
+    //     }
     
         this.suggested = [];
         this.myFormSearch.get('itemSearch')?.setValue('');
@@ -608,7 +624,6 @@ isLinkedToCongregatio : boolean = false;
           this.closebutton.nativeElement.click();
         },1)
 
-        console.log(this.user);
 
    }
 
@@ -629,10 +644,13 @@ isLinkedToCongregatio : boolean = false;
       this.stateLink = state;
       if(this.wasLinked && state){
           this.showLabelLinked = false;
-          console.log(this.showLabelLinked);
       }
-      (!state) ? this.isLinkedToCongregatio = false : this.isLinkedToCongregatio = true;
-    
+
+      if(!state) {
+         this.isLinkedToCongregatio = false;
+       }else{ 
+        this.isLinkedToCongregatio = true;
+      }
   
     });
 

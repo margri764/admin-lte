@@ -113,6 +113,34 @@ export class UserService {
     )
   }
 
+  editUserById( id:any, body:any ){
+
+    return this.http.put<any>(`${this.baseUrl}api/user/updateUser/${id}`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from editUserById service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+  
+  editUserCongregatio( id:any, body:any ){
+
+    return this.http.put<any>(`${this.baseUrl}api/user/updateUserCongregatio/${id}`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from editUserCongregatio service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+
 
 
 

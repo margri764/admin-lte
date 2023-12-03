@@ -26,10 +26,10 @@ export class User {
         public Habito_sem_capuz: string,
         public Habito_com_capuz: string,
         public Historico_Sedes? : string,
-        public semCapuzManager? : string,
-        public semCapuzDate? : string,
-        public capuzManager? : string,
-        public capuzDate? : string,
+        public Encarregado_Com_Capuz ? : string,
+        public Encarregado_Sem_Capuz ? : string,
+        public Data_Habito_Com_Capuz? : string,
+        public Data_Habito_Sem_Capuz? : string,
         )
         {}
   

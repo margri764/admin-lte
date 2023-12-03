@@ -52,9 +52,16 @@ export class ErrorService {
     if (error.status === 401 && error.error.message === "Token expired") {
       localStorage.removeItem('logged');
       this.cookieService.delete('token');
+      this.closeIsLoading$.emit(true);
       setTimeout(()=>{
         this.openDialogLogin();
       },500)
+      return of(null);
+    }
+
+    if (error.status === 401 && error.error.message === "Você precisa de uma função de administrador para concluir esta ação") {
+      alert("Necesitas rol de administrador");
+      this.closeIsLoading$.emit(true);
       return of(null);
     }
 
@@ -109,20 +116,20 @@ export class ErrorService {
       return of(null);
   }
 
-     if (error.status === 403 && error.error.message==="Credenciales invalidas." ) {
+  if (error.status === 403 && error.error.message==="Credenciales invalidas." ) {
       this.closeIsLoading$.emit(true);
       this.labelInvalidCredential$.emit(true);
       return of(null);
-    }
+  }
 
-    if (error.status === 404 ) {
+  if (error.status === 404 ) {
       this.closeIsLoading$.emit(true);
       this.openGenericMsgAlert('Internal Server Error. Sorry, something went wrong on our server. Please try again later')
       return of(null);
-    }
+  }
 
 
-    if (error.status === 400 && error.error.errors && Array.isArray(error.error.errors)) {
+  if (error.status === 400 && error.error.errors && Array.isArray(error.error.errors)) {
     const errors = error.error.errors;
     const errorMessages = errors.map((errorObj: any) => errorObj.msg);
     const errorMessage = errorMessages.join("\n");
@@ -136,6 +143,14 @@ export class ErrorService {
       this.status400Error$.emit({emmited:true, msg: error.error.message });
       return of(null);
     }
+
+    
+    if (error.status === 400 && error.error.message === "A nova conta de e-mail já está em uso por outro usuário" ) {
+      this.closeIsLoading$.emit(true);
+       this.status400Error$.emit({emmited:true, msg: error.error.message });
+       return of(null);
+     }
+    
 
     if (error.status === 400 && error.error.message === "Usuário não verificado" ) {
       this.closeIsLoading$.emit(true);
