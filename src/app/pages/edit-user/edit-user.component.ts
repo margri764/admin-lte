@@ -38,7 +38,7 @@ export class EditUserComponent implements OnInit, AfterViewInit  {
 @Output() onDebounce: EventEmitter<string> = new EventEmitter();
 @Output() onEnter   : EventEmitter<string> = new EventEmitter();
 debouncer: Subject<string> = new Subject();
-@ViewChild('link') tuCheckbox!: ElementRef;
+@ViewChild('link') link!: ElementRef;
 @ViewChild('closebutton') closebutton! : ElementRef;
 
 myForm! : FormGroup;
@@ -60,7 +60,7 @@ showSuccess : boolean = false;
 msg:string = '';
 isLoading : boolean = false;
 askDelDocument : boolean = false;
-ordem :any[] = ["Diaconos","Pastor" ]
+ordem :any[] = ["Primeira","Segunda" ]
 default: string = '';
 selectedPdfBack : any;
 
@@ -96,9 +96,6 @@ userCongregatio : any = null ;
 pathImg : string = 'assets/no-image.jpg';
 loadindCongregatio : boolean = false;
 isLinkedToCongregatio : boolean = false;
-
-
-
 
 
   constructor(
@@ -366,7 +363,9 @@ isLinkedToCongregatio : boolean = false;
             
             this.initialForm();
             this.getDocByUserId(user.iduser);
-            this.pathImg = user.Ruta_Imagen;
+            if(user.Ruta_Imagen){
+              this.pathImg = user.Ruta_Imagen;
+            }
             (user.linkCongregatio === 1) ? this.isLinkedToCongregatio = true : this.isLinkedToCongregatio = false; 
 
 
@@ -440,7 +439,7 @@ isLinkedToCongregatio : boolean = false;
       (this.user.linkCongregatio === 1) ? link = true : link = false;
       
       this.myForm.patchValue({
-        ordem: this.user?.ordem,
+        ordem: this.user?.Ordem,
         name:  this.user?.name,
         lastName: this.user?.lastName,
         Nome_Completo: [this.user?.Nome_Completo,],
@@ -456,6 +455,8 @@ isLinkedToCongregatio : boolean = false;
         active: this.user.active
       });
 
+      console.log(this.user?.Ordem);
+
        this.actualizarEstadoSwitch();
        this.role = this.user.role;
        if(this.user.role === 'user'){
@@ -463,6 +464,16 @@ isLinkedToCongregatio : boolean = false;
        }else if(this.user.role === 'admin'){
           this.adminRole = false;
        }
+    }
+
+    getObjectProperties(): { key: string, value: any }[] {
+      
+      if(this.user){
+        return Object.keys(this.user).map(key => ({ key, value: this.user![key as keyof User] }));
+      }else if(this.userCongregatio){
+        return Object.keys(this.userCongregatio).map(key => ({ key, value: this.userCongregatio[key] }));
+      }
+      return [{key:'', value:''}]
     }
 
     handleRoleChange( value:string ){
@@ -562,20 +573,21 @@ isLinkedToCongregatio : boolean = false;
 
     user = { ...user, iduser: this.user.iduser};
     this.userCongregatio = user;
-
-
     
     this.pathImg =`https://congregatio.info/${user['Ruta Imagen']}`
   
     //back values references
-    const backFullName = user['Nome Completo']
-    const backPhone = user.Telefone1
-    const backBirthday = user['Data Nacimento']
-    const backEmail = user.Email
-    const backNationality = user.Nacionalidade
-    const backActualAddress = user['Residência atual']
-    const backSede = user['Sede onde entrou']
-  
+    const backFullName = user['Nome Completo'];
+    const backPhone = user.Telefone1;
+    const backBirthday = user['Data Nacimento'];
+    const backEmail = user.Email;
+    const backNationality = user.Nacionalidade;
+    const backActualAddress = user['Residência atual'];
+    const backSede = user['Sede onde entrou'];
+    const backOrdem = user['Ordem'];
+    const backName = " ";
+    const backLastName = " ";
+
     // Definir los campos y sus valores iniciales (cámbialos según tu formulario)
     const fields = [
       { name: 'Nome_Completo', backValue: backFullName },
@@ -584,7 +596,10 @@ isLinkedToCongregatio : boolean = false;
       { name: 'Email', backValue: backEmail },
       { name: 'Nacionalidade', backValue: backNationality },
       { name: 'Residencia_atual', backValue: backActualAddress },
-      { name: 'Nome_da_sede', backValue: backSede }
+      { name: 'Nome_da_sede', backValue: backSede },
+      { name: 'ordem', backValue: backOrdem },
+      { name: 'name', backValue: backName },
+      { name: 'lastName', backValue: backLastName },
     ];
   
     // Iterar sobre los campos
@@ -605,6 +620,8 @@ isLinkedToCongregatio : boolean = false;
  
 
     this.wasLinked = true;
+
+
     // this.user = {
     //     ...user,
     //      history: user['Histórico Sedes'],
@@ -636,10 +653,10 @@ isLinkedToCongregatio : boolean = false;
     // });
   
     // Inicializar Bootstrap Switch
-    $(this.tuCheckbox.nativeElement).bootstrapSwitch();
+    $(this.link.nativeElement).bootstrapSwitch();
   
     // Suscribirte al evento switchChange del Bootstrap Switch
-    $(this.tuCheckbox.nativeElement).on('switchChange.bootstrapSwitch', (event: any, state: any) => {
+    $(this.link.nativeElement).on('switchChange.bootstrapSwitch', (event: any, state: any) => {
       console.log('Checkbox changed. Checked:', state);
       this.stateLink = state;
       if(this.wasLinked && state){

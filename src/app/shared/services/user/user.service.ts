@@ -45,6 +45,19 @@ export class UserService {
     )
   }
 
+  createUser( body:User ){
+
+    return this.http.post<any>(`${this.baseUrl}api/user/createUser`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from createUser service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
   getAllUsers( ){
 
     return this.http.get<any>(`${this.baseUrl}api/user/getAllUsers`) 
@@ -56,7 +69,6 @@ export class UserService {
       map( res => res )
     )
   }
-
 
   getDocByUserId( id:any ){
 
@@ -125,7 +137,6 @@ export class UserService {
       map( res => res )
     )
   }
-
   
   editUserCongregatio( id:any, body:any ){
 

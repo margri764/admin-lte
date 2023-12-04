@@ -23,8 +23,8 @@
                     <tbody class="fs-8">
                         <tr *ngFor="let user of users">
                             <td> 
-                                <img [src]="user.img" class="img-fluid" width="40px" *ngIf="user.img !== '' ">
-                                <img src="assets/no-image.jpg" class="img-fluid" width="50px" *ngIf="user.img == '' ">
+                                <img [src]="user.Ruta_Imagen" class="img-fluid" width="40px" *ngIf="user.Ruta_Imagen !== '' ">
+                                <img src="assets/no-image.jpg" class="img-fluid" width="50px" *ngIf="user.Ruta_Imagen == '' || !user.Ruta_Imagen">
                              </td>
                             <td >
                                 <div [routerLink]="['/dashboard/editar-usuario/', user.iduser]" >  
@@ -33,8 +33,8 @@
                             </td>
                             <td>{{ user.Email }} </td>
                             <td> 
-                                <span class="badge badge-success right" style="padding: 8px 10px 8px 10px;">Sim</span>
-                                <!-- <span class="badge badge-danger right" style="padding: 8px 10px 8px 10px;">Não</span> -->
+                                <span class="badge badge-success right" style="padding: 8px 10px 8px 10px;" *ngIf="user.active"> Sim </span>
+                                <span class="badge badge-danger right"  style="padding: 8px 10px 8px 10px;"*ngIf="!user.active"> Não </span>
                             </td>
                         </tr>
                     

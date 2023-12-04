@@ -45,12 +45,13 @@
 
                           <div class="row">
                           
-                              <!-- <div class="input-group mt-3 col-4"  >
+                              <div class="input-group mt-3 col-4" >
                                 <label class="text w-100" > Ordem </label>
-                                <select class="form-control select2 " formControlName="ordem" >
-                                  <option *ngFor="let ord of ordem" [value]="ord"> {{ user.ordem }} </option>
+                                <select class="form-control select2 "  formControlName="ordem" >
+                                  <option *ngFor="let ord of ordem" [value]="ord" > {{ ord }} </option>
                                 </select>
-                              </div>       -->
+                              </div>      
+
                                 <div class="input-group mt-4 col-12">
                                   <span class="text mb-3 w-100"> <b>Nome completo</b> </span>
                                   <input type="text" class="form-control" [readonly]="readonlyFields['Nome_Completo'] || isLinkedToCongregatio" formControlName="Nome_Completo" >
@@ -64,11 +65,12 @@
                                   <div class="" >
                                       <input type="checkbox"  data-bootstrap-switch data-off-color="danger" data-on-color="success" #link >
                                       <label class=" font fs-10" style="color: rgb(4, 171, 4); margin-left: 10px;" *ngIf="stateLink && wasLinked"> Usuário vinculado com sucesso </label>
+
+                                      <button type="button" class="btn btn-primary shadow fs-9" style="margin-left: 30px; padding: 4.2px 9px 4.2px 9px !important; " data-toggle="modal" data-target="#modalFichaCompleta"  ><i class="fa fa-list-ul"></i> &nbsp; Ver ficha completa</button>
                                   </div>
 
                                 </div>
 
-                    
                                  <div class="input-group mt-4 mb-3 col-6" >
                                     <label class="text w-100"  > <b>Nome</b> </label>
                                     <input type="text" class="form-control" [readonly]="readonlyFields['name'] || isLinkedToCongregatio" formControlName="name" >
@@ -160,70 +162,93 @@
                   <div class="col-3" >
 
                     <div class="card card-primary card-outline col-12 p-0"> 
-                            <div class="card-body box-profile">
+                            <div class="card-body box-profile p-2">
+
                               <div class="text-center">
                                   <img class=" img-fluid" [src]="pathImg" alt="Foto do Perfil do Usuário">
                               </div>
                            
 
-                            <h5 class="font fs-11 mt-3 text-center" *ngIf="user?.Nome_Completo !== '' "> {{ user && user.Nome_Completo }} </h5>
-                            <!-- <h5 class="font fs-11 mt-3 text-center" *ngIf="user.Nome_Completo === '' "> {{ user.name }} {{ user.lastName }} </h5> -->
+                            <h5 class="font fs-11 mt-3 text-center" *ngIf="!wasLinked "> {{ user && user.Nome_Completo }} </h5>
+                            <h5 class="font fs-11 mt-3 text-center" *ngIf="wasLinked "> {{ userCongregatio && userCongregatio['Nome Completo'] }} </h5>
                             
-                            <div class="card mt-3" *ngIf=" user?.Habito_com_capuz === 'Sim' ">
+                            <!-- mi back  -->
+                            <ng-container *ngIf="!wasLinked">
 
-                              <div class="capuz">
-                                  Hábito com capuz
+                              <div class="card mt-3 p-0" *ngIf=" user?.Habito_com_capuz === 'Sim' ">
+                                
+                                    <div class="capuz">
+                                        Hábito com capuz
+                                    </div>
+
+                                    <div class="block" style="padding: 5px; line-height: 23px; background-color: rgb(236, 236, 236);" >
+
+                                        <span style="width: 100%; display: inline-block;" > <b> {{ user.Data_Habito_Com_Capuz ? (user.Data_Habito_Com_Capuz | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+                                        <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
+
+                                        <span class="fs-10" *ngIf="!wasLinked"> <b>{{ user.Encarregado_Com_Capuz || '-----------'}} </b></span>
+                                  
+                                    </div>
                               </div>
 
-                            <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
-                              <span style="width: 100%; display: inline-block;" *ngIf="!wasLinked"> <b> {{ user.Data_Habito_Com_Capuz ? (user.Data_Habito_Com_Capuz | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+                              <!-- sin capuz -->
+                              <div class="card mt-3 p-0" *ngIf="user?.Habito_sem_capuz === 'Sim' ">
 
-                            <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
+                                  <div class="capuz">
+                                      Hábito sem capuz
+                                  </div>
+                                <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
 
-                              <span style="width: 100%; display: inline-block;" *ngIf="wasLinked"> <b> {{ userCongregatio['Data Hábito Com Capuz'] ? (userCongregatio['Data Hábito Com Capuz'] | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+                                  <span style="width: 100%; display: inline-block;" > <b> {{ user.Data_Habito_Sem_Capuz ? (user.Data_Habito_Sem_Capuz | date:'dd/MM/yyyy') : '--------' }} </b> </span>
 
-                              <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
+                                  <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
 
-                              <span class="fs-10" *ngIf="!wasLinked"> <b>{{ user.Encarregado_Com_Capuz || '-----------'}} </b></span>
-                              <span class="fs-10" *ngIf="wasLinked "> <b>{{ userCongregatio['Hábito com capuz (s/n)']
-                                || '-----------'}} </b></span>
+                                  <span class="fs-10"> <b>{{ user.Encarregado_Sem_Capuz || '-----------'}} </b></span>
+                                </div>
+                              </div>
 
-                              <!-- <span class="fs-10" *ngIf="!wasLinked"> <b>{{ user.Encarregado_Com_Capuz || '-----------'}} </b></span>
-                              <span class="fs-10" *ngIf="wasLinked "> <b>{{ userCongregatio['Encarregado Com Capuz'] || '-----------'}} </b></span> -->
-                            </div>
-                          </div>
+                            </ng-container>
 
-                          <div class="card mt-3" *ngIf="user?.Habito_sem_capuz === 'Sim' ">
+                            <!-- back congregatio -->
+                            <ng-container *ngIf="wasLinked">
 
-                            <div class="capuz">
-                                Hábito sem capuz
-                            </div>
-                          <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
+                              <div class="card mt-3 p-0" *ngIf="userCongregatio['Hábito com capuz (s/n)'] === 'Sim' ">
+                                    <!-- capuz congregatio  -->
+                                    <div class="capuz">
+                                      Hábito com capuz
+                                    </div>
+    
+                                    <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
+      
+                                        <span style="width: 100%; display: inline-block;" > <b> {{ userCongregatio['Data Hábito Com Capuz'] ? (userCongregatio['Data Hábito Com Capuz'] | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+      
+                                        <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
+      
+                                        <span class="fs-10"> <b>{{ userCongregatio['Encarregado Com Capuz']
+                                          || '-----------'}} </b></span>
+      
+                                    </div>
+                              </div>
+    
+                                  <!-- sin capuz congregatio-->
+                            
+                              <div class="card mt-3 p-0" *ngIf="userCongregatio['Hábito sem capuz (s/n)'] === 'Sim' ">
+                              
+                                      <div class="capuz">
+                                          Hábito sem capuz
+                                      </div>
+                                    <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
+    
+                                      <span style="width: 100%; display: inline-block;" > <b> {{ userCongregatio['Data Hábito Sem Capuz'] ? (userCongregatio['Data Hábito Sem Capuz'] | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+    
+                                      <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
+    
+                                      <span class="fs-10"> <b>{{ userCongregatio['Encarregado Sem Capuz'] || '-----------'}} </b></span>
+                                    </div>
+                              </div>
 
-                            <span style="width: 100%; display: inline-block;" *ngIf="!wasLinked"> <b> {{ user.Data_Habito_Sem_Capuz ? (user.Data_Habito_Sem_Capuz | date:'dd/MM/yyyy') : '--------' }} </b> </span>
-
-                            <span style="width: 100%; display: inline-block;" *ngIf="wasLinked"> <b> {{ userCongregatio['Data_Habito_Sem_Capuz'] ? (userCongregatio['Data_Habito_Sem_Capuz'] | date:'dd/MM/yyyy') : '--------' }} </b> </span>
-
-                            <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
-
-                            <span class="fs-10"> <b>{{ user.Encarregado_Sem_Capuz || '-----------'}} </b></span>
-                          </div>
-                        </div>
-                            <!-- <p class="font fs-10 mt-3 text-center" style="color: gray;">Software Engineer</p> -->
-
-                            <!-- <ul class="list-group list-group-unbordered mb-3">
-                                <li class="list-group-item">
-                                <b>Followers</b> <a class="float-right">1,322</a>
-                                </li>
-                                <li class="list-group-item">
-                                <b>Following</b> <a class="float-right">543</a>
-                                </li>
-                                <li class="list-group-item">
-                                <b>Friends</b> <a class="float-right">13,287</a>
-                                </li>
-                            </ul>
-
-                            <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a> -->
+                            </ng-container>  
+                          
                             </div>
                     </div> 
                     
@@ -517,6 +542,44 @@
       </div>
     </div>
   </div>
+
+    <!-- Modal Ficha completa-->
+    <div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95; ">
+
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header" style="padding: 20px;">
+            <h5 class="modal-title font" id="exampleModalCenterTitle"> Ficha completa</h5>
+        
+          </div>
+          <div class="modal-body">
+            <div class="table-responsive">
+              <table class="table table-striped table-auto " *ngIf="userCongregatio || user">
+                <thead>
+                  <tr>
+                    <th scope="col">Propiedad</th>
+                    <th scope="col">Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let prop of getObjectProperties()">
+                    <td>{{ prop.key }}</td>
+                    <td>{{ prop.value }}</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+  
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close" #closebutton (click)="close()"> Sair</button>
+          </div>
+  
+        
+        </div>
+      </div>
+    </div>
+  
 
   <!-- no link selection  -->
   <div id="custom-toast" class="alert alert-danger alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showLabelLinked"  >
