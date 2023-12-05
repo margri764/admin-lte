@@ -133,8 +133,8 @@
             <div class="input-group mb-4" >
               <label class="text w-100"> Nome do alarme </label>
               <div class="input-group mb-3">
-                <input type="text" class="form-control"  formControlName="reminder" required [ngStyle]="( validField('reminder')) ? {'border':'1px solid red'}:{}">
-                <div *ngIf="validField('reminder')" class="invalid" > Dado obrigatório </div>
+                <input type="text" class="form-control"  formControlName="name" required [ngStyle]="( validField('reminamender')) ? {'border':'1px solid red'}:{}">
+                <div *ngIf="validField('name')" class="invalid" > Dado obrigatório </div>
               </div>
             </div>
 
@@ -149,8 +149,8 @@
             <div class="input-group mb-3" >
               <label class="text w-100"> Selecione um grupo </label>
               <div class="input-group mb-3">
-                <input type="text" class="form-control"  formControlName="user" required [ngStyle]="( validField('user')) ? {'border':'1px solid red'}:{}">
-                <div *ngIf="validField('user')" class="invalid" > Dado obrigatório </div>
+                <input type="text" class="form-control"  formControlName="group" required [ngStyle]="( validField('group')) ? {'border':'1px solid red'}:{}">
+                <div *ngIf="validField('group')" class="invalid" > Dado obrigatório </div>
               </div>
             </div>
 
@@ -158,8 +158,8 @@
 
             <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
               <div class="input-group date" >
+              <label class="text w-100"> Data do alarme </label>
                 <input type="text"
-                  placeholder="Data do alarme"
                   class="form-control datetimepicker-input"
                   bsDatepicker
                   [bsValue]="bsValue"
@@ -177,7 +177,7 @@
 
             <div class="input-group mb-3 mt-5" >
                   <label class="text w-100" > Antecedência do Lembrete </label>
-                  <select class="form-control select2 col-12 w-100" formControlName="reminderLeadTime" >
+                  <select class="form-control select2 col-12 w-100" formControlName="notifFrequency" >
                     <option selected="selected"></option>
                     <option>No mesmo dia</option>
                     <option>7 dias antes</option>
@@ -196,7 +196,7 @@
         </div>
         <div class="modal-footer ">
 
-          <button type="button" class="btn btn-primary btn-block shadow mt-3"> Criar alarme</button>
+          <button type="button" class="btn btn-primary btn-block shadow mt-3" (click)="onSave()"> Criar alarme</button>
           <div class="d-flex flex-column align-items-end mb-3" style="margin-top: 30px;">
        
             <!-- <div >

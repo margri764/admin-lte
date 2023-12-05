@@ -152,6 +152,21 @@ export class UserService {
     )
   }
 
+  getAllGroups(){
+
+    
+    return this.http.get<any>(`${this.baseUrl}api/group/getAllGroups`) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getAllGroups service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
 
 
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as moment from 'moment';
 import { LanguageApp } from 'src/app/pages/table.languaje'
 
 @Component({
@@ -37,14 +38,15 @@ export class AlarmsComponent implements OnInit {
         
    }
 user:any;
+
   ngOnInit(): void {
 
     this.myForm = this.fb.group({
-      reminder:     [ '', [Validators.required] ],
+      name:     [ '', [Validators.required] ],
       user:  [ '', [Validators.required]],
-      birthday:  [ '', [Validators.required]],
+      group:  [ '', [Validators.required]],
       alarmDate:  [ '', [Validators.required]],
-      reminderLeadTime:  [ '', [Validators.required]],
+      notifFrequency:  [ '', [Validators.required]],
 
     });
   
@@ -54,13 +56,24 @@ user:any;
     this.user = this.myForm.get('user')?.value;
   }
 
-  register(){
+  onSave(){
     this.submitted = true;
-    console.log(this.myForm.value); 
-    if ( this.myForm.invalid ) {
-      this.myForm.markAllAsTouched();
-      return;
+
+    const alarmDate = this.myForm.get('alarmDate')?.value;
+
+    let formattedDate = null;
+    if(alarmDate !== null && alarmDate !== ''){
+      formattedDate = moment(alarmDate).toISOString();
+    }else{
+      formattedDate = null;
     }
+
+    console.log(this.myForm.value); 
+    console.log(formattedDate); 
+    // if ( this.myForm.invalid ) {
+    //   this.myForm.markAllAsTouched();
+    //   return;
+    // }
 
   }
 
