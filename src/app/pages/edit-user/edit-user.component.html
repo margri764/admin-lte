@@ -89,10 +89,28 @@
                               <input type="text" class="form-control" [readonly]=" readonlyFields['Telefone1'] || isLinkedToCongregatio" formControlName="Telefone1">
                             </div>
 
-                            <div class="input-group mb-3 mt-3 col-sm-6">
+                            <div class="input-group mb-3 mt-3 col-6" >
+                              <div class="input-group date" >
+                            <label class="text w-100" > Data de nascimento  </label>
+                                <input type="text"
+                                  class="form-control datetimepicker-input"
+                                  bsDatepicker
+                                  [bsValue]="bsValue"
+                                  [minDate]="minDate"
+                                  [maxDate]="maxDate"
+                                  [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
+                                  formControlName="Data_Nascimento" [readonly]="readonlyFields['Data_Nascimento'] || isLinkedToCongregatio">
+                                <div class="input-group-append"  >
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                              </div>
+                              <div *ngIf="validField('Data_Nascimento')" class="invalid" > Dado obrigatório </div>
+                          </div>
+
+                            <!-- <div class="input-group mb-3 mt-3 col-sm-6">
                               <label class="text w-100" > Data de nascimineto  </label>
                               <input type="text" class="form-control" [readonly]="readonlyFields['Data_Nascimento'] || isLinkedToCongregatio" formControlName="Data_Nascimento">
-                            </div>
+                            </div> -->
                           </div>
 
                           <div class="row">
@@ -529,7 +547,8 @@
                 
                 <div class="boxSelection mt-1 font" >   
                    <img class=" img-fluid" src="https://congregatio.info/{{ item['Ruta Imagen'] }}" alt="Foto do Perfil do Usuário" width="40px">
-                  {{ item['Nome Completo'] }}</div>
+                  {{ item['Nome Completo'] }}
+                </div>
               </div>
           </div>
 

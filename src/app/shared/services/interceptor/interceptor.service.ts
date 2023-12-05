@@ -58,9 +58,7 @@ export class InterceptorService {
     const errorMessage = this.errorService.getError(error);
   
     if (error.status === 200 && error.error && error.error.text === "Sesion finalizada") {
-      // Realiza el cierre de sesión
        this.errorService.logout();
-      // Puedes redirigir aquí si es necesario
     }
   
     return throwError( () => errorMessage)

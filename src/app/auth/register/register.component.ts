@@ -15,12 +15,12 @@ export class RegisterComponent implements OnInit {
 
   myForm!: FormGroup;
   submitted : boolean = false;
-   bsValue = new Date();
-   bsRangeValue!:Date[];
-   maxDate = new Date();
-   minDate = new Date();
-   succesSignup : boolean = false;
-   isLoading : boolean = false;
+  bsValue = new Date();
+  bsRangeValue!:Date[];
+  maxDate = new Date();
+  minDate = new Date();
+  succesSignup : boolean = false;
+  isLoading : boolean = false;
 
   constructor(
               private fb : FormBuilder,
@@ -75,8 +75,15 @@ export class RegisterComponent implements OnInit {
     }
     
     const Data_Nascimento = this.myForm.get('Data_Nascimento')?.value;
+    let birthdayFormatted = null;
+    if(Data_Nascimento !== null && Data_Nascimento !== ''){
+      birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
+    }else{
+      birthdayFormatted = null;
+    }
+    
+    
 
-    const birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
     
     const body : User = {
       ...this.myForm.value,

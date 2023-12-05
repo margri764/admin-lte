@@ -97,6 +97,12 @@ pathImg : string = 'assets/no-image.jpg';
 loadindCongregatio : boolean = false;
 isLinkedToCongregatio : boolean = false;
 
+bsValue = new Date();
+bsRangeValue!:Date[];
+maxDate = new Date();
+minDate = new Date();
+
+
 
   constructor(
                 private activatedRoute : ActivatedRoute,
@@ -118,6 +124,10 @@ isLinkedToCongregatio : boolean = false;
 
 
   ngOnInit(): void {
+
+    this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
+    this.minDate.setFullYear(this.bsValue.getFullYear() - 100);
+    this.bsRangeValue = [this.bsValue, this.maxDate];
 
     this.errorService.closeIsLoading$.pipe(delay(100)).subscribe(emitted => emitted && (this.isLoading = false));
 
@@ -197,8 +207,16 @@ isLinkedToCongregatio : boolean = false;
        }else{
         body = this.myForm.value;
         this.isLoading = true;
+
         const Data_Nascimento = this.myForm.get('Data_Nascimento')?.value;
-        const birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
+
+        let birthdayFormatted = null;
+        if(Data_Nascimento !== null && Data_Nascimento !== ''){
+          birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
+        }else{
+          birthdayFormatted = null;
+        }
+        
         body = {
           ...body,
           Data_Nascimento:birthdayFormatted,

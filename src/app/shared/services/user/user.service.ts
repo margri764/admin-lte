@@ -16,6 +16,7 @@ import { LocalstorageService } from '../localstorage/localstorage.service';
 export class UserService {
 
   authDelDocument$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  authAddRole$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
 
 
 

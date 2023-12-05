@@ -1,0 +1,16 @@
+<div class="table-responsive">
+    <table class="table table-striped table-auto " *ngIf="userCongregatio || user">
+      <thead>
+        <tr>
+          <th scope="col">Propiedad</th>
+          <th scope="col">Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prop of getObjectProperties()">
+          <td>{{ prop.key }}</td>
+          <td>{{ prop.value }}</td>
+        </tr>
+      </tbody>
+    </table>
+</div>

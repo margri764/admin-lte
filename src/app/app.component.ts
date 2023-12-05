@@ -25,6 +25,7 @@ export class AppComponent {
   show404 : boolean = false;
   show401 : boolean = false;
   show429 : boolean = false;
+  showBackDown : boolean = false;
 
   constructor(
                 public router : Router,
@@ -71,6 +72,8 @@ this.errorService.status429Error$.pipe(delay(1200)).subscribe(( {emmited, msg} )
 
 this.errorService.status401Credentials$.pipe(delay(1200)).subscribe(( {emmited, msg, remainingAttempts} )=>{ if(emmited){this.show401 = true; this.msg = msg; this.remainingAttemps = remainingAttempts; this.show404 = false; this.show429 = false}} )
 
+this.errorService.backIsDown$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{ if(emmited){this.showBackDown = true; this.msg = msg; this.show404 = false; this.show429 = false; this.gotoDashboard() }});
+
 
 }
 
@@ -78,5 +81,10 @@ closeToast(){
   this.show401 = false;
   this.show404 = false;
   this.show429 = false;
+  this.showBackDown = false;
+}
+
+gotoDashboard(){
+  this.router.navigateByUrl('/dashboard');
 }
 }

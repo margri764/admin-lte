@@ -37,6 +37,7 @@ export class ErrorService {
   status429Error$ : EventEmitter<response> = new EventEmitter<response>; 
   status400VerifyError$ : EventEmitter<response> = new EventEmitter<response>; 
   status401Credentials$ : EventEmitter<response401Credentials> = new EventEmitter<response401Credentials>; 
+  backIsDown$ : EventEmitter<response> = new EventEmitter<response>; 
   
   constructor(
               private store : Store <AppState>,
@@ -47,6 +48,12 @@ export class ErrorService {
   }
 
   getError(error : any) {
+
+    if (error.statusText === "Unknown Error" ) {
+      this.closeIsLoading$.emit(true);
+      this.backIsDown$.emit({emmited:true, msg: 'Erro Interno do Servidor. Desculpe, algo deu errado em nosso servidor. Por favor, tente novamente mais tarde' });     
+      return of(null);
+    }
 
 
     if (error.status === 401 && error.error.message === "Token expired") {

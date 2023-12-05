@@ -20,6 +20,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AlarmsComponent } from './alarms/alarms/alarms.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { GroupsComponent } from './groups/groups.component';
 
 
 
@@ -36,7 +37,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     EditUserComponent,
     NewUserComponent,
     NewClientComponent,
-    AlarmsComponent
+    AlarmsComponent,
+    GroupsComponent
   ],
   exports: [
     DashboardComponent,

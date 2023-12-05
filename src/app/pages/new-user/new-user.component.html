@@ -1,6 +1,6 @@
 <div class="row mt-4"  >
 
-    <div class="col-sm-6 col-lg-12">
+    <div class="col -12">
   
         <div class="card card-primary card-outline card-outline-tabs font">
           <div class="card-header p-0 border-bottom-0 " >
@@ -27,35 +27,50 @@
                         <div class="row">
                           <div class="input-group mt-3 col-6" >
                             <label class="text w-100" > Ordem </label>
-                            <select class="form-control select2 "  formControlName="ordem" >
+                            <select class="form-control select2 "  formControlName="ordem">
                               <option *ngFor="let ord of ordem" [value]="ord" class="font" > {{ ord }} </option>
                             </select>
                           </div>      
+
                         </div>      
                         
                         <div class="row">
 
                                  <div class="input-group mt-4 mb-3 col-6" >
-                                    <label class="text w-100"  > <b>Nome</b> </label>
+                                    <label class="text w-100" > <b>Nome</b> </label>
                                     <input type="text" class="form-control"  formControlName="name" >
+                                 <div *ngIf="validField('name')" class="invalid" > Dado obrigatório </div>
                                 </div>    
                                   
                                 <div class="input-group mt-4 mb-3  col-6">
-                                    <label class="text w-100" >Sobrenome</label>
+                                    <label class="text w-100">Sobrenome</label>
                                     <input type="text" class="form-control" formControlName="lastName">
+                                    <div *ngIf="validField('lastName')" class="invalid" > Dado obrigatório </div>
                                 </div>
                           </div>
 
                           <div class="row">
 
                             <div class="input-group mb-3 mt-3 col-6">
-                              <label class="text w-100" > Telefone  </label>
+                              <label class="text w-100"> Telefone  </label>
                               <input type="text" class="form-control" formControlName="Telefone1">
                             </div>
 
-                            <div class="input-group mb-3 mt-3 col-sm-6">
-                              <label class="text w-100" > Data de nascimineto  </label>
-                              <input type="text" class="form-control"  formControlName="Data_Nascimento">
+                            <div class="input-group mb-3 mt-3 col-6" >
+                                <div class="input-group date" >
+                              <label class="text w-100"> Data de nascimento  </label>
+                                  <input type="text"
+                                    class="form-control datetimepicker-input"
+                                    bsDatepicker
+                                    [bsValue]="bsValue"
+                                    [minDate]="minDate"
+                                    [maxDate]="maxDate"
+                                    [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
+                                    formControlName="Data_Nascimento" >
+                                  <div class="input-group-append"  >
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                  </div>
+                                </div>
                             </div>
                           </div>
 
@@ -64,6 +79,7 @@
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100" >Email</label>
                                 <input type="email" class="form-control" formControlName="Email">
+                                <div *ngIf="validField('Email')" class="invalid" > Dado obrigatório </div>
                               </div>
 
                               <div class="input-group mb-3 mt-3 col-6">
@@ -103,8 +119,6 @@
 
                             <div class="input-group mb-3 mt-3" >
                               <button type="button" class="btn btn-primary shadow fs-10"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
-
-                           
                             </div>
 
                            
@@ -151,11 +165,34 @@
           </div>
           <!-- /.card -->
         </div>
-      </div>
+     </div>
   
-  
+</div>
+
+     <!-- success upload / edition-->
+ <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
+  <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
+  <span class="fs-8 w-100"> Usuário criado com sucesso</span>
+  <!-- <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span> -->
+</div>
+
+
+  <!-- no role selected  -->
+  <div id="custom-toast" class="alert alert-warning alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showLabelNoRole"  >
+    <button type="button" class="close" (click)="closeToastRole()" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5 style="font-size: 0.9em;"><i class="icon fas fas fa-user-lock"></i> Erro</h5>
+    <p class="cursor mt-1 fs-9" >Pode adicionar uma função ou editar mais tarde o usuário</p>
+    <p class="cursor mt-1 fs-9 cursor" style="color: blue; text-decoration: underline; "  (click)="addRole()">Adicionar função</p>
   </div>
+
+
   
   
   
-  
+<div class="loading-overlay" *ngIf="isLoading">
+  <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >
+    <span class="sr-only">Loading...</span>
+  </div>
+</div> 
+
