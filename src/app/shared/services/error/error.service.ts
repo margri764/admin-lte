@@ -72,6 +72,12 @@ export class ErrorService {
       return of(null);
     }
 
+    if (error.status === 401 && error.error.message === "Você precisa de um papel de webmaster o admin para concluir esta ação") {
+      alert("Necesitas rol de webmaster");
+      this.closeIsLoading$.emit(true);
+      return of(null);
+    }
+
     if (error.status === 401 && error.error.message === "Invalid Token") {
         this.logoutInvalidToken();
         this.openDialogLogin();

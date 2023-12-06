@@ -116,13 +116,13 @@
 </div>
 
 
- <!-- Modal Code -->
- <div class="modal fade font" id="modalNova" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="font-size: 0.9em;" >
-    <div class="modal-dialog modal-dialog-centered" role="document" >
-      <div class="modal-content" style="background-color: rgb(234, 243, 250);">
+ <!-- Modal Alarm -->
+ <div class="modal fade font" id="modalNova" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document" style="max-width: 600px;" >
+      <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title font" id="exampleModalCenterTitle"> Nova Alarme </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetForm()" #closebutton>
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -133,30 +133,62 @@
             <div class="input-group mb-4" >
               <label class="text w-100"> Nome do alarme </label>
               <div class="input-group mb-3">
-                <input type="text" class="form-control"  formControlName="name" required [ngStyle]="( validField('reminamender')) ? {'border':'1px solid red'}:{}">
+                <input type="text" class="form-control"  formControlName="name" required [ngStyle]="( validField('name')) ? {'border':'1px solid red'}:{}">
                 <div *ngIf="validField('name')" class="invalid" > Dado obrigatório </div>
               </div>
             </div>
 
-            <div class="input-group mb-3" >
+
+            <form [formGroup]="myFormSearch" class="needs-validation"  novalidate  [autocomplete]="false">
+
+              <div class="input-group mb-3 font" >
               <label class="text w-100 "> Selecione o usuário </label>
-              <div class="input-group mb-3">
-                <input type="text" class="form-control"  formControlName="user" required [ngStyle]="( validField('user')) ? {'border':'1px solid red'}:{}" (blur)="onUserBlur()">
-                <div *ngIf="validField('user')" class="invalid" > Dado obrigatório </div>
+
+                  <input type="text" class="form-control"   name="itemSearch" formControlName="itemSearch" style="height: 50px;"  [ngStyle]="( validField('iduser')) ? {'border':'1px solid red'}:{}">
+                  <div class="input-group-append">
+                    <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
+                      <span class="fas fa-search" style="color: white"></span>
+                    </div>
+                    <div *ngIf="userSelection" class="invalid" > Dado obrigatório </div>
+                    <div *ngIf="exclude" class="exclude" > Selecione o usuário a excluir </div>
+                  </div>
+      
+                </div>
+            </form>
+
+            <div class="d-flex justify-content-center" *ngIf="spinner">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
               </div>
             </div>
-
-            <div class="input-group mb-3" >
-              <label class="text w-100"> Selecione um grupo </label>
-              <div class="input-group mb-3">
-                <input type="text" class="form-control"  formControlName="group" required [ngStyle]="( validField('group')) ? {'border':'1px solid red'}:{}">
-                <div *ngIf="validField('group')" class="invalid" > Dado obrigatório </div>
-              </div>
+  
+            <div *ngIf="mostrarSugerencias">
+                <div *ngFor="let item of suggested"   >
+                  
+                  <div class="font selectUser"  (click)="selectUser(item)">   
+                     <img class="img-fluid" [src]="item.Ruta_Imagen ?? 'assets/no-image.jpg'" alt="Foto do Perfil do Usuário" width="40px" >
+                     &nbsp; {{ item.Nome_Completo }}
+                  </div>
+                </div>
             </div>
 
-        
 
-            <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+            <div class="input-group mb-3 mt-5 ">
+              <label class="text w-100">Seleccione grupo</label>
+              <select #groupSelect class="form-control select2 col-12 cursor" (change)="onSelectGroup($event)"  [ngStyle]="( validField('group')) ? {'border':'1px solid red'}:{}">
+                <option style="display:none; font-size: 0.9em;" disabled selected></option>
+                <option *ngFor="let group of groups" [value]="[group.name, group.idgroup]" class="font">{{ group.name }}</option>
+              </select>
+              <div *ngIf="groupSelection" class="invalid" > Dado obrigatório </div>
+
+              <div class="mt-3 col-12 ">
+                <div class="font fs-11 groups" *ngFor="let sel of nameGroups" >{{ sel }} &nbsp; <i class="fas fa-times-circle cursor" (click)="removeGroup(sel)"></i></div>
+              </div>
+
+            </div>
+
+
+            <div class="input-group mb-3 mt-5" [ngClass]="{'was-validated': submitted}">
               <div class="input-group date" >
               <label class="text w-100"> Data do alarme </label>
                 <input type="text"
@@ -177,16 +209,19 @@
 
             <div class="input-group mb-3 mt-5" >
                   <label class="text w-100" > Antecedência do Lembrete </label>
-                  <select class="form-control select2 col-12 w-100" formControlName="notifFrequency" >
-                    <option selected="selected"></option>
-                    <option>No mesmo dia</option>
-                    <option>7 dias antes</option>
-                    <option>15 dias antes</option>
+                  <select class="form-control select2 col-12 w-100" required formControlName="notifFrequency" [ngStyle]="( validField('alarmDate')) ? {'border':'1px solid red'}:{}" (change)="onSelectFreq($event)" >
+                    <!-- <option selected="selected"></option> -->
+                    <option *ngFor="let freq of frequency" [value]="[freq.id,freq.name]" class="font">{{ freq.name }}</option>
                   </select>
+              <div *ngIf="validField('notifFrequency')" class="invalid" > Dado obrigatório </div>
+
+              <div class="mt-3 col-12" >
+                <div class="font fs-10 groups"  *ngFor="let sel of nameFreq" >{{ sel }} <i class="fas fa-times-circle cursor" (click)="removeFreq(sel)"></i></div> 
+              </div>
             </div>
 
-            <div class="custom-control custom-switch d-flex flex-column align-items-start mb-4" style="margin-left: 18px;">
-              <input type="checkbox" class="custom-control-input " id="customSwitch1" >
+            <div class="custom-control custom-switch d-flex flex-column align-items-start mb-3 mt-4" >
+              <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="onSelect($event)" >
               <label class="custom-control-label cursor" for="customSwitch1"> Excluir do alarme o usuário <b style="color: blue;">{{user}}</b> </label>
             </div>
   
@@ -197,20 +232,12 @@
         <div class="modal-footer ">
 
           <button type="button" class="btn btn-primary btn-block shadow mt-3" (click)="onSave()"> Criar alarme</button>
-          <div class="d-flex flex-column align-items-end mb-3" style="margin-top: 30px;">
-       
-            <!-- <div >
-              <span class="mb-0" style="margin-right: 15px;"> <a href="register.html" class="text-center">  <i class="fas fa-window-close" style="margin-right: 2px;"></i>  Cancelar</a> </span>
-              <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fas fa-reply-all fa-flip-horizontal"></i>         
-                Reenviar</a> </span>
-              &nbsp; &nbsp;
-          </div>   -->
-         </div>
+        
         </div>
   
     
      
       </div>
     </div>
-  </div>
+</div>
     

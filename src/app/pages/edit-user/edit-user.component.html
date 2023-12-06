@@ -52,12 +52,14 @@
                                   </select>
                                 </div>   
                                 
-                                <div class="input-group mt-3 col-4" >
-                                  <label class="text w-100" > Seleccione grupo </label>
-                                  <select class="form-control select2 col-12" (change)="onSelectGroup($event)" >
-                                    <option *ngFor="let group of groups" [value]="[ group.name,group.idgroup]" class="font" > {{ group.name }} </option>
+                                <div class="input-group mt-3 col-4">
+                                  <label class="text w-100">Seleccione grupo</label>
+                                  <select #groupSelect class="form-control select2 col-12 cursor" (change)="onSelectGroup($event)">
+                                    <option style="display:none" disabled selected></option>
+                                    <option *ngFor="let group of groups" [value]="[group.name, group.idgroup]" class="font">{{ group.name }}</option>
                                   </select>
                                 </div>
+
                               
                                 <div class="mt-3 col-4">
                                   <div class="font fs-9 groups" *ngFor="let sel of nameGroups" >{{ sel }} &nbsp; <i class="fas fa-times-circle cursor" (click)="removeGroup(sel)"></i></div>
@@ -591,7 +593,7 @@
     <p class="cursor mt-1 fs-9" >Você selecionou um usuário de um banco de dados externo. É necessário escolher a opção 'Link com Congregatio'.</p>
   </div>
 
- <!-- success upload / edition-->
+ <!-- success upload / edition /active  -->
  <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
   <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>

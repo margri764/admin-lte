@@ -153,6 +153,20 @@ export class UserService {
   }
 
 
+  searchUser( query:any ){
+
+    return this.http.get<any>(`${this.baseUrl}api/user/searchUser?querySearch=${query}`) 
+    
+    .pipe(
+      tap( ( {users}) =>{
+                    console.log("from searchUser service: ", users);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+
 
 
 

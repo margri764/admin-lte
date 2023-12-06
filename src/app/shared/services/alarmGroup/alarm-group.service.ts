@@ -34,6 +34,21 @@ export class AlarmGroupService {
 
   }
 
+  createAlarm( body:any ){
+    
+    return this.http.post<any>(`${this.baseUrl}api/alarm/createAlarm`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from createAlarm service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+
   getAllGroups(){
     
     return this.http.get<any>(`${this.baseUrl}api/group/getAllGroups`) 
@@ -41,6 +56,19 @@ export class AlarmGroupService {
     .pipe(
       tap( ( res) =>{
                     console.log("from getAllGroups service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+  getGroupByUserId( id:any ){
+    
+    return this.http.get<any>(`${this.baseUrl}api/group/getGroupByUserId/${id}`) 
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getGroupByUserId service: ",res);
                 }  
       ),            
       map( res => res )

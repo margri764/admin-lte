@@ -13,7 +13,7 @@ import * as moment from 'moment';
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
 
 
-// TENGO Q VER SI FUNCIONA EN PRODUCCION PROVEER LA RUTA A MI SERVIDOR PARA SERVIR UN PDF
+
 
 interface CustomFile extends File {
   previewUrl?: string;
@@ -41,6 +41,7 @@ export class EditUserComponent implements OnInit, AfterViewInit  {
 debouncer: Subject<string> = new Subject();
 @ViewChild('link') link!: ElementRef;
 @ViewChild('closebutton') closebutton! : ElementRef;
+@ViewChild('groupSelect') groupSelect! : ElementRef;
 
 myForm! : FormGroup;
 myFormSearch! : FormGroup;
@@ -168,7 +169,6 @@ nameGroups : any []=[];
       this.sugerencias(valor);
     });
 
-
     this.myForm = this.fb.group({
       ordem: [ '', [Validators.required] ],
       name:  ['', [Validators.required]],
@@ -184,37 +184,83 @@ nameGroups : any []=[];
       Nome_da_sede:  [ '', [Validators.required]],
       linkCongregatio: [ false],
       active: [''],
-      group : [[]]
     });
 
-  
-    }
+  }
 
-    removeGroup(nameToRemove: string): void {
-      console.log('Nombre a remover:', nameToRemove);
-    
-      // Filtrar el array para excluir el grupo con el nombre especificado
+  getUsersGroups( id:any ){
+    this.alarmGroupService.getGroupByUserId(id).subscribe( 
+      ( {success, groups} )=>{
+         if(success){
+          groups.forEach((item:any)=>{ this.nameGroups.push(item.name)})
+          this.selectedGroups = groups;
+          console.log( this.selectedGroups);
+         }
+      } )
+  }
+
+  removeGroup(nameToRemove: string): void {
+    console.log('Nombre a remover:', nameToRemove);
+    console.log('selectedGroups',  this.selectedGroups);
+    console.log('nameGroups',   this.nameGroups);
+  
+    // Filtrar el array para excluir el grupo con el nombre especificado
+    // esto es para cuando no seleccione nada o sea q viene del back como edit
+    if(this.selectedGroups.length !== 0){
       this.selectedGroups = this.selectedGroups.filter(group => group.name !== nameToRemove);
       this.nameGroups = this.selectedGroups.map(group => group.name);
-    
-
+    }else{
+      this.nameGroups = this.nameGroups.filter(name => name !== nameToRemove);
     }
-    
+    console.log('selectedGroups',  this.selectedGroups);
+  
 
+  }
 
   onSelectGroup( event: any){
 
     const selectedValue = event.target.value;
     const name= selectedValue.split(',')[0];
-    const idgroup= selectedValue.split(',')[1];
+    const idgroup = parseInt(selectedValue.split(',')[1], 10);
+
+    // if(this.selectedGroups.length !== 0){
+    //   this.selectedGroups =  this.selectedGroups.filter(group => group.name !== nameToRemove);
+    //   this.nameGroups = this.selectedGroups.map(group => group.name);
+    // }else{
+    //   this.nameGroups = this.nameGroups.filter(name => name !== nameToRemove);
+    // }
 
     this.selectedGroups.push({idgroup, name});
     this.nameGroups.push(name);
-
     console.log(this.selectedGroups);
+    if (this.groupSelect) {
+      this.groupSelect.nativeElement.selectedIndex = 0;
+    }
    
 
   }
+
+  getUserById( id:any ){
+
+    this.isLoading = false;
+    this.userService.getUserById( id ).subscribe(
+      ( {success, user} )=>{
+        if(success){
+          this.user = user;
+          this.initialForm();
+          this.getUsersGroups(id);
+          this.getDocByUserId(user.iduser);
+          console.log(user.Ruta_Imagen);
+          if(user.Ruta_Imagen !== '' && user.Ruta_Imagen !== null ){
+            this.pathImg = user.Ruta_Imagen;
+          }
+          (user.linkCongregatio === 1) ? this.isLinkedToCongregatio = true : this.isLinkedToCongregatio = false; 
+
+
+        }
+      })
+  }
+
 
     onSave(){
 
@@ -226,8 +272,15 @@ nameGroups : any []=[];
 
        let body = null;
        this.showSuccess = false;
-       if(this.isLinkedToCongregatio){
-        body = this.userCongregatio;
+
+       //esto es para la primera vez q lo linkeo, xq la segunda vez ya esta linqueado pero userCongregatio no existe ya q viene del back
+       //y es una edicion simple
+       if(this.isLinkedToCongregatio && this.userCongregatio){
+        body = {...this.userCongregatio};
+        body = {...body, groups: [...this.selectedGroups]}
+
+        console.log(body);
+
         this.userService.editUserCongregatio(this.user.iduser, body).subscribe(
           ( {success} )=>{
               setTimeout(()=>{ this.isLoading = false },1000)
@@ -238,6 +291,7 @@ nameGroups : any []=[];
           })
 
        }else{
+
         body = this.myForm.value;
         this.isLoading = true;
 
@@ -253,9 +307,11 @@ nameGroups : any []=[];
         body = {
           ...body,
           Data_Nascimento:birthdayFormatted,
-          role : this.role
+          role : this.role,
+          groups: this.selectedGroups
         }
 
+        console.log(body);
         //  alert(JSON.stringify(body) );
         
         this.userService.editUserById(this.user.iduser, body).subscribe(
@@ -268,17 +324,13 @@ nameGroups : any []=[];
             }
           })
        }
-
-
-   
-
     
   }
 
     activeAccount( active:any){
 
       this.isLoading = true;
-
+      this.showSuccess = false;
       const email = this.myForm.get('Email')?.value;
 
       this.authService.activeAccount( email, active ).subscribe
@@ -404,33 +456,13 @@ nameGroups : any []=[];
       
     }
 
-    getUserById( id:any ){
-
-      this.isLoading = false;
-      this.userService.getUserById( id ).subscribe(
-        ( {success, user} )=>{
-          if(success){
-            this.user = user;
-            
-            this.initialForm();
-            this.getDocByUserId(user.iduser);
-            if(user.Ruta_Imagen){
-              this.pathImg = user.Ruta_Imagen;
-            }
-            (user.linkCongregatio === 1) ? this.isLinkedToCongregatio = true : this.isLinkedToCongregatio = false; 
-
-
-          }
-        })
-    }
-
+  
     onView( doc:any ){
       this.selectedPdfBack = doc.filePath;
       this.fileNameBack = 'Teste 1';
     }
 
     getDocByUserId( id:any ){
-      console.log(id);
       this.isLoading = true;
       this.userService.getDocByUserId(id).subscribe(
       ( {document} )=>{
@@ -570,7 +602,6 @@ nameGroups : any []=[];
     this.itemSearch = '';
     this.suggested = [];
     this.spinner= false;
-    this.myFormSearch.get('itemSearch')?.setValue('');
     // this.noMatches = false;
     this.clientFound= null;
     this.isClientFound = false;

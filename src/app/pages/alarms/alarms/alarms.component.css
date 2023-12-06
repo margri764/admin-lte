@@ -39,3 +39,46 @@
    border-radius: 10px; 
    border-color: rgb(255, 255, 255);
 }
+
+.invalid{
+    color: red; 
+    margin-top: 5px;
+    width: 100%;
+    margin-left: 5px;
+  }
+
+.exclude{
+  color: green; 
+  margin-top: 5px;
+  width: 100%;
+  margin-left: 5px;
+}
+
+.groups{
+  display: inline-block;
+  margin-right: 10px;
+  /* justify-content: center;
+  align-items: center; */
+}
+
+.groups:hover{
+  color: blue;
+  text-decoration: underline;
+}
+
+.fa-times-circle:hover{
+  color: red;
+}
+
+
+.selectUser{
+  padding: 7px;
+}
+
+
+.selectUser:hover{
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  background-color: white;
+}

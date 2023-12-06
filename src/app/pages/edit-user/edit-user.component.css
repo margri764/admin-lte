@@ -50,6 +50,7 @@ select{
     color: blue;
     text-decoration: underline;
   }
+  
   .fa-times-circle:hover{
     color: red;
   }
