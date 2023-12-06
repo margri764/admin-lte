@@ -10,6 +10,7 @@ import { Subject, debounceTime, delay } from 'rxjs';
 import { CongregatioService } from 'src/app/shared/services/congregatio/congregatio.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import * as moment from 'moment';
+import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
 
 
 // TENGO Q VER SI FUNCIONA EN PRODUCCION PROVEER LA RUTA A MI SERVIDOR PARA SERVIR UN PDF
@@ -82,6 +83,7 @@ phone : boolean = false;
 // end search
 
 showLabelLinked : boolean = false;
+showSuccessDelDocument : boolean = false;
 fileNameBack : string = '';
 lastSetValue: { [key: string]: any } = {};
 readonlyFields: { [key: string]: boolean } = {};
@@ -101,6 +103,9 @@ bsValue = new Date();
 bsRangeValue!:Date[];
 maxDate = new Date();
 minDate = new Date();
+groups : any []=[];
+selectedGroups : any []=[];
+nameGroups : any []=[];
 
 
 
@@ -110,7 +115,8 @@ minDate = new Date();
                 private userService : UserService,
                 private fb : FormBuilder,
                 private congregatioService : CongregatioService,
-                private errorService : ErrorService
+                private errorService : ErrorService,
+                private alarmGroupService : AlarmGroupService
                 ) { 
 
     this.activatedRoute.params.subscribe(
@@ -120,6 +126,8 @@ minDate = new Date();
       itemSearch:  [ '',  ],
     });   
 
+    (screen.width <= 800) ? this.phone = true : this.phone = false;
+
 }
 
 
@@ -128,6 +136,13 @@ minDate = new Date();
     this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
     this.minDate.setFullYear(this.bsValue.getFullYear() - 100);
     this.bsRangeValue = [this.bsValue, this.maxDate];
+
+    this.alarmGroupService.getAllGroups().subscribe(
+      ( {success, groups} )=>{
+        if(success){
+            this.groups = groups
+        }
+      })
 
     this.errorService.closeIsLoading$.pipe(delay(100)).subscribe(emitted => emitted && (this.isLoading = false));
 
@@ -168,20 +183,38 @@ minDate = new Date();
       Cidade_da_sede:  [ '', [Validators.required]],
       Nome_da_sede:  [ '', [Validators.required]],
       linkCongregatio: [ false],
-      active: ['']
+      active: [''],
+      group : [[]]
     });
 
   
     }
 
-    // const Data_Nascimento = this.myForm.get('Data_Nascimento')?.value;
-
-    // const birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
+    removeGroup(nameToRemove: string): void {
+      console.log('Nombre a remover:', nameToRemove);
     
-    // const body : User = {
-    //   ...this.myForm.value,
-    //   Data_Nascimento: birthdayFormatted
-    // }
+      // Filtrar el array para excluir el grupo con el nombre especificado
+      this.selectedGroups = this.selectedGroups.filter(group => group.name !== nameToRemove);
+      this.nameGroups = this.selectedGroups.map(group => group.name);
+    
+
+    }
+    
+
+
+  onSelectGroup( event: any){
+
+    const selectedValue = event.target.value;
+    const name= selectedValue.split(',')[0];
+    const idgroup= selectedValue.split(',')[1];
+
+    this.selectedGroups.push({idgroup, name});
+    this.nameGroups.push(name);
+
+    console.log(this.selectedGroups);
+   
+
+  }
 
     onSave(){
 
@@ -192,7 +225,7 @@ minDate = new Date();
        } 
 
        let body = null;
-
+       this.showSuccess = false;
        if(this.isLinkedToCongregatio){
         body = this.userCongregatio;
         this.userService.editUserCongregatio(this.user.iduser, body).subscribe(
@@ -439,7 +472,7 @@ minDate = new Date();
           if(success){
             this.getDocByUserId( this.user.iduser );
             this.showSuccess = true;
-            this.msg = "Documento enviado com sucesso!!."
+            this.msg = "Operação de envio bem-sucedida!"
             this.files = [];
           }
         })
@@ -495,9 +528,7 @@ minDate = new Date();
     }
 
     handleRoleChange( value:string ){
-
       this.role = value;
-
      }
 
     continue(){
@@ -506,16 +537,18 @@ minDate = new Date();
 
     deleteDocById( doc:any){
 
+      
       this.userService.authDelDocument$.subscribe( (emmited)=>{ 
         if(emmited){
-
           this.isLoading = true;
+          this.showSuccessDelDocument = false;
           this.userService.deleteDocById( doc.iddocument ).subscribe(
             ( {success} )=>{
                 if(success){
                   this.msg = "Documento removido com sucesso";
                   this.getDocByUserId( this.user.iduser );
                   this.isLoading = false;
+                  this.showSuccessDelDocument = true;
                 }
             })
         } 
@@ -526,6 +559,7 @@ minDate = new Date();
     closeToast(){
       this.showSuccess = false;
       this.showLabelLinked = false;
+      this.showSuccessDelDocument = false;
       this.msg = '';
     }
 

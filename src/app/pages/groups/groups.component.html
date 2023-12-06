@@ -1,21 +1,193 @@
-<div class="table-responsive">
-    <table class="table table-striped table-auto ">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nome</th>
-          <th scope="col">Descrição</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let group of groups">
-          <td>{{ group.idgroup }}</td>
-          <td>{{ group.name }}</td>
-          <td>{{ group.description }}</td>
-        </tr>
-      </tbody>
-    </table>
+
+<div class="row">
+  <div class="col-lg-12">
+     
+      <div class="card pd-20">
+
+
+        <div class="card-tools mb-5" style="width: 160px; margin-left: auto;" >
+          <button type="button" class="btn btn-primary btn-block shadow" data-card-widget="collapse" title="Collapse" data-toggle="modal" data-target="#modalNewGroup">
+          <i class="fas fa-plus "></i> Novo Grupo
+          </button>
+        </div>
+
+
+        <div class="table-responsive">
+            <table class="table table-striped table-auto ">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nome</th>
+                  <th scope="col">Descrição</th>
+                  <th scope="col" class="text-center">Ação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let group of groups">
+                  <td>{{ group.idgroup }}</td>
+                  <td>{{ group.name }}</td>
+                  <td>{{ group.description }}</td>
+                  <td class="text-center" >
+                    <i class="far fa-edit " style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;"(click)="editGroup(group)"  data-toggle="modal" data-target="#modalEditGroup" ></i>
+                    <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelGroup" (click)="onRemove(group)"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+  </div>
 </div>
+
+
+ <!-- Modal New Group -->
+ <div class="modal fade font" id="modalNewGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="font-size: 0.9em;" >
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content" style="background-color: rgb(234, 243, 250);">
+      <div class="modal-header">
+        <h5 class="modal-title font" id="exampleModalCenterTitle"> Nova Alarme </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closebutton>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       
+        <form [formGroup]="myForm" class="needs-validation "  novalidate  [autocomplete]="false" >
+
+          <div class="input-group mb-4" >
+            <label class="text w-100"> Nome do grupo </label>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control"  formControlName="name" required [ngStyle]="( validField('name')) ? {'border':'1px solid red'}:{}">
+              <div *ngIf="validField('name')" class="invalid" > Dado obrigatório </div>
+            </div>
+          </div>
+
+          <div class="input-group mb-4" >
+            <label class="text w-100"> Description </label>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control"  formControlName="description" required [ngStyle]="( validField('description')) ? {'border':'1px solid red'}:{}">
+              <div *ngIf="validField('description')" class="invalid" > Dado obrigatório </div>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer ">
+
+        <button type="button" class="btn btn-primary btn-block shadow mt-3" (click)="onSave()"> Criar grupo</button>
+        <div class="d-flex flex-column align-items-end mb-3" style="margin-top: 30px;">
+     
+          <!-- <div >
+            <span class="mb-0" style="margin-right: 15px;"> <a href="register.html" class="text-center">  <i class="fas fa-window-close" style="margin-right: 2px;"></i>  Cancelar</a> </span>
+            <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fas fa-reply-all fa-flip-horizontal"></i>         
+              Reenviar</a> </span>
+            &nbsp; &nbsp;
+        </div>   -->
+       </div>
+      </div>
+
+  
+   
+    </div>
+  </div>
+</div>
+
+ <!-- Modal Edit Group -->
+ <div class="modal fade font" id="modalEditGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="font-size: 0.9em;" >
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content" style="background-color: rgb(234, 243, 250);">
+      <div class="modal-header">
+        <h5 class="modal-title font" id="exampleModalCenterTitle"> Editar Alarme </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closebutton2>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       
+        <form [formGroup]="myFormEdit" class="needs-validation "  novalidate  [autocomplete]="false" >
+
+          <div class="input-group mb-4" >
+            <label class="text w-100"> Nome do grupo </label>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control"  formControlName="editName" required [ngStyle]="( validFieldEdit('editName')) ? {'border':'1px solid red'}:{}">
+              <div *ngIf="validFieldEdit('editName')" class="invalid" > Dado obrigatório </div>
+            </div>
+          </div>
+
+          <div class="input-group mb-4" >
+            <label class="text w-100"> Description </label>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control"  formControlName="editDescription" required [ngStyle]="( validFieldEdit('editDescription')) ? {'border':'1px solid red'}:{}">
+              <div *ngIf="validFieldEdit('editDescription')" class="invalid" > Dado obrigatório </div>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer ">
+
+        <button type="button" class="btn btn-primary btn-block shadow mt-3" (click)="saveEdition()"> Editar grupo</button>
+        <div class="d-flex flex-column align-items-end mb-3" style="margin-top: 30px;">
+     
+          <!-- <div >
+            <span class="mb-0" style="margin-right: 15px;"> <a href="register.html" class="text-center">  <i class="fas fa-window-close" style="margin-right: 2px;"></i>  Cancelar</a> </span>
+            <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fas fa-reply-all fa-flip-horizontal"></i>         
+              Reenviar</a> </span>
+            &nbsp; &nbsp;
+        </div>   -->
+       </div>
+      </div>
+
+  
+   
+    </div>
+  </div>
+</div>
+
+
+  <!-- ask delete group -->
+  <div class="modal fade" id="modalAskDelGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.85; ">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <i class="fas fa-exclamation-triangle" style="color: red; font-size: 40px;"></i>
+          <button type="button"   class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+           <h6 class="font">Tem certeza de que deseja excluir este grupo?</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-block shadow" (click)="continue()" data-dismiss="modal" aria-label="Close"> Continuar</button>
+          <!-- <button type="button" class="btn btn-primary btn-block shadow"  *ngIf="isSending"> Enviando...</button> -->
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- success delete group -->
+ <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
+  <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
+  <span class="fs-8 w-100"> {{msg}}</span>
+  <!-- <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span> -->
+</div>
+
+    <!-- success create group -->
+ <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccessCreateGroup">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
+  <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
+  <span class="fs-8 w-100"> {{msg}}</span>
+  <!-- <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span> -->
+</div>
+
+  
 
 
 <div class="loading-overlay" *ngIf="isLoading">

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UserService } from './user.service';
+import { AlarmGroupService } from './alarm-group.service';
 
-describe('UserService', () => {
-  let service: UserService;
+describe('AlarmGroupService', () => {
+  let service: AlarmGroupService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(UserService);
+    service = TestBed.inject(AlarmGroupService);
   });
 
   it('should be created', () => {
