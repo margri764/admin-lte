@@ -106,6 +106,7 @@ ngOnInit(): void {
     idgroups:  [ null],
     alarmDate:  [ '', [Validators.required]],
     notifFrequency:  [ null, [Validators.required]],
+    description: ['']
   });
 
   
@@ -176,11 +177,12 @@ onSave(){
 
 
   const body = {
+      ...this.myForm.value,
       alarmDate: formattedDate,
       idgroups: groups.length > 0 ? groups : null,
       iduser: this.isChecked ? null : this.user.iduser,
       notIncludeUser: this.isChecked ? this.user.iduser : null,
-      notifFrequency: this.frequencySelected
+      notifFrequency: this.frequencySelected,
   }
 
   console.log(body); 
@@ -189,7 +191,8 @@ onSave(){
     ( {success} )=>{
       if(success){
         this.closebutton.nativeElement.click();
-        alert("Alarma creada corretcame");
+        this.resetForm();
+        alert("Alarma creada correctamente");
       }
     })
 
@@ -239,7 +242,6 @@ onSelectGroup( event: any){
 
 }
 
-
 onSelectFreq( event: any){
   const selectedValue = event.target.value;
   let id= selectedValue.split(',')[0];
@@ -248,7 +250,6 @@ onSelectFreq( event: any){
   this.frequencySelected.push(id);
   this.nameFreq.push(name);
 }
-
 
 removeFreq(nameToRemove: string): void {
 
@@ -288,7 +289,6 @@ removeFreq(nameToRemove: string): void {
 }
 
 
-
 toggleHover(isHovered: boolean): void {
   this.isHovered = isHovered;
 }
@@ -301,8 +301,18 @@ resetForm(){
   this.myForm.reset();
   this.selectedGroups = [];
   this.nameGroups = [];
+  this.nameFreq = [];
   this.suggested = [];
   this.myFormSearch.get('itemSearch')?.setValue('');
+  this.selectedGroups = [];
+  this.frequencySelected = [];
+  this.exclude = false;
+  this.isChecked = false;
+  this.myForm.get('alarmeDate')?.clearValidators();
+  this.myForm.get('alarmeDate')?.updateValueAndValidity();
+
+
+
 }
 
  // search
@@ -356,8 +366,10 @@ setTimeout(()=>{
 // search
 
 selectUser( user:any ){
-this.myForm.get('itemSearch')?.setValue(user.Nome_Completo);
+
+this.myFormSearch.get('itemSearch')?.setValue(user.Nome_Completo);
 this.user = user;
+this.suggested = [];
 
 }
 }

@@ -118,7 +118,7 @@
 
  <!-- Modal Alarm -->
  <div class="modal fade font" id="modalNova" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document" style="max-width: 600px;" >
+    <div class="modal-dialog modal-dialog-centered modal-md " role="document" style="max-width: 600px;" >
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title font" id="exampleModalCenterTitle"> Nova Alarme </h5>
@@ -126,11 +126,11 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body fs-9">
          
           <form [formGroup]="myForm" class="needs-validation "  novalidate  [autocomplete]="false" >
   
-            <div class="input-group mb-4" >
+            <div class="input-group mb-3" >
               <label class="text w-100"> Nome do alarme </label>
               <div class="input-group mb-3">
                 <input type="text" class="form-control"  formControlName="name" required [ngStyle]="( validField('name')) ? {'border':'1px solid red'}:{}">
@@ -139,21 +139,21 @@
             </div>
 
 
-            <form [formGroup]="myFormSearch" class="needs-validation"  novalidate  [autocomplete]="false">
+            <form [formGroup]="myFormSearch" class="needs-validation "  novalidate  [autocomplete]="false">
 
-              <div class="input-group mb-3 font" >
+              <div class="input-group  font mb-3  "   >
               <label class="text w-100 "> Selecione o usuário </label>
-
-                  <input type="text" class="form-control"   name="itemSearch" formControlName="itemSearch" style="height: 50px;"  [ngStyle]="( validField('iduser')) ? {'border':'1px solid red'}:{}">
+                  <input type="text" class="form-control block "  name="itemSearch" formControlName="itemSearch" [ngStyle]="( validField('iduser')) ? {'border':'1px solid red'}:{}">
                   <div class="input-group-append">
                     <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
                       <span class="fas fa-search" style="color: white"></span>
                     </div>
-                    <div *ngIf="userSelection" class="invalid" > Dado obrigatório </div>
-                    <div *ngIf="exclude" class="exclude" > Selecione o usuário a excluir </div>
+       
                   </div>
-      
+                  <div *ngIf="userSelection" class="invalid" > Dado obrigatório </div>
+                  <div *ngIf="exclude" class="exclude" > Selecione o usuário a excluir </div>
                 </div>
+
             </form>
 
             <div class="d-flex justify-content-center" *ngIf="spinner">
@@ -173,7 +173,7 @@
             </div>
 
 
-            <div class="input-group mb-3 mt-5 ">
+            <div class="input-group mb-3 mt-4">
               <label class="text w-100">Seleccione grupo</label>
               <select #groupSelect class="form-control select2 col-12 cursor" (change)="onSelectGroup($event)"  [ngStyle]="( validField('group')) ? {'border':'1px solid red'}:{}">
                 <option style="display:none; font-size: 0.9em;" disabled selected></option>
@@ -188,7 +188,7 @@
             </div>
 
 
-            <div class="input-group mb-3 mt-5" [ngClass]="{'was-validated': submitted}">
+            <div class="input-group mb-3 mt-3" >
               <div class="input-group date" >
               <label class="text w-100"> Data do alarme </label>
                 <input type="text"
@@ -207,7 +207,7 @@
   
             </div>
 
-            <div class="input-group mb-3 mt-5" >
+            <div class="input-group mb-3 mt-4" >
                   <label class="text w-100" > Antecedência do Lembrete </label>
                   <select class="form-control select2 col-12 w-100" required formControlName="notifFrequency" [ngStyle]="( validField('alarmDate')) ? {'border':'1px solid red'}:{}" (change)="onSelectFreq($event)" >
                     <!-- <option selected="selected"></option> -->
@@ -220,9 +220,15 @@
               </div>
             </div>
 
+            <div class="input-group mb-3" >
+              <label class="text w-100"> Descrição </label>
+                <textarea class="form-control " formControlName="description"></textarea>
+
+            </div>
+
             <div class="custom-control custom-switch d-flex flex-column align-items-start mb-3 mt-4" >
               <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="onSelect($event)" >
-              <label class="custom-control-label cursor" for="customSwitch1"> Excluir do alarme o usuário <b style="color: blue;">{{user}}</b> </label>
+              <label class="custom-control-label cursor" for="customSwitch1"> Excluir do alarme o usuário  </label>
             </div>
   
            
