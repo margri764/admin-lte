@@ -34,13 +34,69 @@ export class AlarmGroupService {
 
   }
 
-  createAlarm( body:any ){
+  createPersonalAlarm( body:any ){
     
-    return this.http.post<any>(`${this.baseUrl}api/alarm/createAlarm`, body) 
+    return this.http.post<any>(`${this.baseUrl}api/alarm/createPersonalAlarm`, body) 
     
     .pipe(
       tap( ( res) =>{
                     console.log("from createAlarm service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+  createGrupalAlarm( body:any ){
+    
+    return this.http.post<any>(`${this.baseUrl}api/alarm/createGrupalAlarm`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from createAlarm service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+  getAllPersonalAlarms(){
+    
+    return this.http.get<any>(`${this.baseUrl}api/alarm/getAllPersonalAlarms`) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getAllPersonalAlarms service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+  getAllGrupalAlarms(){
+    
+    return this.http.get<any>(`${this.baseUrl}api/alarm/getAllGrupalAlarms`) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getAllGrupalAlarms service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+  getAlarmByUser( id:any ){
+    
+    return this.http.get<any>(`${this.baseUrl}api/alarm/getAlarmByUser/${id}`) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getAlarmByUser service: ",res);
                 }  
       ),            
       map( res => res )

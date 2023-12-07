@@ -11,7 +11,7 @@
         <div class="separator"></div>
         
         <div class="d-flex align-items-center" [ngClass]="{'animate__animated animate__flipInX': isHovered}" >
-          <span style="color: white; opacity: 0.89; ">Nova alarm</span>
+          <span style="color: white; opacity: 0.89; ">Nova alarme pessoal</span>
         </div>
       
       </div>
@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt-1" (mouseover)="toggleHover2(true)" (mouseout)="toggleHover2(false)">
+  <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt-1" (mouseover)="toggleHover2(true)" (mouseout)="toggleHover2(false)"  (click)="showPessoalAlarmsOrGrupal('pessoal')">
 
     <div class="d-flex shadow justify-content-center align-items-center customCards2" >
   
@@ -30,7 +30,26 @@
         <div class="separator"></div>
         
         <div class="d-flex align-items-center " [ngClass]="{'animate__animated animate__flipInX': isHovered2}">
-          <span style="color: white; opacity: 0.89; ">Lista</span>
+          <span style="color: white; opacity: 0.89; ">Lista pessoal alarmes</span>
+        </div>
+      
+      </div>
+    
+    </div>
+  </div>
+  
+  <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt-1" (mouseover)="toggleHover3(true)" (mouseout)="toggleHover3(false)" (click)="showPessoalAlarmsOrGrupal('grupal')">
+
+    <div class="d-flex shadow justify-content-center align-items-center customCards3" >
+  
+      <div class="d-flex justify-content-center align-items-center" style="width: 160px; height: 130px;" >
+      
+        <i class="fas fa-list-ul" style="font-size: 60px; opacity: 0.89; color: white;" [ngClass]="{'animate__animated animate__flipInX': isHovered3}"></i>
+
+        <div class="separator"></div>
+        
+        <div class="d-flex align-items-center " [ngClass]="{'animate__animated animate__flipInX': isHovered3}" >
+          <span style="color: white; opacity: 0.89; ">Lista grupal alarmes</span>
         </div>
       
       </div>
@@ -43,7 +62,7 @@
 </div>
 
 
-<div class="row mt-5">
+<div class="row mt-5" *ngIf="showPessoalAlarms">
     <div class="col-lg-12">
        
         <div class="card" style="padding: 12px; padding-top: 20px;">
@@ -61,52 +80,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><a routerLink="/dashboard/editar-usuario/1"> Pedro Oliveira </a></td>
-                        <td>pedro@example.com</td>
-                        <td>A carteira de motorista vence</td>
-                        <td>23 de Janeiro de 2023</td>
+                  <!-- [routerLink]="['editar-usuario/', request.iduser]" -->
+                    <tr *ngFor="let pes of personalAlarms">
+                        <td ><a [routerLink]="['/dashboard/editar-usuario/',pes.iduser]"> {{pes.name }} </a></td>
+                        <td> {{ pes.Email }} </td>
+                        <td> {{ pes.description }} </td>
+                        <td> {{ pes.alarmDate | date}} </td>
                     </tr>
 
-                    <tr>
-                      <td><a routerLink="/dashboard/editar-usuario/1">Pedro Oliveira</a></td>
-                      <td>pedro@example.com</td>
-                      <td>O prazo de validade da minha habilitação está chegando ao fim</td>
-                      <td>5 de Novembro de 2023</td>
-                    </tr>
-                    <tr>
-                      <td><a routerLink="/dashboard/editar-usuario/2">Ana Silva</a></td>
-                      <td>ana@example.com</td>
-                      <td>Aniversário</td>
-                      <td>14 de Março  de 2023</td>
-                    </tr>
-                    <tr>
-                      <td><a routerLink="/dashboard/editar-usuario/3">João Costa</a></td>
-                      <td>joao@example.com</td>
-                      <td>A carteira de motorista vence</td>
-                      <td>5 de Novembro de 2023</td>
-                    </tr>
-                    <tr>
-                      <td><a routerLink="/dashboard/editar-usuario/4">Fernanda Pereira</a></td>
-                      <td>fernanda@example.com</td>
-                      <td>A carteira de motorista vence</td>
-                      <td>5 de Novembro de 2023</td>
-                    </tr>
-                    <tr>
-                      <td><a routerLink="/dashboard/editar-usuario/5">Maria Santos</a></td>
-                      <td>maria@example.com</td>
-                      <td>A carteira de motorista vence</td>
-                      <td>5 de Novembro de 2023</td>
-
-                    </tr>
-
-                   
-                    <tr>
-                        <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
-                        <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
-                        <td style="visibility: hidden;"> zzzzzzzzzzz</td>
-                        <td style="visibility: hidden;"> zzzzzzzzzzz</td>
-                    </tr>
+               
 
                 
                 </tbody>
@@ -115,17 +97,59 @@
     </div>
 </div>
 
+<div class="row mt-5" *ngIf="showGrupalAlarms">
+  <div class="col-lg-12">
+     
+      <div class="card" style="padding: 12px; padding-top: 20px;">
+
+        <div class="customTHead w-100 shadow"></div>
+
+          <table datatable class="row-border hover font" dt-options="dtOptions" style="font-size: 0.9em;">
+
+              <thead class="">
+                  <tr >
+                      <th>Grupos</th>
+                      <th>Nome alarme</th>
+                      <th>Descrição</th>
+                      <th>Data</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let pes of grupalAlarms">
+                      <td> <span *ngFor="let name of pes.group_names">
+                        {{ name }}
+                      </span></td>
+                      <td> {{ pes.name }} </td>
+                      <td> {{ pes.description }} </td>
+                      <td> {{ pes.alarmDate | date}} </td>
+                  </tr>
+
+             
+
+              
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>
+
+
 
  <!-- Modal Alarm -->
  <div class="modal fade font" id="modalNova" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
     <div class="modal-dialog modal-dialog-centered modal-md " role="document" style="max-width: 600px;" >
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title font" id="exampleModalCenterTitle"> Nova Alarme </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetForm()" #closebutton>
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+
+        <div class="modal-header" >
+            <button type="button" class="shadow mt-3"  [ngClass]="pessoal ? 'btnMenuClicked':'btnMenu'" (click)="selectPessoalOrGrupal('pessoal')" >Alarme pessoal</button>
+            <button type="button" class="shadow  mt-3"   [ngClass]="grupal ? 'btnMenuClicked':'btnMenu'" style="margin-left: 30px;" (click)="selectPessoalOrGrupal('grupal')">Alarme grupal</button>
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetForm()" #closebutton>
+              <span aria-hidden="true">&times;</span>
+            </button>
+            
+       </div>
+
         <div class="modal-body fs-9">
          
           <form [formGroup]="myForm" class="needs-validation "  novalidate  [autocomplete]="false" >
@@ -133,7 +157,7 @@
             <div class="input-group mb-3" >
               <label class="text w-100"> Nome do alarme </label>
               <div class="input-group mb-3">
-                <input type="text" class="form-control"  formControlName="name" required [ngStyle]="( validField('name')) ? {'border':'1px solid red'}:{}">
+                <input type="text" class="form-control"  formControlName="name"  [ngStyle]="( validField('name')) ? {'border':'1px solid red'}:{}"  [attr.disabled]="(!pessoal && !grupal) ? '' : null" >
                 <div *ngIf="validField('name')" class="invalid" > Dado obrigatório </div>
               </div>
             </div>
@@ -143,7 +167,7 @@
 
               <div class="input-group  font mb-3  "   >
               <label class="text w-100 "> Selecione o usuário </label>
-                  <input type="text" class="form-control block "  name="itemSearch" formControlName="itemSearch" [ngStyle]="( validField('iduser')) ? {'border':'1px solid red'}:{}">
+                  <input type="text" class="form-control block "  name="itemSearch" formControlName="itemSearch" [ngStyle]="( validField('itemSearch')) ? {'border':'1px solid red'}:{}" [attr.disabled]="(!exclude && grupal) ? '' : null">
                   <div class="input-group-append">
                     <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
                       <span class="fas fa-search" style="color: white"></span>
@@ -175,7 +199,7 @@
 
             <div class="input-group mb-3 mt-4">
               <label class="text w-100">Seleccione grupo</label>
-              <select #groupSelect class="form-control select2 col-12 cursor" (change)="onSelectGroup($event)"  [ngStyle]="( validField('group')) ? {'border':'1px solid red'}:{}">
+              <select #groupSelect class="form-control select2 col-12 cursor" (change)="onSelectGroup($event)"  [ngStyle]="( validField('group')) ? {'border':'1px solid red'}:{}"[attr.disabled]="(!grupal) ? '' : null">
                 <option style="display:none; font-size: 0.9em;" disabled selected></option>
                 <option *ngFor="let group of groups" [value]="[group.name, group.idgroup]" class="font">{{ group.name }}</option>
               </select>
@@ -198,7 +222,7 @@
                   [minDate]="minDate"
                   [maxDate]="maxDate"
                   [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
-                  formControlName="alarmDate" required [ngStyle]="( validField('alarmDate')) ? {'border':'1px solid red'}:{}">
+                  formControlName="alarmDate" required [ngStyle]="( validField('alarmDate')) ? {'border':'1px solid red'}:{}" [attr.disabled]="(!pessoal && !grupal) ? '' : null">
                 <div class="input-group-append"  >
                   <div class="input-group-text"><i class="fa fa-calendar" style="color: rgb(0, 123, 255);"></i></div>
                 </div>
@@ -209,7 +233,7 @@
 
             <div class="input-group mb-3 mt-4" >
                   <label class="text w-100" > Antecedência do Lembrete </label>
-                  <select class="form-control select2 col-12 w-100" required formControlName="notifFrequency" [ngStyle]="( validField('alarmDate')) ? {'border':'1px solid red'}:{}" (change)="onSelectFreq($event)" >
+                  <select class="form-control select2 col-12 w-100" required formControlName="notifFrequency" [ngStyle]="( validField('alarmDate')) ? {'border':'1px solid red'}:{}" (change)="onSelectFreq($event)" [attr.disabled]="(!pessoal && !grupal) ? '' : null">
                     <!-- <option selected="selected"></option> -->
                     <option *ngFor="let freq of frequency" [value]="[freq.id,freq.name]" class="font">{{ freq.name }}</option>
                   </select>
@@ -222,12 +246,12 @@
 
             <div class="input-group mb-3" >
               <label class="text w-100"> Descrição </label>
-                <textarea class="form-control " formControlName="description"></textarea>
+                <textarea class="form-control " formControlName="description" [attr.disabled]="(!pessoal && !grupal) ? '' : null"></textarea>
 
             </div>
 
             <div class="custom-control custom-switch d-flex flex-column align-items-start mb-3 mt-4" >
-              <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="onSelect($event)" >
+              <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="onSelect($event)" [attr.disabled]="(!grupal) ? '' : null">
               <label class="custom-control-label cursor" for="customSwitch1"> Excluir do alarme o usuário  </label>
             </div>
   
@@ -237,7 +261,7 @@
         </div>
         <div class="modal-footer ">
 
-          <button type="button" class="btn btn-primary btn-block shadow mt-3" (click)="onSave()"> Criar alarme</button>
+          <button type="button" class="btn btn-primary btn-block shadow mt-3" (click)="onSave()" [attr.disabled]="(!pessoal && !grupal) ? '' : null"> Criar alarme</button>
         
         </div>
   

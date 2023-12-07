@@ -416,8 +416,11 @@
 
             <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm">
               <div class="row mt-5">
-                <div class="col-sm-12">
-                   Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum ipsum porro explicabo, ut similique quasi debitis mollitia numquam impedit asperiores fugiat vero corporis. Totam inventore ab hic dolorem nam tempore!
+                <div class="col-12">
+                  <div class="boxSelection font" style="padding: 15px; margin-top: 5px;" *ngFor="let alarm of userAlarms">
+                    Nome: {{ alarm.name }} &nbsp; Data: {{ alarm.alarmDate }} &nbsp; Descripcion {{alarm.description}}
+                  </div>
+               
                </div>
               </div>
             </div>

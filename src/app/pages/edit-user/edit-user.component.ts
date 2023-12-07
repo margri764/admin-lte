@@ -107,7 +107,7 @@ minDate = new Date();
 groups : any []=[];
 selectedGroups : any []=[];
 nameGroups : any []=[];
-
+userAlarms : any []=[];
 
 
   constructor(
@@ -250,6 +250,7 @@ nameGroups : any []=[];
           this.initialForm();
           this.getUsersGroups(id);
           this.getDocByUserId(user.iduser);
+          this.getAlarmByUser(user.iduser);
           console.log(user.Ruta_Imagen);
           if(user.Ruta_Imagen !== '' && user.Ruta_Imagen !== null ){
             this.pathImg = user.Ruta_Imagen;
@@ -260,6 +261,8 @@ nameGroups : any []=[];
         }
       })
   }
+
+
 
 
     onSave(){
@@ -325,6 +328,14 @@ nameGroups : any []=[];
           })
        }
     
+  }
+
+  getAlarmByUser( id:any){
+
+    this.alarmGroupService.getAlarmByUser(id).subscribe(
+      ( {success, alarm} )=>{
+        this.userAlarms = alarm;
+      })
   }
 
     activeAccount( active:any){

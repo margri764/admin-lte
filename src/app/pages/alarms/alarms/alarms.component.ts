@@ -50,6 +50,7 @@ export class AlarmsComponent implements OnInit {
    minDate = new Date();
    isHovered: boolean = false;
    isHovered2: boolean = false;
+   isHovered3: boolean = false;
    dtOptions: any  = {};
    groupSelection : boolean = false;
    userSelection : boolean = false;
@@ -62,7 +63,12 @@ export class AlarmsComponent implements OnInit {
    frequencySelected : any []=[];
    frequency = [ {id:0, name: 'No mesmo dia'}, {id:1, name: '1 dia antes'}, {id:7, name: '7 dias antes'}, {id:15, name: '15 dias antes'}  ]
    nameFreq : any []=[];
-
+   personalAlarms : any []=[];
+   grupalAlarms : any []=[];
+   pessoal : boolean = false;
+   grupal : boolean = false;
+   showPessoalAlarms : boolean = false;
+   showGrupalAlarms : boolean = true;
 
 
 
@@ -86,9 +92,11 @@ export class AlarmsComponent implements OnInit {
       this.myFormSearch = this.fb.group({
         itemSearch:  [ '',  ],
       });   
+
   
         
    }
+
 
 ngOnInit(): void {
 
@@ -97,7 +105,22 @@ ngOnInit(): void {
       if(success){
           this.groups = groups
       }
-    })
+    });
+
+  this.alarmGroupService.getAllPersonalAlarms().subscribe(
+    ( {success, personalAlarms} )=>{
+      if(success){
+      this.personalAlarms = personalAlarms;
+      }
+    })  
+
+    this.alarmGroupService.getAllGrupalAlarms().subscribe(
+      ( {success, groupAlarms} )=>{
+        if(success){
+        this.grupalAlarms = groupAlarms;
+        }
+      })  
+  
 
 
   this.myForm = this.fb.group({
@@ -130,34 +153,74 @@ ngOnInit(): void {
 
 }
 
+selectPessoalOrGrupal( option:string ){
+
+  if(option === "pessoal"){
+    this.pessoal = true;
+    this.grupal = false;
+  }else if(option === "grupal"){
+    this.grupal = true;
+    this.pessoal = false;
+  }
+}
+
+showPessoalAlarmsOrGrupal( alarm : string ){
+
+  switch (alarm) {
+    case 'pessoal':
+                  this.showPessoalAlarms = true;
+                  this.showGrupalAlarms = false
+      break;
+
+    case 'grupal':
+                this.showGrupalAlarms = true;
+                this.showPessoalAlarms = false;
+    break;
+  
+    default:
+            this.showPessoalAlarms = true;
+            this.showGrupalAlarms = false
+      break;
+  }
+}
+
 
 onSave(){
-
-  console.log(this.user);
-
-
-  this.submitted = true;
-  this.userSelection = false;
-  this.groupSelection = false;
 
   if ( this.myForm.invalid ) {
     this.myForm.markAllAsTouched();
     return;
   }
 
+  this.submitted = true;
+  this.userSelection = false;
+  this.groupSelection = false;
 
   const grupsLength = this.selectedGroups.length;
 
-  if(this.user === null && grupsLength === 0 && !this.isChecked){
+  if(this.pessoal == false && this.grupal === false){
+    alert('Selecciona tipo de alarma: usuario o grupos ');
+    return;
+  } 
+
+  if(this.user === undefined && grupsLength === 0 && !this.isChecked){
     this.userSelection = true;
     this.groupSelection = true;
     alert('Debes seleccionar una opcion: usuario o grupos ');
     return;
   } 
-  if(!this.isChecked && grupsLength !== 0 && this.user !== null){
-    alert('No puedes seleccionar usuarios y grupos');
+
+  if(this.user === undefined && grupsLength === 0 && !this.isChecked){
+    this.userSelection = true;
+    this.groupSelection = true;
+    alert('Debes seleccionar una opcion: usuario o grupos ');
     return;
-  }else if (this.isChecked && grupsLength !== 0 &&this.user === null) {
+  } 
+
+  // if(!this.isChecked && grupsLength !== 0 && this.user !== undefined){
+  //   alert('No puedes seleccionar usuarios y grupos');
+  //   return;
+   if (this.isChecked && grupsLength !== 0 &&this.user === undefined) {
     alert('Deebs seleccionar el usuario a excluir');
     return;
 
@@ -169,41 +232,70 @@ onSave(){
 
   if(alarmDate !== null && alarmDate !== ''){
     formattedDate = moment(alarmDate).toISOString();
+
   }
 
   this.selectedGroups.forEach( (element:any)=>{
     groups?.push(element.idgroup)
   })
 
+  console.log(this.isChecked);
 
-  const body = {
+
+  if(this.pessoal){
+
+    
+    const body = {
       ...this.myForm.value,
       alarmDate: formattedDate,
       idgroups: groups.length > 0 ? groups : null,
-      iduser: this.isChecked ? null : this.user.iduser,
-      notIncludeUser: this.isChecked ? this.user.iduser : null,
+      iduser:  this.user.iduser,
       notifFrequency: this.frequencySelected,
   }
 
-  console.log(body); 
+    this.alarmGroupService.createPersonalAlarm(body).subscribe(
+      ( {success} )=>{
+        if(success){
+          this.closebutton.nativeElement.click();
+          this.resetForm();
+          alert("Alarma creada correctamente");
+          this.pessoal = false;
+          this.grupal = false;
+        }
+      })
 
-  this.alarmGroupService.createAlarm(body).subscribe(
-    ( {success} )=>{
-      if(success){
-        this.closebutton.nativeElement.click();
-        this.resetForm();
-        alert("Alarma creada correctamente");
-      }
-    })
+  }else if(this.grupal){
+        
+      const body = {
+        ...this.myForm.value,
+        alarmDate: formattedDate,
+        idgroups: groups.length > 0 ? groups : null,
+        iduser: !this.isChecked ? null : this.user.iduser,
+        excludedUser: !this.isChecked ? null : this.user.iduser,
+        notifFrequency: this.frequencySelected,
+    }
+
+    this.alarmGroupService.createGrupalAlarm(body).subscribe(
+      ( {success} )=>{
+        if(success){
+          this.closebutton.nativeElement.click();
+          this.resetForm();
+          alert("Alarma creada correctamente");
+          this.pessoal = false;
+          this.grupal = false;
+        }
+      })
+
+  }
+
+
 
 }
 
 onSelect(event: any): void {
     this.isChecked = (event.target as HTMLInputElement).checked;
     this.exclude = true;
-
 }
-
 
 validField( field: string ) {
     const control = this.myForm.controls[field];
@@ -288,13 +380,16 @@ removeFreq(nameToRemove: string): void {
 
 }
 
-
 toggleHover(isHovered: boolean): void {
   this.isHovered = isHovered;
 }
 
 toggleHover2(isHovered2: boolean): void {
   this.isHovered2 = isHovered2;
+}
+
+toggleHover3(isHovered3: boolean): void {
+  this.isHovered3 = isHovered3;
 }
 
 resetForm(){
@@ -308,11 +403,8 @@ resetForm(){
   this.frequencySelected = [];
   this.exclude = false;
   this.isChecked = false;
-  this.myForm.get('alarmeDate')?.clearValidators();
-  this.myForm.get('alarmeDate')?.updateValueAndValidity();
-
-
-
+  this.pessoal = false;
+  this.grupal = false;
 }
 
  // search
