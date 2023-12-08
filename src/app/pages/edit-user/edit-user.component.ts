@@ -443,15 +443,28 @@ userAlarms : any []=[];
     }
     // no pude lograr q ande asi-----------------------------------------------------------
 
-    onViewClick( name:string, index: number): void {
-      if(this.pdfSrcList[index]){
+    onViewClick(name: string, index: number): void {
+      if (this.pdfSrcList[index]) {
         console.log(name, index);
-        setTimeout( ()=>{
-            this.selectedPdfSrc = this.pdfSrcList[index];
-            this.selectedFile = this.files[index];
-            this.fileName = name;
-          }, 200)
+        
+        const reader = new FileReader();
+        
+        reader.onloadend = () => {
+          // Obtén los datos Base64
+          const base64Data = reader.result as string;
+          
+          // Asigna los datos Base64 al src del pdf-viewer
+          this.selectedPdfSrc = base64Data;
+          
+          this.selectedFile = this.files[index];
+          this.fileName = name;
+        };
+        
+        // Lee el contenido del archivo como datos Base64
+        reader.readAsDataURL(this.files[index]);
       }
+    }
+    
 
 
       //    if(this.arrDocument[index]){
@@ -463,7 +476,6 @@ userAlarms : any []=[];
       //     }, 200)
       // }
       
-    }
 
   
     onView( doc:any ){
