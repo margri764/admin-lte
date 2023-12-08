@@ -69,7 +69,7 @@
 
           <div class="customTHead w-100 shadow"></div>
 
-            <table datatable class="row-border hover font" dt-options="dtOptions" style="font-size: 0.9em;">
+            <table datatable class="row-border hover font" [dtOptions]="dtOptions" style="font-size: 0.9em;">
 
                 <thead class="">
                     <tr >
@@ -104,7 +104,7 @@
 
         <div class="customTHead w-100 shadow"></div>
 
-          <table datatable class="row-border hover font" dt-options="dtOptions" style="font-size: 0.9em;">
+          <table datatable class="row-border hover font" [dtOptions]="dtOptions" style="font-size: 0.9em;">
 
               <thead class="">
                   <tr >
@@ -259,15 +259,35 @@
           </form>
   
         </div>
-        <div class="modal-footer ">
-
-          <button type="button" class="btn btn-primary btn-block shadow mt-3" (click)="onSave()" [attr.disabled]="(!pessoal && !grupal) ? '' : null"> Criar alarme</button>
-        
-        </div>
+        <div class="loading-overlay d-flex align-items-center justify-content-center" *ngIf="isLoading">
+          <div class="spinner-grow" role="status" >
+              <span class="sr-only">Loading...</span>
+          </div>
+      </div> 
+        <div class=" modal-footer d-flex align-items-center justify-content-center">
+          <button type="button" class="btn btn-primary btn-block shadow mt-3" (click)="onSave()" [attr.disabled]="(!pessoal && !grupal) ? '' : null">Criar alarme</button>
+      
+          
+      </div>
+      
   
     
      
       </div>
     </div>
 </div>
+
+ <!-- success del document-->
+ <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
+  <h5 class="fs-10"><i class="icon fas fa-check"> &nbsp;</i> Sucesso!!</h5>
+  <span class="fs-8 w-100"> {{msg}}</span>
+  <!-- <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span> -->
+</div>
+
+
+
+
+
+
     

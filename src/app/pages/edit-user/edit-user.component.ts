@@ -489,13 +489,16 @@ userAlarms : any []=[];
     downloadPdf(files: any) {
       if (files && files.filePath) {
         // Obtén el nombre del archivo desde la ruta
-        const fileName = files.filePath.split('\\').pop() || files.name;
+        const fileName = files.filePath.split('/').pop() || files.name;
+    
+        // Configura la ruta del servidor en producción
+        const serverURL = 'https://arcanjosaorafael.org/documents/'; // Reemplaza con la URL de tu servidor
     
         // Crea un enlace temporal
         const link = document.createElement('a');
-        
-        // Configura el enlace con la ruta del archivo
-        link.href = files.filePath;
+    
+        // Configura el enlace con la ruta completa del archivo en producción
+        link.href = `${serverURL}${fileName}`;
     
         // Configura la propiedad de descarga con el nombre del archivo original
         link.download = fileName;
@@ -507,6 +510,8 @@ userAlarms : any []=[];
         link.click();
       }
     }
+    
+    
 
     uploadDocument( file:any ){
 

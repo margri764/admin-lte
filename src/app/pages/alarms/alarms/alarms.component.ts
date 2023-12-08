@@ -69,7 +69,9 @@ export class AlarmsComponent implements OnInit {
    grupal : boolean = false;
    showPessoalAlarms : boolean = false;
    showGrupalAlarms : boolean = true;
-
+   isLoading : boolean = false;
+   showSuccess : boolean = false;
+   msg : string=''
 
 
   constructor(
@@ -87,7 +89,7 @@ export class AlarmsComponent implements OnInit {
       // Inicializar bsRangeValue con la fecha actual y la fecha máxima
       this.bsRangeValue = [this.bsValue, this.maxDate];
 
-      this.dtOptions = { language: LanguageApp.spanish_datatables }
+      this.dtOptions = { language: LanguageApp.spanish_datatables,  pagingType: 'full_numbers' }
 
       this.myFormSearch = this.fb.group({
         itemSearch:  [ '',  ],
@@ -198,33 +200,7 @@ onSave(){
 
   const grupsLength = this.selectedGroups.length;
 
-  if(this.pessoal == false && this.grupal === false){
-    alert('Selecciona tipo de alarma: usuario o grupos ');
-    return;
-  } 
 
-  if(this.user === undefined && grupsLength === 0 && !this.isChecked){
-    this.userSelection = true;
-    this.groupSelection = true;
-    alert('Debes seleccionar una opcion: usuario o grupos ');
-    return;
-  } 
-
-  if(this.user === undefined && grupsLength === 0 && !this.isChecked){
-    this.userSelection = true;
-    this.groupSelection = true;
-    alert('Debes seleccionar una opcion: usuario o grupos ');
-    return;
-  } 
-
-  // if(!this.isChecked && grupsLength !== 0 && this.user !== undefined){
-  //   alert('No puedes seleccionar usuarios y grupos');
-  //   return;
-   if (this.isChecked && grupsLength !== 0 &&this.user === undefined) {
-    alert('Deebs seleccionar el usuario a excluir');
-    return;
-
-  }
   const alarmDate = this.myForm.get('alarmDate')?.value;
 
   let formattedDate = null;
@@ -253,14 +229,21 @@ onSave(){
       notifFrequency: this.frequencySelected,
   }
 
+    this.isLoading = true;
+    this.showSuccess = false;
     this.alarmGroupService.createPersonalAlarm(body).subscribe(
       ( {success} )=>{
+        setTimeout(()=>{ this.isLoading = false },1800)
         if(success){
-          this.closebutton.nativeElement.click();
-          this.resetForm();
-          alert("Alarma creada correctamente");
-          this.pessoal = false;
-          this.grupal = false;
+          setTimeout(()=>{   
+            this.closebutton.nativeElement.click();
+            this.resetForm();
+            this.showSuccess = true;
+            this.msg = "Alarme criado com sucesso";
+            this.pessoal = false;
+            this.grupal = false;
+          },1000)
+          
         }
       })
 
@@ -274,22 +257,32 @@ onSave(){
         excludedUser: !this.isChecked ? null : this.user.iduser,
         notifFrequency: this.frequencySelected,
     }
-
+    this.isLoading = true;
+    this.showSuccess = false;
     this.alarmGroupService.createGrupalAlarm(body).subscribe(
       ( {success} )=>{
+        setTimeout(()=>{ this.isLoading = false },1800)
         if(success){
-          this.closebutton.nativeElement.click();
-          this.resetForm();
-          alert("Alarma creada correctamente");
-          this.pessoal = false;
-          this.grupal = false;
+          setTimeout(()=>{   
+            this.closebutton.nativeElement.click();
+            this.resetForm();
+            this.showSuccess = true;
+            this.msg = "Alarme criado com sucesso";
+            this.pessoal = false;
+            this.grupal = false;
+          },1000)
+          
         }
       })
-
   }
 
 
 
+}
+
+closeToast(){
+  this.showSuccess = false;
+  this.msg = '';
 }
 
 onSelect(event: any): void {

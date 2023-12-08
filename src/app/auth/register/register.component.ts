@@ -39,14 +39,13 @@ export class RegisterComponent implements OnInit {
     this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
     
     this.myForm = this.fb.group({
-      name:     [ 'Fernando', [Validators.required] ],
-      lastName:  [ 'Griotti', [Validators.required]],
-      email:  [ 'fgriotti747@alumnos.iua.edu.ar', [Validators.required]],
-      Data_Nascimento:  [ '2003-10-10', [Validators.required]],
-      Telefone1:  [ '453454rt', [Validators.required]],
-      Nome_da_sede:  [ 'aaa', [Validators.required]],
-      Cidade_da_sede:  [ 'bbb', [Validators.required]],
-      Pais_da_sede:  [ 'ccc', [Validators.required]],
+      name:     [ '', [Validators.required] ],
+      lastName:  [ '', [Validators.required]],
+      email:  [ '', [Validators.required]],
+      Data_Nascimento:  [ '', [Validators.required]],
+      Telefone1:  [ '', [Validators.required]],
+      Cidade_da_sede:  [ '', [Validators.required]],
+      Pais_da_sede:  [ '', [Validators.required]],
     });
 
     // this.myForm = this.fb.group({
