@@ -262,10 +262,7 @@ userAlarms : any []=[];
       })
   }
 
-
-
-
-    onSave(){
+  onSave(){
 
       // esto es por si alguien se olvida de linkear despues de seleccionar el user de la BD congregatio
        if(this.wasLinked && !this.stateLink){
@@ -471,11 +468,14 @@ userAlarms : any []=[];
   
     onView( doc:any ){
 
+      const fileName = doc.filePath.split('/').pop() ;
+
         // Configura la ruta del servidor en producción
         const serverURL = 'https://arcanjosaorafael.org/documents/'; // Reemplaza con la URL de tu servidor
       
         // Configura la URL completa del servidor junto con la ruta del archivo
-        this.selectedPdfBack = `${serverURL}${doc.filePath}`;
+        this.selectedPdfBack = `${serverURL}${fileName}`;
+        console.log( this.selectedPdfBack);
         this.fileNameBack = doc.originalName;
       
     }
