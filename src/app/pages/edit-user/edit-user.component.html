@@ -479,6 +479,38 @@
     </div>
   </div>
 
+   
+  <!-- Modal Preview Back -->
+  <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl justify-content-center" role="document"> 
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewModalLabel"> <a>{{fileName}}</a> </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" >
+
+          <div *ngIf="!loadingPdf">
+            <div class="embed-responsive embed-responsive-16by9">
+              <pdf-viewer [src]="selectedPdfSrc" [render-text]="true" [original-size]="false" class="embed-responsive-item"></pdf-viewer>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+
+
+          <a [href]="selectedPdfBack" download="{{fileNameBack}}">
+            <i class="fas fa-download"></i> Baixar
+          </a>
+          <!-- Botones y acciones del pie del modal -->
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ask delete document -->
   <div class="modal fade" id="modalAskDelDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.85; ">
     <div class="modal-dialog modal-dialog-centered" role="document">

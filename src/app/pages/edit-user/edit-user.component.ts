@@ -409,11 +409,12 @@ userAlarms : any []=[];
       return new Uint8Array();
     }
 
-    // no pude lograr q ande asi-----------------------------------------------------------
+
     //con esta funcion traigo los documentos q el usuario tiene en BD
     readAndShowPDFFromBack(fileContents: any[]): void {
 
       this.backFiles = fileContents;
+      console.log('');
     
       fileContents.forEach((fileContent) => {
         
@@ -446,8 +447,8 @@ userAlarms : any []=[];
     // no pude lograr q ande asi-----------------------------------------------------------
 
     onViewClick( name:string, index: number): void {
-
       if(this.pdfSrcList[index]){
+        console.log(name, index);
         setTimeout( ()=>{
             this.selectedPdfSrc = this.pdfSrcList[index];
             this.selectedFile = this.files[index];
@@ -469,8 +470,14 @@ userAlarms : any []=[];
 
   
     onView( doc:any ){
-      this.selectedPdfBack = doc.filePath;
-      this.fileNameBack = 'Teste 1';
+
+        // Configura la ruta del servidor en producción
+        const serverURL = 'https://arcanjosaorafael.org/documents/'; // Reemplaza con la URL de tu servidor
+      
+        // Configura la URL completa del servidor junto con la ruta del archivo
+        this.selectedPdfBack = `${serverURL}${doc.filePath}`;
+        this.fileNameBack = doc.originalName;
+      
     }
 
     getDocByUserId( id:any ){
