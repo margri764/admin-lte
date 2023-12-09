@@ -3,7 +3,7 @@
 <router-outlet></router-outlet>
 
  <!-- 400 status -->
-  <div id="custom-toast" class="alert alert-danger alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="show404"  >
+  <div id="custom-toast" class="alert alert-danger alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="show400"  >
     <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5 style="font-size: 1.2em;"><i class="icon fas fas fa-ban"></i> Erro!</h5>
     {{msg}}

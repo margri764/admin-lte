@@ -173,24 +173,26 @@
                               </div>
                             </div>
 
-                            <div class="input-group mb-3 mt-3" >
-                              <button type="button" class="btn btn-primary shadow fs-10"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
+                            <div class="d-flex align-items-start mt-3" >
+
+                              <button type="button" class="btn btn-primary shadow fs-10" style="display: block"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
 
                               <button type="button" class="btn btn-danger shadow fs-10"  style="margin-left: 30px;"> <i class="fas fa-trash"></i> &nbsp; Excluir</button>
 
-                              <button type="button" class="btn btn-success shadow fs-10"  style="margin-left: 30px;" (click)="activeAccount('1')" *ngIf="myForm.get('active')?.value === 0"> <i class="fas fa-check-circle" ></i> &nbsp; Ativar</button>
+                              <!-- <button type="button" class="btn btn-success shadow fs-10"  style="margin-left: 30px;" (click)="activeAccount('1')" *ngIf="myForm.get('active')?.value === 0"> <i class="fas fa-check-circle" ></i> &nbsp; Ativar</button> -->
 
-                              <button type="button" class="btn btn-warning shadow fs-10"  style="margin-left: 30px; color: white;" (click)="activeAccount('0')" *ngIf="myForm.get('active')?.value === 1"> <i class="fas fa-check-circle" ></i> &nbsp; Desativar</button>
+                              <!-- <button type="button" class="btn btn-warning shadow fs-10"  style="margin-left: 30px; color: white;" (click)="activeAccount('0')" *ngIf="myForm.get('active')?.value === 1"> <i class="fas fa-check-circle" ></i> &nbsp; Desativar</button> -->
+
+                              <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 30px;" >
+                                <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="activeDeacTive($event)" [checked]="myForm.get('active')?.value === 1">
+                                <label class="custom-control-label cursor" for="customSwitch1"> Ativar usúario  </label>
+                              </div>
+                              <!-- [attr.disabled]="(!grupal) ? '' : null"  -->
+                    
                             </div>
 
                         
-                              <!-- <div class="input-group mb-3 mt-3" >
-                                <label style="margin-left: 0px;">Condição</label>
-                                <div class="" style="margin-left: 30px;">
-                                    <input type="checkbox"  checked data-bootstrap-switch data-off-color="danger" data-on-color="success"   >
-                                </div>
-                              </div> -->
-                                  
+                  
                       </form>    
                                   
                   </div>
@@ -348,11 +350,6 @@
 
                 <div class="card pd-20 mt-5">
 
-                  <!-- <div class="card-tools mb-5 " style="width: 80px; margin-left: auto;" >
-                      <button type="button" class="btn btn-primary btn-block shadow" data-card-widget="collapse" title="Collapse" routerLink="/dashboard/novo-usuario">
-                      <i class="fas fa-plus "></i> Novo
-                      </button>
-                  </div> -->
                   
                   <table datatable [dtOptions]="dtOptions" class="row-border hover font" style="font-size: 0.9em;">
       

@@ -11,6 +11,7 @@ import { CongregatioService } from 'src/app/shared/services/congregatio/congrega
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import * as moment from 'moment';
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
+import { LanguageApp } from '../table.languaje';
 
 
 
@@ -93,7 +94,7 @@ userRole : boolean = false;
 role : string = '';
 stateLink : boolean = false;
 adminRole : boolean = false;
-dtOptions: any = {};
+dtOptions: DataTables.Settings = {};
 
 userCongregatio : any = null ;
 pathImg : string = 'assets/no-image.jpg';
@@ -120,6 +121,7 @@ userAlarms : any []=[];
                 private alarmGroupService : AlarmGroupService
                 ) { 
 
+     this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers' }
     this.activatedRoute.params.subscribe(
     ({id})=>{ this.getUserById(id) });
 
@@ -130,6 +132,47 @@ userAlarms : any []=[];
     (screen.width <= 800) ? this.phone = true : this.phone = false;
 
 }
+
+isChecked = false;
+activeDeacTive(event: any): void{
+
+this.isChecked = (event.target as HTMLInputElement).checked;
+this.isLoading = true;
+this.showSuccess = false;
+
+const email = this.myForm.get('Email')?.value;
+let active : any;
+(this.isChecked) ? active = '1' :  active = '0';
+
+this.authService.activeAccount( email, active ).subscribe
+( ({success})=>{
+  if(success){
+    this.showSuccess = true,
+    (active === "1") ? this.msg = 'Usúario ativado com sucesso' : this.msg = 'Usúario desativado com sucesso'; 
+    setTimeout( ()=>{ this.getUserById( this.user.iduser ); this.isLoading = false;  }, 1000);
+  }
+
+ }) 
+}
+
+// activeAccount( active:any){
+
+//   this.isLoading = true;
+//   this.showSuccess = false;
+//   const email = this.myForm.get('Email')?.value;
+
+//   this.authService.activeAccount( email, active ).subscribe
+//   ( ({success})=>{
+//     if(success){
+//       this.showSuccess = true,
+//       (active === "1") ? this.msg = 'Usúario ativado com sucesso' : this.msg = 'Usúario desativado com sucesso'; 
+//       setTimeout( ()=>{ this.getUserById( this.user.iduser ); this.isLoading = false;  }, 1000);
+      
+//     }
+
+//    })   
+// }
+
 
 
   ngOnInit(): void {
@@ -335,23 +378,23 @@ userAlarms : any []=[];
       })
   }
 
-    activeAccount( active:any){
+    // activeAccount( active:any){
 
-      this.isLoading = true;
-      this.showSuccess = false;
-      const email = this.myForm.get('Email')?.value;
+    //   this.isLoading = true;
+    //   this.showSuccess = false;
+    //   const email = this.myForm.get('Email')?.value;
 
-      this.authService.activeAccount( email, active ).subscribe
-      ( ({success})=>{
-        if(success){
-          this.showSuccess = true,
-          (active === "1") ? this.msg = 'Usúario ativado com sucesso' : this.msg = 'Usúario desativado com sucesso'; 
-          setTimeout( ()=>{ this.getUserById( this.user.iduser ); this.isLoading = false;  }, 1000);
+    //   this.authService.activeAccount( email, active ).subscribe
+    //   ( ({success})=>{
+    //     if(success){
+    //       this.showSuccess = true,
+    //       (active === "1") ? this.msg = 'Usúario ativado com sucesso' : this.msg = 'Usúario desativado com sucesso'; 
+    //       setTimeout( ()=>{ this.getUserById( this.user.iduser ); this.isLoading = false;  }, 1000);
           
-        }
+    //     }
 
-       })   
-    }
+    //    })   
+    // }
 
     onSelect(event: any): void {
 

@@ -11,6 +11,7 @@ export class ValidateEmailComponent implements OnInit {
 
   code:string = '';
   email:string = '';
+  success: boolean = false;
 
   constructor(
             private activatedRoute : ActivatedRoute,
@@ -35,16 +36,22 @@ export class ValidateEmailComponent implements OnInit {
       console.error('La cadena no tiene al menos 50 caracteres');
     }
     if(this.code !== '' && this.email !== ''){
+      console.log(this.code);
       this.validateEmail();
     }
   }
 
   validateEmail(){
+    this.success = false;
 
     const body = {email: this.email, code: this.code}
     
     this.authService.validateEmail(body).subscribe(
-      ()=>{})
+      ( {success} )=>{
+        if(success){
+          this.success= true;
+        }
+      })
     }
 
  close(){

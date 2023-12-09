@@ -138,8 +138,8 @@ verifyEmail(){
     ( {success} )=>{
       if(success){
         setTimeout(()=>{ 
-          this.isLoading = false; 
           this.successResendVerify = true 
+          this.isLoading = false; 
           this.noVerified = false;
           this.successResendPass = false;
           this.showResendPass = false;

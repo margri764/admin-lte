@@ -23,6 +23,7 @@ export class AppComponent {
   remainingAttemps : number = 0;
   
   show404 : boolean = false;
+  show400 : boolean = false;
   show401 : boolean = false;
   show429 : boolean = false;
   showBackDown : boolean = false;
@@ -66,13 +67,13 @@ this.errorService.close$.subscribe((emitted)=>{if(emitted){this.closeToast()} })
 
 this.errorService.closeIsLoading$.pipe(delay(700)).subscribe(emitted => emitted && (this.isLoading = false));
 
-this.errorService.status400Error$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{if(emmited){this.show404 = true; this.msg = msg; this.show401 = false; this.show429 = false}});
+this.errorService.status400Error$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{if(emmited){this.show400 = true; this.msg = msg; this.show401 = false; this.show429 = false}});
 
-this.errorService.status429Error$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{if(emmited){this.show429 = true; this.msg = msg, this.show401 = false; this.show404 = false}});
+this.errorService.status429Error$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{if(emmited){this.show429 = true; this.msg = msg, this.show401 = false; this.show400 = false}});
 
-this.errorService.status401Credentials$.pipe(delay(1200)).subscribe(( {emmited, msg, remainingAttempts} )=>{ if(emmited){this.show401 = true; this.msg = msg; this.remainingAttemps = remainingAttempts; this.show404 = false; this.show429 = false}} )
+this.errorService.status401Credentials$.pipe(delay(1200)).subscribe(( {emmited, msg, remainingAttempts} )=>{ if(emmited){this.show401 = true; this.msg = msg; this.remainingAttemps = remainingAttempts; this.show400 = false; this.show429 = false}} )
 
-this.errorService.backIsDown$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{ if(emmited){this.showBackDown = true; this.msg = msg; this.show404 = false; this.show429 = false; this.gotoDashboard() }});
+this.errorService.backIsDown$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{ if(emmited){this.showBackDown = true; this.msg = msg; this.show400 = false; this.show429 = false; this.gotoDashboard() }});
 
 
 }

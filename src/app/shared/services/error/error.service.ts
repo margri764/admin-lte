@@ -93,12 +93,19 @@ export class ErrorService {
        return of(null);
     }
 
-    if (error.status === 401 && error.error.message === 'Usuário não encontrado' ) {
+    if (error.status === 400 && error.error.message === 'Usuário não encontrado' ) {
 
       this.closeIsLoading$.emit(true);
-       this.status429Error$.emit({emmited:true, msg: error.error.message });
+       this.status400Error$.emit({emmited:true, msg: error.error.message });
      return of(null);
    }
+
+   if (error.status === 400 && error.error.message === 'Sua conta não foi ativada' ) {
+    this.closeIsLoading$.emit(true);
+     this.status400Error$.emit({emmited:true, msg: error.error.message });
+   return of(null);
+ }
+
 
     if (error.status === 401) {
       this.logout();

@@ -45,6 +45,7 @@ export class RegisterComponent implements OnInit {
       Data_Nascimento:  [ '', [Validators.required]],
       Telefone1:  [ '', [Validators.required]],
       Cidade_da_sede:  [ '', [Validators.required]],
+      Nome_da_sede:  [ '', [Validators.required]],
       Pais_da_sede:  [ '', [Validators.required]],
     });
 

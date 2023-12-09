@@ -9,7 +9,7 @@
       <div class="card-body">
         <p class="login-box-msg">Login</p>
   
-        <form [formGroup]="myForm" class="needs-validation"  novalidate  [autocomplete]="false" >
+        <form [formGroup]="myForm" class="needs-validation"  novalidate  [autocomplete]="false"  (ngSubmit)="login()">
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
             <input type="email" class="form-control" placeholder="Email" required [ngStyle]="( validField('email')) ? {'border':'1px solid red'}:{}" formControlName="email">
@@ -31,7 +31,7 @@
             <div *ngIf="validField('password')" class="invalid" > Dado obrigatório </div>
           </div>
           <!-- data-toggle="modal" data-target="#modalCode" -->
-          <button type="button" class="btn btn-primary btn-block shadow" (click)="login()" > Aceitar</button>
+          <button type="submit" class="btn btn-primary btn-block shadow"  > Aceitar</button>
          
         </form>
   
@@ -175,7 +175,7 @@
     <h5 class="fs-10"><i class="icon fas fa-exclamation-triangle"></i> Email não verificado!</h5>
     <span class="fs-8" >Já enviamos um email de confirmação. Precisa que enviemos novamente?</span>
 
-    <form [formGroup]="myFormResend" class="needs-validation mt-1"  novalidate  [autocomplete]="false" >
+    <form [formGroup]="myFormResend" class="needs-validation mt-1"  novalidate  [autocomplete]="false" (ngSubmit)="verifyEmail()" >
   
         <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
           <input type="email" class="form-control fs-8" placeholder="Email" required [ngStyle]="( validFieldResend('resendEmail')) ? {'border':'1px solid red'}:{}" formControlName="resendEmail">
@@ -187,7 +187,7 @@
           <div *ngIf="validFieldResend('resendEmail')" class="invalid fs-8" > Dado obrigatório </div>
         </div>
         
-        <button type="button" class="btn btn-primary shadow fs-9 w-100" (click)="verifyEmail()" >
+        <button type="submit" class="btn btn-primary shadow fs-9 w-100"  >
             Enviar
         </button>
     

@@ -3,6 +3,7 @@ import { delay } from 'rxjs';
 import { User } from 'src/app/shared/models/user.models';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
+import { LanguageApp } from '../table.languaje';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -23,9 +24,7 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
    
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
+    this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers' }
 
     this.initialUsers();
     this.errorService.closeIsLoading$.pipe(delay(700)).subscribe(emitted => emitted && (this.isLoading = false));

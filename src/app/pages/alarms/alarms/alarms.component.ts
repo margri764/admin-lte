@@ -89,7 +89,7 @@ export class AlarmsComponent implements OnInit {
       // Inicializar bsRangeValue con la fecha actual y la fecha máxima
       this.bsRangeValue = [this.bsValue, this.maxDate];
 
-      this.dtOptions = { language: LanguageApp.spanish_datatables,  pagingType: 'full_numbers' }
+      this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers' }
 
       this.myFormSearch = this.fb.group({
         itemSearch:  [ '',  ],
@@ -287,7 +287,7 @@ closeToast(){
 
 onSelect(event: any): void {
     this.isChecked = (event.target as HTMLInputElement).checked;
-    this.exclude = true;
+    this.exclude = !this.exclude;
 }
 
 validField( field: string ) {
