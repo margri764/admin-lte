@@ -6,7 +6,7 @@
       <div class="card card-primary card-outline card-outline-tabs fs-9">
         <div class="card-header p-0 border-bottom-0">
           <div class="ml-auto">
-              <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+              <ul class="nav nav-tabs fs-11 p-1" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">
                       <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#dados" role="tab" aria-controls="custom-tabs-four-dados" aria-selected="true">Dados</a>
                   </li>
@@ -38,14 +38,14 @@
           <div class="tab-content" id="custom-tabs-four-tabContent " >
 
             <div class="tab-pane fade show active " id="dados" role="tabpanel" aria-labelledby="dados">
-              <div class="row">
+              <div class="row ">
                   <div class="col-9">
 
-                    <form [formGroup]="myForm" class="needs-validation mt-1"  novalidate  [autocomplete]="false" >
+                    <form [formGroup]="myForm" class="needs-validation mt-1 "  novalidate  [autocomplete]="false" >
 
                         <div class="row">
                         
-                              <div class="input-group mt-3 col-4" >
+                              <div class="input-group mt-3 col-4 fs-10" >
                                 <label class="text w-100" > Ordem </label>
                                 <select class="form-control select2 "  formControlName="ordem" >
                                   <option *ngFor="let ord of ordem" [value]="ord" > {{ ord }} </option>
@@ -61,8 +61,8 @@
                               </div>
 
                             
-                              <div class="mt-3 col-4">
-                                <div class="font fs-9 groups" *ngFor="let sel of nameGroups" >{{ sel }} &nbsp; <i class="fas fa-times-circle cursor" (click)="removeGroup(sel)"></i></div>
+                              <div class="mt-3 col-4 shadow frame-work">
+                                <div class="font fs-11 groups" *ngFor="let sel of nameGroups" >{{ sel }} &nbsp; <i class="fas fa-times-circle cursor" (click)="removeGroup(sel)"></i></div>
                               </div>
 
                         </div>
@@ -78,7 +78,7 @@
 
                               <div class="input-group mb-3 mt-5 col-12" >
                                 <label class="text w-100">Link com Congregatio</label>
-                                <div class="" >
+                                <div class="mt-1" >
                                     <input type="checkbox"  data-bootstrap-switch data-off-color="danger" data-on-color="success" #link >
                                     <label class=" font fs-10" style="color: rgb(4, 171, 4); margin-left: 10px;" *ngIf="stateLink && wasLinked"> Usuário vinculado com sucesso </label>
 
@@ -411,14 +411,35 @@
             </div>
 
             <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm">
-              <div class="row mt-5">
-                <div class="col-12">
-                  <div class="boxSelection font" style="padding: 15px; margin-top: 5px;" *ngFor="let alarm of userAlarms">
-                    Nome: {{ alarm.name }} &nbsp; Data: {{ alarm.alarmDate }} &nbsp; Descripcion: {{alarm.description}}
-                  </div>
-               
-               </div>
-              </div>
+
+
+              <div class="col-lg-12">
+     
+                <div class="card" style="padding: 12px; padding-top: 20px; background-color: white;">
+          
+                  <div class="customTHead w-100 shadow"></div>
+          
+                    <table datatable class="row-border hover font fs-10" [dtOptions]="dtOptions"  >
+          
+                        <thead >
+                            <tr >
+                                <th style="width: 20px;"> Nome alarme</th>
+                                <th style="width: 200px;"> Descrição</th>
+                                <th style="width: 20px;"> Data</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="userAlarms.length === 0">
+                        <tbody *ngIf="userAlarms.length !== 0">
+                            <tr *ngFor="let alarm of userAlarms">
+                                <td> {{ alarm.name }} </td>
+                                <td> {{ alarm.description }} </td>
+                                <td> {{ alarm.alarmDate | date:'dd/MM/yyyy'}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             </div>
 
             <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history">
@@ -533,7 +554,7 @@
   <!-- Modal Congregatio-->
   <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95; ">
 
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header" style="padding: 20px;">
           <h5 class="modal-title font" id="exampleModalCenterTitle"> Busca por nome ou sobrenome</h5>
@@ -544,7 +565,7 @@
           <form [formGroup]="myFormSearch" class="needs-validation"  novalidate  [autocomplete]="false">
 
             <div class="input-group mb-3 font" >
-                <input type="text" class="form-control" placeholder="Busca no Congregatio"  name="itemSearch" formControlName="itemSearch" style="height: 50px;">
+                <input type="text" class="form-control" placeholder="Use % para pesquisas complexas"  name="itemSearch" formControlName="itemSearch" style="height: 50px;">
                 <div class="input-group-append">
                   <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
                     <span class="fas fa-search" style="color: white"></span>
@@ -583,15 +604,15 @@
   <!-- Modal Ficha completa-->
    <div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95; ">
 
-      <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header" style="padding: 20px;">
             <h5 class="modal-title font" id="exampleModalCenterTitle"> Ficha completa</h5>
         
           </div>
           <div class="modal-body">
-            <div class="table-responsive">
-              <table class="table table-striped table-auto " *ngIf="userCongregatio || user">
+            <div class="table-responsive  font" >
+              <table class="table  table-hover" *ngIf="userCongregatio || user">
                 <thead>
                   <tr>
                     <th scope="col">Propiedad</th>
@@ -600,7 +621,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let prop of getObjectProperties()">
-                    <td>{{ prop.key }}</td>
+                    <td> <b>{{ prop.key }}</b> </td>
                     <td>{{ prop.value }}</td>
                   </tr>
                 </tbody>

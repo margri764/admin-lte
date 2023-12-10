@@ -1,5 +1,5 @@
 import { ThisReceiver } from '@angular/compiler';
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { Subject, debounceTime } from 'rxjs';
@@ -16,7 +16,7 @@ import { BsLocaleService } from 'ngx-bootstrap/datepicker';
   templateUrl: './alarms.component.html',
   styleUrls: ['./alarms.component.css']
 })
-export class AlarmsComponent implements OnInit {
+export class AlarmsComponent implements OnInit, OnDestroy{
 
   @ViewChild('groupSelect') groupSelect! : ElementRef;
   @ViewChild('excluir') excluir! : ElementRef;
@@ -55,7 +55,9 @@ export class AlarmsComponent implements OnInit {
    isHovered: boolean = false;
    isHovered2: boolean = false;
    isHovered3: boolean = false;
-   dtOptions: any  = {};
+   dtOptions: DataTables.Settings = {};
+   dtTrigger: Subject<any> = new Subject();
+   dtTrigger2: Subject<any> = new Subject();
    groupSelection : boolean = false;
    userSelection : boolean = false;
    user : any | null;
@@ -93,23 +95,25 @@ export class AlarmsComponent implements OnInit {
       defineLocale('pt-br', ptBrLocale);
       this.localeService.use('pt-br')
 
-      this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers' }
 
       this.myFormSearch = this.fb.group({
         itemSearch:  [ '',  ],
       });   
 
+      // this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers', responsive: true };
   
         
    }
 
 
 ngOnInit(): void {
+  this.isLoading = true;
+  this.initDtOptions();
 
   this.alarmGroupService.getAllGroups().subscribe(
     ( {success, groups} )=>{
       if(success){
-          this.groups = groups
+          this.groups = groups;
       }
     });
 
@@ -117,6 +121,8 @@ ngOnInit(): void {
     ( {success, personalAlarms} )=>{
       if(success){
       this.personalAlarms = personalAlarms;
+      this.dtTrigger2.next(null);
+      this.isLoading = false;
       }
     })  
 
@@ -124,6 +130,8 @@ ngOnInit(): void {
       ( {success, groupAlarms} )=>{
         if(success){
         this.grupalAlarms = groupAlarms;
+        this.dtTrigger.next(null);
+        this.isLoading = false;
         }
       })  
   
@@ -159,14 +167,25 @@ ngOnInit(): void {
 
 }
 
+initDtOptions(): void {
+  this.dtOptions = {
+    language: LanguageApp.portuguese_brazil_datatables,
+    pagingType: 'full_numbers',
+    responsive: true,
+  };
+}
+
 selectPessoalOrGrupal( option:string ){
 
   if(option === "pessoal"){
     this.pessoal = true;
     this.grupal = false;
+
   }else if(option === "grupal"){
     this.grupal = true;
     this.pessoal = false;
+
+
   }
 }
 
@@ -175,17 +194,21 @@ showPessoalAlarmsOrGrupal( alarm : string ){
   switch (alarm) {
     case 'pessoal':
                   this.showPessoalAlarms = true;
-                  this.showGrupalAlarms = false
+                  this.showGrupalAlarms = false;
+                  this.initDtOptions();  
+                  this.dtTrigger.next(true);
+                  
       break;
 
     case 'grupal':
                 this.showGrupalAlarms = true;
                 this.showPessoalAlarms = false;
+                this.initDtOptions();  
+                this.dtTrigger2.next(true);
     break;
   
     default:
-            this.showPessoalAlarms = true;
-            this.showGrupalAlarms = false
+        
       break;
   }
 }
@@ -460,5 +483,11 @@ this.myFormSearch.get('itemSearch')?.setValue(user.Nome_Completo);
 this.user = user;
 this.suggested = [];
 
+}
+
+ngOnDestroy(): void {
+  // Do not forget to unsubscribe the event
+  this.dtTrigger.unsubscribe();
+  this.dtTrigger2.unsubscribe();
 }
 }

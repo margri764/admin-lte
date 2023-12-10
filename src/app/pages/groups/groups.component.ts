@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { delay } from 'rxjs';
+import { Subject, delay } from 'rxjs';
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
-import { UserService } from 'src/app/shared/services/user/user.service';
+import { LanguageApp } from '../table.languaje';
 
 @Component({
   selector: 'app-groups',
@@ -23,9 +23,8 @@ export class GroupsComponent implements OnInit {
   showSuccessCreateGroup : boolean = false;
   phone : boolean = false;
   msg : string = '';
-
-
-
+  dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject();
 
 
   constructor(
@@ -34,7 +33,9 @@ export class GroupsComponent implements OnInit {
               private alarmGroupService : AlarmGroupService 
     
               ) 
+
   {
+
 
     this.myForm = this.fb.group({
       name:     [ '', [Validators.required] ],
@@ -52,8 +53,9 @@ export class GroupsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
     this.getInitialGroups();
+    this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
+    this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers', responsive: true }
 
   }
 
@@ -63,6 +65,7 @@ export class GroupsComponent implements OnInit {
       ( {success, groups} )=>{
         if(success){
           this.groups = groups;
+          this.dtTrigger.next(null);
           setTimeout(()=>{ this.isLoading = false }, 700)
         }
       })

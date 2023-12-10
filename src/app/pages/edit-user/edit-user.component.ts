@@ -112,6 +112,8 @@ groups : any []=[];
 selectedGroups : any []=[];
 nameGroups : any []=[];
 userAlarms : any []=[];
+isChecked = false;
+
 
 
   constructor(
@@ -123,41 +125,23 @@ userAlarms : any []=[];
                 private errorService : ErrorService,
                 private alarmGroupService : AlarmGroupService,
                 private localeService: BsLocaleService
-                ) { 
+                ) 
+                
+{ 
 
-     this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers' }
-    this.activatedRoute.params.subscribe(
+  this.activatedRoute.params.subscribe(
     ({id})=>{ this.getUserById(id) });
-
+    
     this.myFormSearch = this.fb.group({
       itemSearch:  [ '',  ],
     });   
-
+    
     (screen.width <= 800) ? this.phone = true : this.phone = false;
-
+    
+    this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers', responsive:true }
 }
 
-isChecked = false;
-activeDeacTive(event: any): void{
 
-this.isChecked = (event.target as HTMLInputElement).checked;
-this.isLoading = true;
-this.showSuccess = false;
-
-const email = this.myForm.get('Email')?.value;
-let active : any;
-(this.isChecked) ? active = '1' :  active = '0';
-
-this.authService.activeAccount( email, active ).subscribe
-( ({success})=>{
-  if(success){
-    this.showSuccess = true,
-    (active === "1") ? this.msg = 'Usúario ativado com sucesso' : this.msg = 'Usúario desativado com sucesso'; 
-    setTimeout( ()=>{ this.getUserById( this.user.iduser ); this.isLoading = false;  }, 1000);
-  }
-
- }) 
-}
 
 // activeAccount( active:any){
 
@@ -197,9 +181,6 @@ this.authService.activeAccount( email, active ).subscribe
 
     this.errorService.closeIsLoading$.pipe(delay(100)).subscribe(emitted => emitted && (this.isLoading = false));
 
-    this.dtOptions = {
-      pagingType: 'full_numbers', // Otras opciones de configuración...
-    };
 
     this.myFormSearch.get('itemSearch')?.valueChanges.subscribe(newValue => {
       this.itemSearch = newValue;
@@ -733,6 +714,27 @@ this.authService.activeAccount( email, active ).subscribe
   unLinkCongregatioActio(){
 
   }
+
+  activeDeacTive(event: any): void{
+
+    this.isChecked = (event.target as HTMLInputElement).checked;
+    this.isLoading = true;
+    this.showSuccess = false;
+    
+    const email = this.myForm.get('Email')?.value;
+    let active : any;
+    (this.isChecked) ? active = '1' :  active = '0';
+    
+    this.authService.activeAccount( email, active ).subscribe
+    ( ({success})=>{
+      if(success){
+        this.showSuccess = true,
+        (active === "1") ? this.msg = 'Usúario ativado com sucesso' : this.msg = 'Usúario desativado com sucesso'; 
+        setTimeout( ()=>{ this.getUserById( this.user.iduser ); this.isLoading = false;  }, 1000);
+      }
+    
+     }) 
+    }
 
 
    selectUser(user: any){

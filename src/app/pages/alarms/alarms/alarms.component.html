@@ -69,9 +69,9 @@
 
           <div class="customTHead w-100 shadow"></div>
 
-            <table datatable class="row-border hover font fs-10" [dtOptions]="dtOptions">
+          <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger2" class="row-border hover font fs-10" #table >
 
-                <thead class="">
+                <thead >
                     <tr >
                         <th>Nome</th>
                         <th>Endereço de email</th>
@@ -79,7 +79,7 @@
                         <th>Data</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody *ngIf="personalAlarms.length !== 0">
                   <!-- [routerLink]="['editar-usuario/', request.iduser]" -->
                     <tr *ngFor="let pes of personalAlarms">
                         <td ><a [routerLink]="['/dashboard/editar-usuario/',pes.iduser]"> {{pes.name }} </a></td>
@@ -87,10 +87,6 @@
                         <td> {{ pes.description }} </td>
                         <td> {{ pes.alarmDate | date}} </td>
                     </tr>
-
-               
-
-                
                 </tbody>
             </table>
         </div>
@@ -98,15 +94,15 @@
 </div>
 
 <div class="row mt-5" *ngIf="showGrupalAlarms">
-  <div class="col-lg-12">
+  <div class="col-12">
      
       <div class="card" style="padding: 12px; padding-top: 20px; background-color: white;">
 
         <div class="customTHead w-100 shadow"></div>
 
-          <table datatable class="row-border hover font fs-10" [dtOptions]="dtOptions" >
+        <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover font fs-10"  >
 
-              <thead class="">
+              <thead >
                   <tr >
                       <th>Grupos</th>
                       <th>Nome alarme</th>
@@ -114,14 +110,14 @@
                       <th>Data</th>
                   </tr>
               </thead>
-              <tbody>
+              <tbody *ngIf="grupalAlarms.length !== 0">
                   <tr *ngFor="let pes of grupalAlarms">
                       <td> <span *ngFor="let name of pes.group_names">
                         {{ name }}
                       </span></td>
                       <td> {{ pes.name }} </td>
                       <td> {{ pes.description }} </td>
-                      <td> {{ pes.alarmDate | date}} </td>
+                      <td> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
                   </tr>
 
              
@@ -285,7 +281,15 @@
   <!-- <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span> -->
 </div>
 
-
+<div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div> 
+  
+  
+  
+  
 
 
 

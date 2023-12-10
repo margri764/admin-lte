@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-lg-12 back-white">
+    <div class="col-lg-12 back-white" >
        
         <div class="card pd-20" >
 
@@ -9,8 +9,7 @@
                 </button>
             </div>
 
-            <div *ngIf="users.length !== 0">
-                <table datatable [dtOptions]="dtOptions"  class="row-border hover font fs-10" #table >
+                <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover font fs-10" #table >
 
                     <thead >
                         <tr >
@@ -20,7 +19,8 @@
                             <th style="width: 40px;">Ativo</th>
                         </tr>
                     </thead>
-                    <tbody >
+                    <tbody *ngIf="users.length !== 0">
+                        
                         <tr *ngFor="let user of users">
                             <td> 
                                 <img [src]="user.Ruta_Imagen" class="img-fluid" style="border-radius: 7px;" *ngIf="user.Ruta_Imagen !== '' " >
@@ -39,8 +39,8 @@
                         </tr>
                     
                     </tbody>
+                  
                 </table>
-            </div>
         </div>
     </div>
 </div>

@@ -1,42 +1,39 @@
 
-<div class="row">
-  <div class="col-lg-12">
-     
-      <div class="card pd-20">
 
+<div class="card" style="padding: 12px; padding-top: 20px; background-color: white;">
 
-        <div class="card-tools mb-5" style="width: 160px; margin-left: auto;" >
-          <button type="button" class="btn btn-primary btn-block shadow" data-card-widget="collapse" title="Collapse" data-toggle="modal" data-target="#modalNewGroup">
-          <i class="fas fa-plus "></i> Novo Grupo
-          </button>
-        </div>
-
-
-        <div class="table-responsive">
-            <table class="table table-striped table-auto ">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Nome</th>
-                  <th scope="col">Descrição</th>
-                  <th scope="col" class="text-center">Ação</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let group of groups">
-                  <td>{{ group.idgroup }}</td>
-                  <td>{{ group.name }}</td>
-                  <td>{{ group.description }}</td>
-                  <td class="text-center" >
-                    <i class="far fa-edit " style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;"(click)="editGroup(group)"  data-toggle="modal" data-target="#modalEditGroup" ></i>
-                    <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelGroup" (click)="onRemove(group)"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-        </div>
-      </div>
+  <div class="customTHead w-100 shadow"></div>
+  <div class="card-tools mb-5" style="width: 160px; margin-left: auto;" >
+    <button type="button" class="btn btn-primary btn-block shadow" data-card-widget="collapse" title="Collapse" data-toggle="modal" data-target="#modalNewGroup">
+    <i class="fas fa-plus "></i> Novo Grupo
+    </button>
   </div>
+
+
+    <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover font fs-10" #table >
+
+        <thead >
+            <tr >
+                <th>Nome alarme</th>
+                <th style="width: 60%;">Descrição</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="groups.length !== 0">
+            <tr *ngFor="let group of groups">
+                <td> {{ group.name }} </td>
+                <td> {{ group.description }} </td>
+                <td> 
+                  <i class="far fa-edit " style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;"(click)="editGroup(group)"  data-toggle="modal" data-target="#modalEditGroup" ></i>
+                    <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelGroup" (click)="onRemove(group)"></i>
+                </td>
+            </tr>
+
+       
+
+        
+        </tbody>
+    </table>
 </div>
 
 
