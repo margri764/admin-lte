@@ -12,6 +12,9 @@ import { ErrorService } from 'src/app/shared/services/error/error.service';
 import * as moment from 'moment';
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
 import { LanguageApp } from '../table.languaje';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 
 
@@ -118,7 +121,8 @@ userAlarms : any []=[];
                 private fb : FormBuilder,
                 private congregatioService : CongregatioService,
                 private errorService : ErrorService,
-                private alarmGroupService : AlarmGroupService
+                private alarmGroupService : AlarmGroupService,
+                private localeService: BsLocaleService
                 ) { 
 
      this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers' }
@@ -180,6 +184,9 @@ this.authService.activeAccount( email, active ).subscribe
     this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
     this.minDate.setFullYear(this.bsValue.getFullYear() - 100);
     this.bsRangeValue = [this.bsValue, this.maxDate];
+    this.bsRangeValue = [this.bsValue, this.maxDate];
+    defineLocale('pt-br', ptBrLocale);
+    this.localeService.use('pt-br');
 
     this.alarmGroupService.getAllGroups().subscribe(
       ( {success, groups} )=>{

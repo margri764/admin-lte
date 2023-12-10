@@ -6,6 +6,9 @@ import * as moment from 'moment';
 import { User } from 'src/app/shared/models/user.models';
 import { delay } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 
 @Component({
@@ -33,7 +36,9 @@ export class NewUserComponent implements OnInit{
     constructor(
                 private fb : FormBuilder,
                 private userService : UserService,
-                private errorService : ErrorService
+                private errorService : ErrorService,
+              private localeService: BsLocaleService
+
     ) {
 
   (screen.width <= 800) ? this.phone = true : this.phone = false;
@@ -65,6 +70,10 @@ export class NewUserComponent implements OnInit{
       this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
       this.minDate.setFullYear(this.bsValue.getFullYear() - 100);
       this.bsRangeValue = [this.bsValue, this.maxDate];
+      this.bsRangeValue = [this.bsValue, this.maxDate];
+      defineLocale('pt-br', ptBrLocale);
+      this.localeService.use('pt-br');
+        
         
     }
 

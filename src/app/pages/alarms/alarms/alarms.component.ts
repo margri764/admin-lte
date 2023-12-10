@@ -6,6 +6,10 @@ import { Subject, debounceTime } from 'rxjs';
 import { LanguageApp } from 'src/app/pages/table.languaje'
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+
 
 @Component({
   selector: 'app-alarms',
@@ -77,17 +81,17 @@ export class AlarmsComponent implements OnInit {
   constructor(
               private fb : FormBuilder,
               private alarmGroupService : AlarmGroupService,
-              private userService : UserService
+              private userService : UserService,
+              private localeService: BsLocaleService
+
+              
   ) {
 
-      // Establecer la fecha máxima como 50 años después de la fecha actual
       this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
-
-      // Establecer la fecha mínima como 100 años antes de la fecha actual
       this.minDate.setFullYear(this.bsValue.getFullYear() - 100);
-      
-      // Inicializar bsRangeValue con la fecha actual y la fecha máxima
       this.bsRangeValue = [this.bsValue, this.maxDate];
+      defineLocale('pt-br', ptBrLocale);
+      this.localeService.use('pt-br')
 
       this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers' }
 

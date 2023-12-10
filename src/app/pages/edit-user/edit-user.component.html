@@ -41,159 +41,159 @@
               <div class="row">
                   <div class="col-9">
 
-                      <form [formGroup]="myForm" class="needs-validation mt-1"  novalidate  [autocomplete]="false" >
+                    <form [formGroup]="myForm" class="needs-validation mt-1"  novalidate  [autocomplete]="false" >
 
-                          <div class="row">
-                          
-                                <div class="input-group mt-3 col-4" >
-                                  <label class="text w-100" > Ordem </label>
-                                  <select class="form-control select2 "  formControlName="ordem" >
-                                    <option *ngFor="let ord of ordem" [value]="ord" > {{ ord }} </option>
-                                  </select>
-                                </div>   
-                                
-                                <div class="input-group mt-3 col-4">
-                                  <label class="text w-100">Seleccione grupo</label>
-                                  <select #groupSelect class="form-control select2 col-12 cursor" (change)="onSelectGroup($event)">
-                                    <option style="display:none" disabled selected></option>
-                                    <option *ngFor="let group of groups" [value]="[group.name, group.idgroup]" class="font">{{ group.name }}</option>
-                                  </select>
-                                </div>
-
+                        <div class="row">
+                        
+                              <div class="input-group mt-3 col-4" >
+                                <label class="text w-100" > Ordem </label>
+                                <select class="form-control select2 "  formControlName="ordem" >
+                                  <option *ngFor="let ord of ordem" [value]="ord" > {{ ord }} </option>
+                                </select>
+                              </div>   
                               
-                                <div class="mt-3 col-4">
-                                  <div class="font fs-9 groups" *ngFor="let sel of nameGroups" >{{ sel }} &nbsp; <i class="fas fa-times-circle cursor" (click)="removeGroup(sel)"></i></div>
-                                </div>
+                              <div class="input-group mt-3 col-4">
+                                <label class="text w-100">Seleccione grupo</label>
+                                <select #groupSelect class="form-control select2 col-12 cursor" (change)="onSelectGroup($event)">
+                                  <option style="display:none" disabled selected></option>
+                                  <option *ngFor="let group of groups" [value]="[group.name, group.idgroup]" class="font">{{ group.name }}</option>
+                                </select>
+                              </div>
 
-                          </div>
+                            
+                              <div class="mt-3 col-4">
+                                <div class="font fs-9 groups" *ngFor="let sel of nameGroups" >{{ sel }} &nbsp; <i class="fas fa-times-circle cursor" (click)="removeGroup(sel)"></i></div>
+                              </div>
 
-                            <div class="row">
-                                <div class="input-group mt-4 col-12">
-                                  <span class="text mb-3 w-100"> <b>Nome completo</b> </span>
-                                  <input type="text" class="form-control" [readonly]="readonlyFields['Nome_Completo'] || isLinkedToCongregatio" formControlName="Nome_Completo" >
-                                  <button type="button" class="btn btn-primary btn-block" style="width: 150px; font-size: 1em; line-height: 20px;" data-toggle="modal" data-target="#modalCongregatio" >
-                                    <i class="fas fa-search"></i> &nbsp; Congregatio
-                                  </button>
-                                </div>
-
-                                <div class="input-group mb-3 mt-5 col-12" >
-                                  <label class="text w-100">Link com Congregatio</label>
-                                  <div class="" >
-                                      <input type="checkbox"  data-bootstrap-switch data-off-color="danger" data-on-color="success" #link >
-                                      <label class=" font fs-10" style="color: rgb(4, 171, 4); margin-left: 10px;" *ngIf="stateLink && wasLinked"> Usuário vinculado com sucesso </label>
-
-                                      <button type="button" class="btn btn-primary shadow fs-9" style="margin-left: 30px; padding: 4.2px 9px 4.2px 9px !important; " data-toggle="modal" data-target="#modalFichaCompleta"  ><i class="fa fa-list-ul"></i> &nbsp; Ver ficha completa</button>
-                                  </div>
-
-                                </div>
-
-                       
-
-                                 <div class="input-group mt-4 mb-3 col-6" >
-                                    <label class="text w-100"  > <b>Nome</b> </label>
-                                    <input type="text" class="form-control" [readonly]="readonlyFields['name'] || isLinkedToCongregatio" formControlName="name" >
-                                </div>    
-                                  
-                                <div class="input-group mt-4 mb-3  col-6">
-                                    <label class="text w-100" >Sobrenome</label>
-                                    <input type="text" class="form-control" [readonly]="readonlyFields['lastName'] || isLinkedToCongregatio" formControlName="lastName">
-                                </div>
-                          </div>
+                        </div>
 
                           <div class="row">
+                              <div class="input-group mt-4 col-12">
+                                <span class="text mb-3 w-100"> <b>Nome completo</b> </span>
+                                <input type="text" class="form-control" [readonly]="readonlyFields['Nome_Completo'] || isLinkedToCongregatio" formControlName="Nome_Completo" >
+                                <button type="button" class="btn btn-primary btn-block" style="width: 150px; font-size: 1em; line-height: 20px;" data-toggle="modal" data-target="#modalCongregatio" >
+                                  <i class="fas fa-search"></i> &nbsp; Congregatio
+                                </button>
+                              </div>
+
+                              <div class="input-group mb-3 mt-5 col-12" >
+                                <label class="text w-100">Link com Congregatio</label>
+                                <div class="" >
+                                    <input type="checkbox"  data-bootstrap-switch data-off-color="danger" data-on-color="success" #link >
+                                    <label class=" font fs-10" style="color: rgb(4, 171, 4); margin-left: 10px;" *ngIf="stateLink && wasLinked"> Usuário vinculado com sucesso </label>
+
+                                    <button type="button" class="btn btn-primary shadow fs-9" style="margin-left: 30px; padding: 4.2px 9px 4.2px 9px !important; " data-toggle="modal" data-target="#modalFichaCompleta"  ><i class="fa fa-list-ul"></i> &nbsp; Ver ficha completa</button>
+                                </div>
+
+                              </div>
+
+                      
+
+                                <div class="input-group mt-4 mb-3 col-6" >
+                                  <label class="text w-100"  > <b>Nome</b> </label>
+                                  <input type="text" class="form-control" [readonly]="readonlyFields['name'] || isLinkedToCongregatio" formControlName="name" >
+                              </div>    
+                                
+                              <div class="input-group mt-4 mb-3  col-6">
+                                  <label class="text w-100" >Sobrenome</label>
+                                  <input type="text" class="form-control" [readonly]="readonlyFields['lastName'] || isLinkedToCongregatio" formControlName="lastName">
+                              </div>
+                        </div>
+
+                        <div class="row">
+
+                          <div class="input-group mb-3 mt-3 col-6">
+                            <label class="text w-100" > Telefone  </label>
+                            <input type="text" class="form-control" [readonly]=" readonlyFields['Telefone1'] || isLinkedToCongregatio" formControlName="Telefone1">
+                          </div>
+
+                          <div class="input-group mb-3 mt-3 col-6" >
+                            <div class="input-group date" >
+                          <label class="text w-100" > Data de nascimento  </label>
+                              <input type="text"
+                                class="form-control datetimepicker-input"
+                                bsDatepicker
+                                [bsValue]="bsValue"
+                                [minDate]="minDate"
+                                [maxDate]="maxDate"
+                                [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
+                                formControlName="Data_Nascimento" [readonly]="readonlyFields['Data_Nascimento'] || isLinkedToCongregatio">
+                              <div class="input-group-append"  >
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                              </div>
+                            </div>
+                            <div *ngIf="validField('Data_Nascimento')" class="invalid" > Dado obrigatório </div>
+                        </div>
+
+                          <!-- <div class="input-group mb-3 mt-3 col-sm-6">
+                            <label class="text w-100" > Data de nascimineto  </label>
+                            <input type="text" class="form-control" [readonly]="readonlyFields['Data_Nascimento'] || isLinkedToCongregatio" formControlName="Data_Nascimento">
+                          </div> -->
+                        </div>
+
+                        <div class="row">
+
+                            <div class="input-group mb-3 mt-3 col-6" >
+                              <label class="text w-100" >Email</label>
+                              <input type="email" class="form-control" [readonly]="readonlyFields['Email'] || isLinkedToCongregatio" formControlName="Email">
+                            </div>
 
                             <div class="input-group mb-3 mt-3 col-6">
-                              <label class="text w-100" > Telefone  </label>
-                              <input type="text" class="form-control" [readonly]=" readonlyFields['Telefone1'] || isLinkedToCongregatio" formControlName="Telefone1">
+                              <label class="text w-100" > Nacionalidade </label>
+                              <input type="text" class="form-control" [readonly]="readonlyFields['Nacionalidade'] || isLinkedToCongregatio" formControlName="Nacionalidade">
+                            </div>
+
+                            <div class="input-group mb-3 mt-3 col-6">
+                              <label class="text w-100" > Residência atual </label>
+                              <input type="text" class="form-control" [readonly]="readonlyFields['Residencia_atual'] || isLinkedToCongregatio" formControlName="Residencia_atual">
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-3 font">
+                          <div style="border-top: 2px solid rgb(203, 203, 203); width: 100%; padding-top: 5px; margin-left: 10px;">
+                            <p>Sede</p>
+                          </div>
+
+                            <div class="input-group mb-3 mt-3 col-6" >
+                              <label class="text w-100" > País da sede </label>
+                              <input type="text" class="form-control" [readonly]="readonlyFields['Pais_da_sede'] || isLinkedToCongregatio" formControlName="Pais_da_sede">
                             </div>
 
                             <div class="input-group mb-3 mt-3 col-6" >
-                              <div class="input-group date" >
-                            <label class="text w-100" > Data de nascimento  </label>
-                                <input type="text"
-                                  class="form-control datetimepicker-input"
-                                  bsDatepicker
-                                  [bsValue]="bsValue"
-                                  [minDate]="minDate"
-                                  [maxDate]="maxDate"
-                                  [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
-                                  formControlName="Data_Nascimento" [readonly]="readonlyFields['Data_Nascimento'] || isLinkedToCongregatio">
-                                <div class="input-group-append"  >
-                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                              </div>
-                              <div *ngIf="validField('Data_Nascimento')" class="invalid" > Dado obrigatório </div>
+                              <label class="text w-100"> Cidade da sede </label>
+                                <input type="text" class="form-control" [readonly]="readonlyFields['Cidade_da_sede'] || isLinkedToCongregatio" formControlName="Cidade_da_sede">
+                            </div>
+                            </div>
+                                          
+                        <div class="row mt-3" >
+                            <div class="input-group mb-3 mt-3 col-6" >
+                              <label class="text w-100"> Nome da sede </label>
+                              <input type="text" class="form-control"  [readonly]="readonlyFields['Nome_da_sede'] || isLinkedToCongregatio"formControlName="Nome_da_sede">
+                            </div>
                           </div>
 
-                            <!-- <div class="input-group mb-3 mt-3 col-sm-6">
-                              <label class="text w-100" > Data de nascimineto  </label>
-                              <input type="text" class="form-control" [readonly]="readonlyFields['Data_Nascimento'] || isLinkedToCongregatio" formControlName="Data_Nascimento">
-                            </div> -->
-                          </div>
+                          <div class="d-flex align-items-start mt-3" >
 
-                          <div class="row">
+                            <button type="button" class="btn btn-primary shadow fs-10" style="display: block"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
 
-                              <div class="input-group mb-3 mt-3 col-6" >
-                                <label class="text w-100" >Email</label>
-                                <input type="email" class="form-control" [readonly]="readonlyFields['Email'] || isLinkedToCongregatio" formControlName="Email">
-                              </div>
+                            <button type="button" class="btn btn-danger shadow fs-10"  style="margin-left: 30px;"> <i class="fas fa-trash"></i> &nbsp; Excluir</button>
 
-                              <div class="input-group mb-3 mt-3 col-6">
-                                <label class="text w-100" > Nacionalidade </label>
-                                <input type="text" class="form-control" [readonly]="readonlyFields['Nacionalidade'] || isLinkedToCongregatio" formControlName="Nacionalidade">
-                              </div>
+                            <!-- <button type="button" class="btn btn-success shadow fs-10"  style="margin-left: 30px;" (click)="activeAccount('1')" *ngIf="myForm.get('active')?.value === 0"> <i class="fas fa-check-circle" ></i> &nbsp; Ativar</button> -->
 
-                              <div class="input-group mb-3 mt-3 col-6">
-                                <label class="text w-100" > Residência atual </label>
-                                <input type="text" class="form-control" [readonly]="readonlyFields['Residencia_atual'] || isLinkedToCongregatio" formControlName="Residencia_atual">
-                              </div>
+                            <!-- <button type="button" class="btn btn-warning shadow fs-10"  style="margin-left: 30px; color: white;" (click)="activeAccount('0')" *ngIf="myForm.get('active')?.value === 1"> <i class="fas fa-check-circle" ></i> &nbsp; Desativar</button> -->
 
-                          </div>
-
-                          <div class="row mt-3 font">
-                            <div style="border-top: 2px solid rgb(203, 203, 203); width: 100%; padding-top: 5px; margin-left: 10px;">
-                              <p>Sede</p>
+                            <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 30px;" >
+                              <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="activeDeacTive($event)" [checked]="myForm.get('active')?.value === 1">
+                              <label class="custom-control-label cursor" for="customSwitch1"> Ativar usúario  </label>
                             </div>
-
-                              <div class="input-group mb-3 mt-3 col-6" >
-                                <label class="text w-100" > País da sede </label>
-                                <input type="text" class="form-control" [readonly]="readonlyFields['Pais_da_sede'] || isLinkedToCongregatio" formControlName="Pais_da_sede">
-                              </div>
-
-                              <div class="input-group mb-3 mt-3 col-6" >
-                                <label class="text w-100"> Cidade da sede </label>
-                                  <input type="text" class="form-control" [readonly]="readonlyFields['Cidade_da_sede'] || isLinkedToCongregatio" formControlName="Cidade_da_sede">
-                              </div>
-                              </div>
-                                            
-                          <div class="row mt-3" >
-                              <div class="input-group mb-3 mt-3 col-6" >
-                                <label class="text w-100"> Nome da sede </label>
-                                <input type="text" class="form-control"  [readonly]="readonlyFields['Nome_da_sede'] || isLinkedToCongregatio"formControlName="Nome_da_sede">
-                              </div>
-                            </div>
-
-                            <div class="d-flex align-items-start mt-3" >
-
-                              <button type="button" class="btn btn-primary shadow fs-10" style="display: block"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
-
-                              <button type="button" class="btn btn-danger shadow fs-10"  style="margin-left: 30px;"> <i class="fas fa-trash"></i> &nbsp; Excluir</button>
-
-                              <!-- <button type="button" class="btn btn-success shadow fs-10"  style="margin-left: 30px;" (click)="activeAccount('1')" *ngIf="myForm.get('active')?.value === 0"> <i class="fas fa-check-circle" ></i> &nbsp; Ativar</button> -->
-
-                              <!-- <button type="button" class="btn btn-warning shadow fs-10"  style="margin-left: 30px; color: white;" (click)="activeAccount('0')" *ngIf="myForm.get('active')?.value === 1"> <i class="fas fa-check-circle" ></i> &nbsp; Desativar</button> -->
-
-                              <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 30px;" >
-                                <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="activeDeacTive($event)" [checked]="myForm.get('active')?.value === 1">
-                                <label class="custom-control-label cursor" for="customSwitch1"> Ativar usúario  </label>
-                              </div>
-                              <!-- [attr.disabled]="(!grupal) ? '' : null"  -->
-                    
-                            </div>
-
-                        
+                            <!-- [attr.disabled]="(!grupal) ? '' : null"  -->
                   
-                      </form>    
+                          </div>
+
+                      
+                
+                    </form>    
                                   
                   </div>
                   
@@ -205,7 +205,6 @@
                               <div class="text-center">
                                   <img class=" img-fluid" [src]="pathImg" alt="Foto do Perfil do Usuário">
                               </div>
-                           
 
                             <h5 class="font fs-11 mt-3 text-center" *ngIf="!wasLinked "> {{ user && user.Nome_Completo }} </h5>
                             <h5 class="font fs-11 mt-3 text-center" *ngIf="wasLinked "> {{ userCongregatio && userCongregatio['Nome Completo'] }} </h5>
@@ -221,7 +220,7 @@
 
                                     <div class="block" style="padding: 5px; line-height: 23px; background-color: rgb(236, 236, 236);" >
 
-                                        <span style="width: 100%; display: inline-block;" > <b> {{ user.Data_Habito_Com_Capuz ? (user.Data_Habito_Com_Capuz | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+                                        <span style="width: 100%; display: inline-block;" > <b> {{ user.Data_Habito_Com_Capuz ? (user.Data_Habito_Com_Capuz | date:'dd/MM/YYYY') : '--------' }} </b> </span>
                                         <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
 
                                         <span class="fs-10" *ngIf="!wasLinked"> <b>{{ user.Encarregado_Com_Capuz || '-----------'}} </b></span>
@@ -237,7 +236,7 @@
                                   </div>
                                 <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
 
-                                  <span style="width: 100%; display: inline-block;" > <b> {{ user.Data_Habito_Sem_Capuz ? (user.Data_Habito_Sem_Capuz | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+                                  <span style="width: 100%; display: inline-block;" > <b> {{ user.Data_Habito_Sem_Capuz ? (user.Data_Habito_Sem_Capuz | date:'dd/MM/YYYY') : '--------' }} </b> </span>
 
                                   <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
 
@@ -258,7 +257,7 @@
     
                                     <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
       
-                                        <span style="width: 100%; display: inline-block;" > <b> {{ userCongregatio['Data Hábito Com Capuz'] ? (userCongregatio['Data Hábito Com Capuz'] | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+                                        <span style="width: 100%; display: inline-block;" > <b> {{ userCongregatio['Data Hábito Com Capuz'] ? (userCongregatio['Data Hábito Com Capuz'] | date:'dd/MM/YYYY') : '--------' }} </b> </span>
       
                                         <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
       
@@ -277,7 +276,7 @@
                                       </div>
                                     <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
     
-                                      <span style="width: 100%; display: inline-block;" > <b> {{ userCongregatio['Data Hábito Sem Capuz'] ? (userCongregatio['Data Hábito Sem Capuz'] | date:'dd/MM/yyyy') : '--------' }} </b> </span>
+                                      <span style="width: 100%; display: inline-block;" > <b> {{ userCongregatio['Data Hábito Sem Capuz'] ? (userCongregatio['Data Hábito Sem Capuz'] | date:'dd/MM/YYYY') : '--------' }} </b> </span>
     
                                       <span class="fs-10 " style="width: 100%; display: inline-block;"> Ecarregado </span>
     

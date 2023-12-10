@@ -22,7 +22,7 @@
                     <div class="col-lg-12">
                     
                    
-                      <form [formGroup]="myForm" class="needs-validation mt-1 font"  novalidate  [autocomplete]="false"  >
+                      <form [formGroup]="myForm" class="needs-validation mt-1 font"  novalidate  [autocomplete]="false" (ngSubmit)="onSave()" >
 
                         <div class="row">
                           <div class="input-group mt-3 col-6" >
@@ -65,7 +65,7 @@
                                     [bsValue]="bsValue"
                                     [minDate]="minDate"
                                     [maxDate]="maxDate"
-                                    [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
+                                    [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
                                     formControlName="Data_Nascimento" >
                                   <div class="input-group-append"  >
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -118,7 +118,7 @@
                             </div>
 
                             <div class="input-group mb-3 mt-3" >
-                              <button type="button" class="btn btn-primary shadow fs-10"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
+                              <button type="submit" class="btn btn-primary shadow fs-10"   ><i class="fa fa-save"></i> &nbsp; Guardar</button>
                             </div>
 
                            

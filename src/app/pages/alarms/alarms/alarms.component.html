@@ -152,7 +152,7 @@
 
         <div class="modal-body fs-9">
          
-          <form [formGroup]="myForm" class="needs-validation "  novalidate  [autocomplete]="false" >
+          <form [formGroup]="myForm" class="needs-validation "  novalidate  [autocomplete]="false" (ngSubmit)="onSave()">
   
             <div class="input-group mb-3" >
               <label class="text w-100"> Nome do alarme </label>
@@ -221,7 +221,7 @@
                   [bsValue]="bsValue"
                   [minDate]="minDate"
                   [maxDate]="maxDate"
-                  [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
+                  [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
                   formControlName="alarmDate" required [ngStyle]="( validField('alarmDate')) ? {'border':'1px solid red'}:{}" [attr.disabled]="(!pessoal && !grupal) ? '' : null">
                 <div class="input-group-append"  >
                   <div class="input-group-text"><i class="fa fa-calendar" style="color: rgb(0, 123, 255);"></i></div>
@@ -265,7 +265,7 @@
           </div>
       </div> 
         <div class=" modal-footer d-flex align-items-center justify-content-center">
-          <button type="button" class="btn btn-primary btn-block shadow mt-3" (click)="onSave()" [attr.disabled]="(!pessoal && !grupal) ? '' : null">Criar alarme</button>
+          <button type="submit" class="btn btn-primary btn-block shadow mt-3"  [attr.disabled]="(!pessoal && !grupal) ? '' : null">Criar alarme</button>
       
           
       </div>

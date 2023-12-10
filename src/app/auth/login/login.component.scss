@@ -22,6 +22,35 @@
   width: 380px;
 }
 
+.icon{
+  cursor: pointer;
+}
+
+.toggle-container {
+  position: fixed;
+  bottom: 0;
+  right: 10px;
+  width: 400px;
+  height: 35px;
+  background-color: #007bff;
+  color: #fff;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 999;
+  -webkit-transition-duration: 0.6s;
+  -moz-transition-duration: 0.6s;
+  transition-duration: 0.6s;
+
+}
+
+.expanded {
+  // height: 520px; 
+  height: auto;
+}
+
+.custom-text{
+  color: rgb(108, 108, 108);
+}
 
 
 

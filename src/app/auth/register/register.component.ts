@@ -5,6 +5,9 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import * as moment from 'moment';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { delay } from 'rxjs';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-register',
@@ -25,12 +28,15 @@ export class RegisterComponent implements OnInit {
   constructor(
               private fb : FormBuilder,
               private authService : AuthService,
-              private errorService : ErrorService
+              private errorService : ErrorService,
+              private localeService: BsLocaleService
   ) {
 
       this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
       this.minDate.setFullYear(this.bsValue.getFullYear() - 100);
       this.bsRangeValue = [this.bsValue, this.maxDate];
+      defineLocale('pt-br', ptBrLocale);
+      this.localeService.use('pt-br');
         
    }
 

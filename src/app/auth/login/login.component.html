@@ -1,9 +1,10 @@
-<div class="login-page"  >
+<div class="login-page font"  >
   <div class="login-box" *ngIf="showLogin">
 
     <div class="card card-outline card-primary" style="background-color: rgb(234, 243, 250, 0.9);">
       <div class="card-header text-center">
-        <span class="h1"><b>Admin</b>LTE</span>
+        <h1> Arcanjo Sao Rafael </h1>
+        <!-- <span class="h1"><b>Arcanjo</b> &nbsp;Sao Rafael</span> -->
       </div>
 
       <div class="card-body">
@@ -45,7 +46,7 @@
                </div>
                <div class="col-12 d-flex justify-content-end mt-2">
                 
-                <span class="mb-0"> <a  routerLink="/resend-password" href="" class="text-center" (click)="changeModalsStates()" data-toggle="modal" data-target="#modalContactUs">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Entre em contato conosco</a> </span>
+                <!-- <span class="mb-0"> <a  routerLink="/resend-password" href="" class="text-center" (click)="changeModalsStates()" data-toggle="modal" data-target="#modalContactUs">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Entre em contato conosco</a> </span> -->
 
                </div>
       
@@ -57,7 +58,65 @@
     </div>
 
   </div>
+
+<!-- entre em contacto  -->
+  <div style="opacity: 0.9;">
+    <div class="toggle-container d-flex flex-column shadow" [ngClass]="{ 'expanded': isDivVisible }">
+      <div class="d-flex justify-content-between font fs-10 p-2" >
+        <p>Entre em contato conosco</p>  
+        <i class="icon fas fa-plus" (click)="toggleDiv()" *ngIf="!position"></i>
+        <i class="icon fas fa-minus" (click)="toggleDiv()" *ngIf="position"></i>
+
+      </div>
+      <div class="d-flex justify-content-center p-3" style="background-color: white;">
+
+        <form [formGroup]="myForm2" class="needs-validation font fs-10 w-100"  novalidate  [autocomplete]="false" >
+
+          <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+            <p class="custom-text w-100"> Nome </p>
+            <input type="text" class="form-control"  required [ngStyle]="( validField2('fullName')) ? {'border':'1px solid red'}:{}" formControlName="fullName" >
+            <div *ngIf="validField2('fullName')" class="invalid" > Dado obrigatório </div>
+          </div>
+
+          <div class="input-group mb-3 mt-1" >
+            <p class="custom-text w-100"> Ordem </p>
+            <select class="form-control select2 col-12 w-100" required  formControlName="headquarter" >
+              <option selected="selected"> </option>
+              <option>Ordem primeira</option>
+              <option>Ordem segunda</option>
+              
+            </select>
+            <div *ngIf="validField2('headquarter')" class="invalid" > Dado obrigatório </div>
+          </div>
+
+          <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+            <p class="custom-text w-100"> Digite seu email </p>
+            <input type="email" class="form-control"  required [ngStyle]="( validField2('userEmail')) ? {'border':'1px solid red'}:{}" formControlName="userEmail">
+            <div *ngIf="validField2('userEmail')" class="invalid" > Dado obrigatório </div>
+          </div>
+
+          <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+            <p class="custom-text w-100"> Assunto </p>
+              <textarea class="form-control" formControlName="subject" style="height: 60px;"></textarea>
+            <div *ngIf="validField2('subject')" class="invalid" > Dado obrigatório </div>
+
+          </div>
+
+          <div class="w-100">
+            <button type="submit" class="btn btn-primary btn-block shadow " style="background-color: #007bff !important;" (click)="contactUs()" *ngIf="!isSending"> Enviar</button>
+            <button type="button" class="btn btn-primary btn-block shadow" style="background-color: #007bff !important;" *ngIf="isSending"> Enviando...</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
 </div>  
+
+
 
 
 
@@ -74,7 +133,7 @@
         </div>
         <div class="modal-body">
           
-          <form [formGroup]="myForm2" class="needs-validation"  novalidate  [autocomplete]="false">
+          <form [formGroup]="myForm2" class="needs-validation"  novalidate  [autocomplete]="false" (ngSubmit)="contactUs()">
 
             <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
               <label class="text w-100"> Nome </label>
@@ -105,6 +164,11 @@
               <div *ngIf="validField('subject')" class="invalid" > Dado obrigatório </div>
 
             </div>
+
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary btn-block shadow"  *ngIf="!isSending"> Enviar</button>
+              <button type="button" class="btn btn-primary btn-block shadow"  *ngIf="isSending"> Enviando...</button>
+            </div>
   
           </form>
 
@@ -112,7 +176,6 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-primary btn-block shadow" (click)="contactUs()" *ngIf="!isSending"> Enviar</button>
           <button type="button" class="btn btn-primary btn-block shadow"  *ngIf="isSending"> Enviando...</button>
-
         </div>
 
       </div>
@@ -175,7 +238,7 @@
     <h5 class="fs-10"><i class="icon fas fa-exclamation-triangle"></i> Email não verificado!</h5>
     <span class="fs-8" >Já enviamos um email de confirmação. Precisa que enviemos novamente?</span>
 
-    <form [formGroup]="myFormResend" class="needs-validation mt-1"  novalidate  [autocomplete]="false" (ngSubmit)="verifyEmail()" >
+    <form [formGroup]="myFormResend" class="needs-validation mt-1"  novalidate  [autocomplete]="false"  >
   
         <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
           <input type="email" class="form-control fs-8" placeholder="Email" required [ngStyle]="( validFieldResend('resendEmail')) ? {'border':'1px solid red'}:{}" formControlName="resendEmail">
@@ -187,7 +250,7 @@
           <div *ngIf="validFieldResend('resendEmail')" class="invalid fs-8" > Dado obrigatório </div>
         </div>
         
-        <button type="submit" class="btn btn-primary shadow fs-9 w-100"  >
+        <button type="button" class="btn btn-primary shadow fs-9 w-100" (click)="verifyEmail()" >
             Enviar
         </button>
     
@@ -195,7 +258,6 @@
 
 
   </div>
-
   
   <!-- success verify email -->
   <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font " *ngIf="successResendVerify">
@@ -205,18 +267,16 @@
     <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span>
     
   </div>
-    
 
-  <!-- no role -->
+  <!-- no role - no ative -->
   <div id="custom-toast" class="alert alert-warning alert-dismissible animate__animated animate__fadeIn font" *ngIf="noRole" style="width: 380px; font-size: 0.9em;">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (click)="closeToast()">&times;</button>
-    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Usuário sem função!</h5>
-    Nossos administradores estão em processo de atribuir uma função a você.
-    <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#exampleModalCenter">Entre em contato conosco</p>
+    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Sua conta não foi ativada</h5>
+    Nossos administradores estão em processo de ativar sua conta.
   </div>
 
   <!-- success contact-us -->
-  <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font" *ngIf="successContactUs" style="width: 380px; font-size: 0.9em;">
+  <div id="custom-toast" class="alert alert-success alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="successContactUs" style="width: 380px; font-size: 0.9em;">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Sucesso!</h5>
     Em breve entraremos em contato

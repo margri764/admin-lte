@@ -33,6 +33,9 @@ export class LoginComponent implements OnInit {
   successResendPass : boolean = false;
   showResendPass : boolean = false;
   successResendVerify : boolean = false;
+  phone : boolean = false;
+  isDivVisible : boolean = false;
+  position : boolean = false;
 
 
   constructor(
@@ -41,8 +44,11 @@ export class LoginComponent implements OnInit {
               private router : Router,
               private errorService : ErrorService,
   ) {
+  (screen.width <= 800) ? this.phone = true : this.phone = false;
      
    }
+
+
 
 
   ngOnInit(): void {
@@ -63,11 +69,10 @@ export class LoginComponent implements OnInit {
     });
 
     this.myForm2 = this.fb.group({
-      fullName:     [ '', [Validators.required] ],
-      headquarter:     [ '', [Validators.required] ],
-      userEmail:     [ '', [Validators.required] ],
-      subject:     [ '', [Validators.required] ],
-  
+      fullName: [ '', [Validators.required] ],
+      headquarter: [ '', [Validators.required] ],
+      userEmail: [ '', [Validators.required] ],
+      subject: [ '', [Validators.required] ],
     });
 
     
@@ -122,33 +127,36 @@ export class LoginComponent implements OnInit {
   }
 
   // por si pide una reenvio de contraseña y todavia no esta verficado  
-verifyEmail(){
-  
-  this.errorService.close$.next(true);
-  this.errorService.close$.next(false);
-
-  if ( this.myFormResend.invalid ) {
-    this.myFormResend.markAllAsTouched();
-    return
-  }
-  this.isLoading = true
-  const email = this.myFormResend.get("resendEmail")?.value;
+  verifyEmail(){
     
-  this.authService.verifyEmail(email).subscribe(
-    ( {success} )=>{
-      if(success){
-        setTimeout(()=>{ 
-          this.successResendVerify = true 
-          this.isLoading = false; 
-          this.noVerified = false;
-          this.successResendPass = false;
-          this.showResendPass = false;
-        },700);
-      }
-    })
+    this.errorService.close$.next(true);
+    this.errorService.close$.next(false);
+
+    if ( this.myFormResend.invalid ) {
+      this.myFormResend.markAllAsTouched();
+      return
+    }
+    this.isLoading = true
+    const email = this.myFormResend.get("resendEmail")?.value;
+      
+    this.authService.verifyEmail(email).subscribe(
+      ( {success} )=>{
+        if(success){
+          setTimeout(()=>{ 
+            this.successResendVerify = true 
+            this.isLoading = false; 
+            this.noVerified = false;
+            this.successResendPass = false;
+            this.showResendPass = false;
+          },700);
+        }
+      })
   }
 
-
+  toggleDiv() {
+    this.isDivVisible = !this.isDivVisible;
+    this.position = !this.position
+  }
 
   openToastResend(){
     this.showResendPass = true;
@@ -174,16 +182,18 @@ verifyEmail(){
 
 //entre em contato con nosotros
   contactUs(){
+
+    if ( this.myForm2.invalid ) {
+      this.myForm2.markAllAsTouched();
+      return;
+    }
     this.isSending= true;
     this.authService.contactUs(this.myForm2.value).subscribe( 
       ({success})=>{
         if(success){
-
-          setTimeout(()=>{
-            // asi cierro el modal
-            this.closebutton.nativeElement.click();
-          },1000)
-
+          this.isSending= false;
+          this.isDivVisible = false;
+          this.position = false;
           setTimeout(()=>{
             this.successContactUs = true;
           },1800)
@@ -213,6 +223,11 @@ verifyEmail(){
 
    validField(field: string) {
     const control = this.myForm.get(field);
+    return control && control.errors && control.touched;
+  }
+
+  validField2(field: string) {
+    const control = this.myForm2.get(field);
     return control && control.errors && control.touched;
   }
 
