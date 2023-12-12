@@ -6,6 +6,12 @@
      background-size:cover;
 }
 
+.animate__animated.animate__flash {
+  --animate-duration: 5s;
+  --animate-delay: 0.1s;
+}
+
+
 .invalid{
      color: red; 
      margin-top: 5px;

@@ -10,7 +10,7 @@
       <div class="card-body">
         <p class="login-box-msg">Login</p>
   
-        <form [formGroup]="myForm" class="needs-validation"  novalidate  [autocomplete]="false"  (ngSubmit)="login()">
+        <form [formGroup]="myForm" class="needs-validation"  novalidate  [autocomplete]="false" (ngSubmit)="login()" >
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
             <input type="email" class="form-control" placeholder="Email" required [ngStyle]="( validField('email')) ? {'border':'1px solid red'}:{}" formControlName="email">
@@ -46,7 +46,7 @@
                </div>
                <div class="col-12 d-flex justify-content-end mt-2">
                 
-                <!-- <span class="mb-0"> <a  routerLink="/resend-password" href="" class="text-center" (click)="changeModalsStates()" data-toggle="modal" data-target="#modalContactUs">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Entre em contato conosco</a> </span> -->
+        
 
                </div>
       
@@ -102,6 +102,7 @@
 
           </div>
 
+
           <div class="w-100">
             <button type="submit" class="btn btn-primary btn-block shadow " style="background-color: #007bff !important;" (click)="contactUs()" *ngIf="!isSending"> Enviar</button>
             <button type="button" class="btn btn-primary btn-block shadow" style="background-color: #007bff !important;" *ngIf="isSending"> Enviando...</button>
@@ -115,9 +116,6 @@
 
 
 </div>  
-
-
-
 
 
 
@@ -182,13 +180,16 @@
     </div>
   </div>
 
- <!-- Modal Code -->
- <div class="modal fade" id="modalCode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+  <!-- Modal Code -->
+  <button type="button" style="display: none;" data-toggle="modal" data-target="#modalCode" #openModal>Abrir Modal</button>
+  <!-- <button type="button" style="display: none;" data-dismiss="modal" aria-label="Close" #closeModal>Cerrar Modal</button> -->
+
+ <div class="modal fade" id="modalCode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document"  >
     <div class="modal-content" style="background-color: rgb(234, 243, 250, 0.9);">
       <div class="modal-header">
         <!-- <h5 class="modal-title" id="exampleModalCenterTitle"> Login </h5> -->
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeModal >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -204,18 +205,18 @@
 
           <div class="input-group mb-3" >
             <label class="text w-100"> Insira este código no quadro abaixo para continuar </label>
-              <textarea class="form-control " formControlName="code" [ngStyle]="( validField('code')) ? {'border':'1px solid red'}:{}" ></textarea>
-            <div *ngIf="validField('code')" class="invalid" > Dado obrigatório </div>
+              <input class="form-control " formControlName="code" [ngStyle]="( validFieldCode('code')) ? {'border':'1px solid red'}:{}" >
+            <div *ngIf="validFieldCode('code')" class="invalid" > Dado obrigatório </div>
 
           </div>
-
-         
         </form>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-block shadow"> Continuar</button>
+        <button type="button" class="btn btn-primary btn-block shadow" (click)="doubleAuth()" *ngIf="!sendingAuth"> Continuar</button>
+        <button type="button" class="btn btn-primary btn-block shadow "  (click)="doubleAuth()" *ngIf="sendingAuth"> <span class="animate__animated  animate__flash" #flash>Enviando ...</span></button>
         <div class="d-flex flex-column align-items-end mb-3" style="margin-top: 30px;">
+      
      
           <div >
             <span class="mb-0" style="margin-right: 15px;"> <a href="register.html" class="text-center">  <i class="fas fa-window-close" style="margin-right: 2px;"></i>  Cancelar</a> </span>

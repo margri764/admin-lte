@@ -34,11 +34,8 @@ select{
 
   
   .selected:hover{
-
-
     color: rgb(0, 128, 255);
     text-decoration: underline;
-
   }
 
   .groups{

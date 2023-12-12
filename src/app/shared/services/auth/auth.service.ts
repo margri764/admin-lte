@@ -36,6 +36,27 @@ export class AuthService {
     return this.http.post<any>(`${this.baseUrl}api/auth/login`, body) 
     
     .pipe(
+      // tap( ( {user, token, success}) =>{
+      //                 if(success){
+      //                     this.token = token;
+      //                     this.cookieService.set('token',token);
+      //                     this.user = user;
+      //                     this.store.dispatch(authActions.setUser({user}));
+      //                     const userToLS = { name: user.Nome_Completo, role:user.role};
+      //                     this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
+      //                 }           
+                    
+      //           }  
+      // ),            
+      map( res => {console.log("from login Service: ",res);return res} )
+    )
+  }
+
+  doubleAuth( body:any ){
+  
+    return this.http.post<any>(`${this.baseUrl}api/auth/doubleAuth`, body) 
+    
+    .pipe(
       tap( ( {user, token, success}) =>{
                       if(success){
                           this.token = token;
@@ -48,7 +69,7 @@ export class AuthService {
                     
                 }  
       ),            
-      map( res => {console.log("from login Service: ",res);return res} )
+      map( res => {console.log("from doubleAuth Service: ",res);return res} )
     )
   }
 

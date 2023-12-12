@@ -117,6 +117,7 @@ nameGroups : any []=[];
 personalAlarms : any []=[];
 isChecked = false;
 idUser : any;
+disableOrdem : boolean = false;
 
 
   constructor(
@@ -404,24 +405,6 @@ idUser : any;
   }
   
 
-    // activeAccount( active:any){
-
-    //   this.isLoading = true;
-    //   this.showSuccess = false;
-    //   const email = this.myForm.get('Email')?.value;
-
-    //   this.authService.activeAccount( email, active ).subscribe
-    //   ( ({success})=>{
-    //     if(success){
-    //       this.showSuccess = true,
-    //       (active === "1") ? this.msg = 'Usúario ativado com sucesso' : this.msg = 'Usúario desativado com sucesso'; 
-    //       setTimeout( ()=>{ this.getUserById( this.user.iduser ); this.isLoading = false;  }, 1000);
-          
-    //     }
-
-    //    })   
-    // }
-
     onSelect(event: any): void {
 
       const addedFiles: File[] = event.addedFiles;
@@ -474,7 +457,6 @@ idUser : any;
       }
       return new Uint8Array();
     }
-
 
     //con esta funcion traigo los documentos q el usuario tiene en BD
     readAndShowPDFFromBack(fileContents: any[]): void {
@@ -534,18 +516,6 @@ idUser : any;
       }
     }
     
-
-
-      //    if(this.arrDocument[index]){
-      //   setTimeout( ()=>{
-      //       this.selectedPdfSrc = this.arrDocument[index];
-      //       console.log(  this.selectedPdfSrc);
-      //       this.selectedFile = this.files[index];
-      //       this.fileName = name;
-      //     }, 200)
-      // }
-      
-
   
     onView( doc:any ){
 
@@ -621,7 +591,7 @@ idUser : any;
 
       let link = null;
       
-      (this.user.linkCongregatio === 1) ? link = true : link = false;
+      (this.user.linkCongregatio === 1) ? [ link = true, this.disableOrdem = true ]: link = false;
       
       this.myForm.patchValue({
         ordem: this.user?.Ordem,
@@ -639,8 +609,6 @@ idUser : any;
         linkCongregatio: link,
         active: this.user.active
       });
-
-      console.log(this.user?.Ordem);
 
        this.actualizarEstadoSwitch();
        this.role = this.user.role;
@@ -693,7 +661,6 @@ idUser : any;
       })
      
     }
-  
 
     deleteDocById( doc:any){
 
@@ -772,10 +739,6 @@ idUser : any;
    }
   // search
 
-  
-  unLinkCongregatioActio(){
-
-  }
 
   activeDeacTive(event: any): void{
 
@@ -796,7 +759,7 @@ idUser : any;
       }
     
      }) 
-    }
+  }
 
 
    selectUser(user: any){

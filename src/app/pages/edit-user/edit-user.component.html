@@ -47,7 +47,7 @@
                         
                               <div class="input-group mt-3 col-4 fs-11" >
                                 <label class="text w-100" > Ordem </label>
-                                <select class="form-control select2 "  formControlName="ordem" >
+                                <select class="form-control select2 "  formControlName="ordem" [attr.disabled]="(disableOrdem) ? '' : null">
                                   <option *ngFor="let ord of ordem" [value]="ord" > {{ ord }} </option>
                                 </select>
                               </div>   

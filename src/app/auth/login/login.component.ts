@@ -1,10 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { saveDataLS, saveDataSS } from 'src/app/shared/storage';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { delay } from 'rxjs';
+import * as $ from 'jquery';
+
 
 
 @Component({
@@ -14,7 +16,8 @@ import { delay } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
 
-  @ViewChild('closebutton') closebutton! : ElementRef;
+  @ViewChild('closeModal') closeModal! : ElementRef;
+  @ViewChild('openModal') openModal! : ElementRef;
   @ViewChild('closeNoVerifiedEmail') closeNoVerifiedEmail! : ElementRef;
 
   myForm!: FormGroup;
@@ -36,6 +39,7 @@ export class LoginComponent implements OnInit {
   phone : boolean = false;
   isDivVisible : boolean = false;
   position : boolean = false;
+  sendingAuth : boolean = false;
 
 
   constructor(
@@ -43,15 +47,19 @@ export class LoginComponent implements OnInit {
               private authService : AuthService,
               private router : Router,
               private errorService : ErrorService,
-  ) {
+  )
+  
+  {
   (screen.width <= 800) ? this.phone = true : this.phone = false;
      
    }
 
 
-
+  
 
   ngOnInit(): void {
+
+                // setTimeout(()=>{this.closeModal.nativeElement.click();},3000)
 
     this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
 
@@ -109,21 +117,45 @@ export class LoginComponent implements OnInit {
     const password = this.myForm.get('password')?.value;
     this.isLoading = true;
     this.authService.login( email, password ).subscribe(
-      ({token})=>{
-        if(token){
-                
-          saveDataLS('logged', true);
-          // if(this.myForm.get('toLStorage')?.value === true){
-          //       }else{
-          //         saveDataSS('logged', true);
-          //       }
+      ({success})=>{
+        if(success){
+                 setTimeout(()=>{ 
+                   this.isLoading = false;
+                   this.openDoubleAuthModal(); },1200)
+                    }
+        });
+  }
 
-                this.isLoading = false;
-                this.router.navigateByUrl('dashboard');}
+  doubleAuth(){
+    
+    const code = this.myFormCode.get('code')?.value;
+    const email = this.myForm.get('email')?.value;
+    const body = { code, email };
+    
+    if ( this.myForm.invalid ) {
+      this.myFormCode.markAllAsTouched();
+      return;
+    }
+
+    this.sendingAuth = true;
+    this.authService.doubleAuth( body ).subscribe(
+      ({success})=>{
+        if(success){
+
+                saveDataLS('logged', true);
+                setTimeout(()=>{ 
+                    this.sendingAuth = false;
+                    this.closeModal.nativeElement.click();
+                    this.router.navigateByUrl('dashboard');
+                  },1700)
+                }
               });
 
-    // this.router.navigateByUrl('/dashboard')
-    
+  }
+
+
+  openDoubleAuthModal() {
+    this.openModal.nativeElement.click();
   }
 
   // por si pide una reenvio de contraseña y todavia no esta verficado  
@@ -228,6 +260,11 @@ export class LoginComponent implements OnInit {
 
   validField2(field: string) {
     const control = this.myForm2.get(field);
+    return control && control.errors && control.touched;
+  }
+
+  validFieldCode(field: string) {
+    const control = this.myFormCode.get(field);
     return control && control.errors && control.touched;
   }
 
