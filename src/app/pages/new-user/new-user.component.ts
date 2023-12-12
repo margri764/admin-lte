@@ -45,17 +45,17 @@ export class NewUserComponent implements OnInit{
 
 
       this.myForm = this.fb.group({
-        ordem: [ '' ],
+        ordem: [ '', [Validators.required] ],
         name:  ['', [Validators.required]],
         lastName:  [ '', [Validators.required]],
-        Telefone1:  [ ''],
-        Data_Nascimento:  [ '' ],
+        Telefone1:  [ '', [Validators.required]],
+        Data_Nascimento:  [ '', [Validators.required] ],
         Email:  [ '', [Validators.required]],
-        Nacionalidade:  [ '' ],
-        Residencia_atual:  [ '' ],
-        Pais_da_sede:  [ '' ],
-        Cidade_da_sede:  [ '' ],
-        Nome_da_sede:  [ '' ],
+        Nacionalidade:  [ '', [Validators.required] ],
+        Residencia_atual:  [ '', [Validators.required] ],
+        Pais_da_sede:  [ '', [Validators.required] ],
+        Cidade_da_sede:  [ '', [Validators.required] ],
+        Nome_da_sede:  [ '', [Validators.required] ],
         role: ['']
       });
      }
@@ -84,14 +84,12 @@ export class NewUserComponent implements OnInit{
 
     onSave(){
 
-      // alert(JSON.stringify(this.myForm.value));
-
+      alert(JSON.stringify(this.myForm.value));
      
       if ( this.myForm.invalid ) {
         this.myForm.markAllAsTouched();
         return;
       }
-      
 
       const role = this.myForm.get('role')?.value;
 

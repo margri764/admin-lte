@@ -13,6 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+               "lodash",
+               "./node_modules/pdfjs-dist/build/pdf"  ],
             "outputPath": "dist/admin-lte",
             "index": "src/index.html",
             "main": "src/main.ts",

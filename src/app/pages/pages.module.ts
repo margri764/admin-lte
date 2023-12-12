@@ -21,6 +21,8 @@ import { AlarmsComponent } from './alarms/alarms/alarms.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GroupsComponent } from './groups/groups.component';
+import { CongregatioComponent } from './congregatio/congregatio/congregatio.component';
+import { ViewCongregatiComponent } from './view-congregatio/view-congregati/view-congregati.component';
 
 
 
@@ -38,7 +40,9 @@ import { GroupsComponent } from './groups/groups.component';
     NewUserComponent,
     NewClientComponent,
     AlarmsComponent,
-    GroupsComponent
+    GroupsComponent,
+    CongregatioComponent,
+    ViewCongregatiComponent
   ],
   exports: [
     DashboardComponent,

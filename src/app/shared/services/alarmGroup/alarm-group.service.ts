@@ -11,6 +11,7 @@ export class AlarmGroupService {
   private baseUrl = environment.baseUrl;
 
   authDelGroup$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  authDelAlarm$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
 
   constructor(
               private http : HttpClient,
@@ -97,6 +98,20 @@ export class AlarmGroupService {
     .pipe(
       tap( ( res) =>{
                     console.log("from getAlarmByUser service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+  deleteAlarm( id:any ){
+    
+    return this.http.patch<any>(`${this.baseUrl}api/alarm/deleteAlarm/${id}`, null) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from deleteAlarm service: ",res);
                 }  
       ),            
       map( res => res )

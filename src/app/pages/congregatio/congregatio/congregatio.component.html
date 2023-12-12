@@ -1,0 +1,103 @@
+
+
+<div class="col-12">
+
+    <div class="card table-responsive " style="padding: 12px; padding-top: 20px; background-color: white;">
+
+        <form [formGroup]="myFormSearch" class="needs-validation"  novalidate  [autocomplete]="false">
+
+            <div class="input-group mb-3 font" >
+                <input type="text" class="form-control" placeholder="Use % para pesquisas complexas"  name="itemSearch" formControlName="itemSearch" style="height: 50px;">
+                <div class="input-group-append">
+                  <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
+                    <span class="fas fa-search" style="color: white"></span>
+                  </div>
+                </div>
+    
+              </div>
+          </form>
+
+    
+    </div>
+
+        
+        <div class="customTHead w-100 shadow"></div>
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col"> Imagen</th>
+                <th scope="col"> Nome Completo</th>
+                <th scope="col"> E-mail</th>
+                <th scope="col"> Ordem</th>
+                <th scope="col"> Nacionalidade</th>
+                <th scope="col"> Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let con of congregatio">
+                <td> 
+                     <img class=" img-fluid" src="https://congregatio.info/{{ con['Ruta Imagen'] }}" alt="Foto do Perfil do Usuário" width="40px"> 
+                </td>
+                <td> <a class="selected" [routerLink]="['../ver-congregatio', con['Número ID']]">{{ con['Nome Completo'] }} </a> </td>
+                <td> {{ con.Email }} </td>
+                <td> {{ con.Ordem }} </td>
+                <td> {{ con.Nacionalidade }} </td>
+                <td> 
+                    <span class="badge badge-success right shadow cursor" data-toggle="modal" data-target="#modalFichaCompleta"  style="padding: 8px 10px 8px 10px;" (click)="selectUserCongregatio(con)"> Ver ficha completa </span>
+
+                </td>
+            </tr>
+             
+          </table>
+      
+        
+      
+</div>
+
+  <!-- Modal Ficha completa-->
+  <div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95; ">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="padding: 20px;">
+          <h5 class="modal-title font" id="exampleModalCenterTitle"> Ficha completa</h5>
+      
+        </div>
+        <div class="modal-body">
+
+          <div class="table-responsive  font" >
+            <table class="table  table-hover" >
+              <thead>
+                <tr>
+                  <th scope="col">Propiedad</th>
+                  <th scope="col">Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let prop of getObjectProperties()">
+                  <td> <b>{{ prop.key }}</b> </td>
+                  <td>{{ prop.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close" #closebutton (click)="close()"> Sair</button>
+        </div>
+
+      
+      </div>
+    </div>
+</div>
+
+<div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div> 
+  
+  
+  

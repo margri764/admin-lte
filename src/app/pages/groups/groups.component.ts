@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, delay } from 'rxjs';
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
@@ -51,6 +51,7 @@ export class GroupsComponent implements OnInit {
     (screen.width <= 800) ? this.phone = true : this.phone = false;
    }
 
+
   ngOnInit(): void {
 
     this.getInitialGroups();
@@ -59,17 +60,6 @@ export class GroupsComponent implements OnInit {
 
   }
 
-  getInitialGroups(){
-
-    this.alarmGroupService.getAllGroups().subscribe(
-      ( {success, groups} )=>{
-        if(success){
-          this.groups = groups;
-          this.dtTrigger.next(null);
-          setTimeout(()=>{ this.isLoading = false }, 700)
-        }
-      })
-  }
 
 onSave(){
 
@@ -89,6 +79,7 @@ onSave(){
 }
 
 tempId= null;
+
 editGroup( group:any ){
   console.log(group);
 
@@ -140,7 +131,23 @@ validFieldEdit( field: string ) {
   return control && control.errors && control.touched;
 }
 
+getInitialGroups(){
+
+
+  this.alarmGroupService.getAllGroups().subscribe(
+    ( {success, groups} )=>{
+      if(success){
+        this.groups = groups;
+        this.dtTrigger.next(null);
+        setTimeout(()=>{ this.isLoading = false }, 700)
+      }
+    })
+}
+
+
+
 onRemove( group:any ){
+
 
   this.alarmGroupService.authDelGroup$.subscribe(
     (auth)=>{
@@ -151,6 +158,12 @@ onRemove( group:any ){
           ( {success} )=>{
             setTimeout(()=>{ this.isLoading = false },700)
             if(success){
+
+              if (this.dtTrigger) {
+                this.dtTrigger.complete();
+              }
+              this.dtTrigger = new Subject();
+              
               this.getInitialGroups();
               this.msg = "Grupo eliminado com sucesso."
               this.showSuccess = true;

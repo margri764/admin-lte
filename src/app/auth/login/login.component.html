@@ -235,22 +235,22 @@
   <!-- no verified email -->
   <div id="custom-toast" class="alert alert-warning alert-dismissible animate__animated animate__fadeIn font" *ngIf="noVerified">
     <button type="button" class="close"#closeNoVerifiedEmail  data-dismiss="alert" aria-hidden="true">&times;</button>
-    <h5 class="fs-10"><i class="icon fas fa-exclamation-triangle"></i> Email não verificado!</h5>
-    <span class="fs-8" >Já enviamos um email de confirmação. Precisa que enviemos novamente?</span>
+    <h5 ><i class="icon fas fa-exclamation-triangle"></i> Email não verificado!</h5>
+    <span class="fs-11"> Já enviamos um email de confirmação. Precisa que enviemos novamente?</span>
 
     <form [formGroup]="myFormResend" class="needs-validation mt-1"  novalidate  [autocomplete]="false"  >
   
         <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
-          <input type="email" class="form-control fs-8" placeholder="Email" required [ngStyle]="( validFieldResend('resendEmail')) ? {'border':'1px solid red'}:{}" formControlName="resendEmail">
+          <input type="email" class="form-control fs-10" placeholder="Email" required [ngStyle]="( validFieldResend('resendEmail')) ? {'border':'1px solid red'}:{}" formControlName="resendEmail">
           <div class="input-group-append">
             <div class="input-group-text fs-8">
               <span class="fas fa-envelope" style="color: rgb(0, 123, 255);"></span>
             </div>
           </div>
-          <div *ngIf="validFieldResend('resendEmail')" class="invalid fs-8" > Dado obrigatório </div>
+          <div *ngIf="validFieldResend('resendEmail')" class="invalid fs-10" > Dado obrigatório </div>
         </div>
         
-        <button type="button" class="btn btn-primary shadow fs-9 w-100" (click)="verifyEmail()" >
+        <button type="button" class="btn btn-primary shadow fs-11 w-100" (click)="verifyEmail()" >
             Enviar
         </button>
     
@@ -262,25 +262,24 @@
   <!-- success verify email -->
   <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font " *ngIf="successResendVerify">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <h5 class="fs-10"><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
-    <span class="fs-8 w-100"> Email enviado com sucesso!!.</span>
-    <span class="fs-8 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span>
+    <h5 ><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
+    <span class="fs-11 w-100"> Email enviado com sucesso!!.</span>
+    <span class="fs-11 w-100"> Para verificar seu e-mail, siga as instruções que enviamos.</span>
     
   </div>
 
   <!-- no role - no ative -->
   <div id="custom-toast" class="alert alert-warning alert-dismissible animate__animated animate__fadeIn font" *ngIf="noRole" style="width: 380px; font-size: 0.9em;">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (click)="closeToast()">&times;</button>
-    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Sua conta não foi ativada</h5>
-    Nossos administradores estão em processo de ativar sua conta.
+    <h5 ><i class="icon fas fa-exclamation-triangle"></i> Sua conta não foi ativada</h5>
+    <span class="fs-12"> Nossos administradores estão em processo de ativar sua conta. </span>
   </div>
 
   <!-- success contact-us -->
   <div id="custom-toast" class="alert alert-success alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="successContactUs" style="width: 380px; font-size: 0.9em;">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <h5 style="font-size: 1.2em;"><i class="icon fas fa-exclamation-triangle"></i> Sucesso!</h5>
-    Em breve entraremos em contato
-    <!-- <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#exampleModalCenter">Entre em contato conosco</p> -->
+    <h5 ><i class="icon fas fa-exclamation-triangle"></i> Sucesso!</h5>
+    <span class="fs-12"> Em breve entraremos em contato </span>
   </div>
 
 

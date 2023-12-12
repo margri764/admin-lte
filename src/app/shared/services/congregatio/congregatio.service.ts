@@ -46,6 +46,19 @@ export class CongregatioService {
     )
   }
 
+  getUserCongregatioById( id:any ){
+
+    return this.http.get<any>(`${this.baseUrl}api/congregatio/getUserByIdCongregatio/${id}`) 
+    
+    .pipe(
+      tap( ( {users}) =>{
+                    console.log("from getUserCongregatioById service: ", users);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
 
 
 

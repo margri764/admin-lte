@@ -16,6 +16,7 @@ import { LocalstorageService } from '../localstorage/localstorage.service';
 export class UserService {
 
   authDelDocument$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  authDelUser$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authAddRole$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
 
 
@@ -120,6 +121,19 @@ export class UserService {
     .pipe(
       tap( ( res) =>{
                     console.log("from deleteDocById service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+  deleteUser( id:any ){
+
+    return this.http.patch<any>(`${this.baseUrl}api/user/deleteUser/${id}`, null) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from deleteUser service: ",res);
                 }  
       ),            
       map( res => res )

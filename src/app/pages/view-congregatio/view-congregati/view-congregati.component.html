@@ -1,0 +1,35 @@
+
+
+<div class="card table-responsive">
+
+  <div class="table-responsive font p-3" >
+
+    <h3 *ngIf="user" class="mt-5" style="color: #007BFF;"> {{user['Nome Completo']  }} </h3>
+
+        <div #gallery class="d-flex  mt-3 shadow" style="overflow-x: auto; padding: 2px; ">  </div>
+
+    <table class="table table-hover mt-5" >
+      <thead>
+        <tr>
+          <th scope="col">Propiedad</th>
+          <th scope="col">Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prop of getObjectProperties()">
+          <td> <b>{{ prop.key }}</b> </td>
+          <td>{{ prop.value }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>  
+
+
+
+<div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div> 

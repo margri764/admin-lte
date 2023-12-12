@@ -1,18 +1,18 @@
 <div class="row">
     <div class="col-lg-12 back-white" >
        
-        <div class="card pd-20" >
+        <div class="card col-12 table-responsive pd-20" >
 
-            <div class="card-tools mb-5 " style="width: 80px; margin-left: auto;" >
-                <button type="button" class="btn btn-primary btn-block shadow" data-card-widget="collapse" title="Collapse" routerLink="/dashboard/novo-usuario">
+            <div class="card-tools mb-5 font" style=" margin-left: auto;" >
+                <button type="button" class="btn btn-primary btn-block shadow rotate" data-card-widget="collapse" title="Collapse" routerLink="/dashboard/novo-usuario">
                 <i class="fas fa-plus "></i> Novo
                 </button>
             </div>
 
                 <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover font fs-10" #table >
 
-                    <thead >
-                        <tr >
+                    <thead>
+                        <tr>
                             <th style="width: 40px;">Img</th>
                             <th style="width: 350px;">Nome</th>
                             <th style="width: 350px;">Endereço de email</th>

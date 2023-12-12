@@ -1,5 +1,5 @@
 import { ThisReceiver } from '@angular/compiler';
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { Subject, debounceTime } from 'rxjs';
@@ -9,6 +9,7 @@ import { UserService } from 'src/app/shared/services/user/user.service';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { DataTableDirective } from 'angular-datatables';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { BsLocaleService } from 'ngx-bootstrap/datepicker';
   templateUrl: './alarms.component.html',
   styleUrls: ['./alarms.component.css']
 })
-export class AlarmsComponent implements OnInit, OnDestroy{
+export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
 
   @ViewChild('groupSelect') groupSelect! : ElementRef;
   @ViewChild('excluir') excluir! : ElementRef;
@@ -26,6 +27,8 @@ export class AlarmsComponent implements OnInit, OnDestroy{
   @Output() onDebounce: EventEmitter<string> = new EventEmitter();
   @Output() onEnter   : EventEmitter<string> = new EventEmitter();
   debouncer: Subject<string> = new Subject();
+
+  @ViewChild(DataTableDirective, { static: false }) dtElement!: DataTableDirective;
 
 
       // start search
@@ -84,7 +87,7 @@ export class AlarmsComponent implements OnInit, OnDestroy{
               private fb : FormBuilder,
               private alarmGroupService : AlarmGroupService,
               private userService : UserService,
-              private localeService: BsLocaleService
+              private localeService: BsLocaleService,
 
               
   ) {
@@ -105,10 +108,19 @@ export class AlarmsComponent implements OnInit, OnDestroy{
         
    }
 
+   ngAfterViewInit(): void {
+    // this.dtTrigger.next(null);
+    // this.dtTrigger2.next(null);
+  }
+
+
 
 ngOnInit(): void {
+
   this.isLoading = true;
   this.initDtOptions();
+  this.initGrupalAlarms();
+  this.initPersonalAlarms();
 
   this.alarmGroupService.getAllGroups().subscribe(
     ( {success, groups} )=>{
@@ -116,25 +128,6 @@ ngOnInit(): void {
           this.groups = groups;
       }
     });
-
-  this.alarmGroupService.getAllPersonalAlarms().subscribe(
-    ( {success, personalAlarms} )=>{
-      if(success){
-      this.personalAlarms = personalAlarms;
-      this.dtTrigger2.next(null);
-      this.isLoading = false;
-      }
-    })  
-
-    this.alarmGroupService.getAllGrupalAlarms().subscribe(
-      ( {success, groupAlarms} )=>{
-        if(success){
-        this.grupalAlarms = groupAlarms;
-        this.dtTrigger.next(null);
-        this.isLoading = false;
-        }
-      })  
-  
 
 
   this.myForm = this.fb.group({
@@ -175,6 +168,31 @@ initDtOptions(): void {
   };
 }
 
+initPersonalAlarms(){
+
+  this.alarmGroupService.getAllPersonalAlarms().subscribe(
+    ( {success, personalAlarms} )=>{
+      if(success){
+      this.personalAlarms = personalAlarms;
+      this.dtTrigger2.next(null);
+      this.isLoading = false;
+      }
+    })  
+
+}
+
+initGrupalAlarms(){
+  this.alarmGroupService.getAllGrupalAlarms().subscribe(
+    ( {success, groupAlarms} )=>{
+      if(success){
+      this.grupalAlarms = groupAlarms;
+      this.dtTrigger.next(null);
+      this.isLoading = false;
+      }
+    })
+}
+
+
 selectPessoalOrGrupal( option:string ){
 
   if(option === "pessoal"){
@@ -189,29 +207,47 @@ selectPessoalOrGrupal( option:string ){
   }
 }
 
-showPessoalAlarmsOrGrupal( alarm : string ){
 
-  switch (alarm) {
-    case 'pessoal':
-                  this.showPessoalAlarms = true;
-                  this.showGrupalAlarms = false;
-                  this.initDtOptions();  
-                  this.dtTrigger.next(true);
+// dtInstance!: DataTables.Api;
+
+// showPessoalAlarmsOrGrupal( alarm : string ){
+
+//    this.dtTrigger.unsubscribe();
+//    this.dtTrigger2.unsubscribe();
+ 
+//    if (this.dtElement && this.dtElement.dtInstance) {
+//     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+//       dtInstance.destroy();
+//     });
+//   }
+ 
+//   switch (alarm) {
+//     case 'pessoal':
+//                   this.showPessoalAlarms = true;
+//                   this.showGrupalAlarms = false;
+//                   this.dtTrigger2 = new Subject();
+//                   this.initDtOptions();  
                   
-      break;
+//       break;
 
-    case 'grupal':
-                this.showGrupalAlarms = true;
-                this.showPessoalAlarms = false;
-                this.initDtOptions();  
-                this.dtTrigger2.next(true);
-    break;
+//     case 'grupal':
+//                   this.showGrupalAlarms = true;
+//                   this.showPessoalAlarms = false;
+//                   this.dtTrigger = new Subject();
+//                   this.initDtOptions();  
+//     break;
   
-    default:
+//     default:
         
-      break;
-  }
-}
+//       break;
+//   }
+
+//   if (this.dtElement && this.dtElement.dtInstance) {
+//     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+//       this.dtInstance = dtInstance;
+//     });
+//   }
+// }
 
 
 onSave(){
@@ -304,6 +340,48 @@ onSave(){
   }
 
 
+
+}
+
+
+onRemove( alarm:any ){
+
+  let id: any;
+  let personal : boolean = false;
+  let grupal : boolean = false;
+
+  (!alarm.idalarm || alarm.idalarm === undefined ) ? [id = alarm.idgroupalarm, grupal = true] : [id = alarm.idalarm, personal = true];
+
+  this.alarmGroupService.authDelAlarm$.subscribe(
+    (auth)=>{
+      if(auth){
+        this.isLoading = true;
+        this.showSuccess = false;
+        this.alarmGroupService.deleteAlarm( id ).subscribe(
+          ( {success} )=>{
+            setTimeout(()=>{ this.isLoading = false },700)
+            if(success){
+
+                if (grupal) {
+                  this.grupalAlarms = this.grupalAlarms.filter(a => a.idgroupalarm !== alarm.idgroupalarm);
+                } else if (personal) {
+                  this.personalAlarms = this.personalAlarms.filter(a => a.idalarm !== alarm.idalarm);
+                }
+      
+              this.msg = "Alarma eliminada com sucesso."
+              this.showSuccess = true;
+            }
+          })
+      }
+    })
+
+}
+
+continue( ){
+  this.alarmGroupService.authDelAlarm$.emit(true);
+}
+
+editPessoalAlarm( alarm:any ){
 
 }
 

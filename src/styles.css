@@ -25,6 +25,13 @@ src: url(assets/font/Luckiest_Guy/LuckiestGuy-Regular.ttf);
  
 }
 
+@font-face {
+  font-family:'source_3';
+  src: url(assets/font/Source_Sans_3/SourceSans3-VariableFont_wght.ttf);
+  /* src: url(assets/font/Source_Sans_3/static/SourceSans3-Regular.ttf); */
+   
+  }
+
 body .bs-datepicker-container .bs-datepicker-head {
     background-color: blue;
   }
@@ -36,10 +43,6 @@ body .bs-datepicker-container .bs-datepicker-head {
     color: rgba(255, 0, 0, 0) !important; 
 } 
 
-.bs-datepicker-body table td span.selected{
-    /* color: brown !important;  */
-
-}
 
 
 .cursor{
@@ -47,7 +50,7 @@ body .bs-datepicker-container .bs-datepicker-head {
 }
 
 .font{
-  font-family: "poppins-light";
+  font-family: "source_3";
 }
 
 .ml-20{

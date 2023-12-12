@@ -13,6 +13,8 @@ import { NewUserComponent } from './new-user/new-user.component';
 import { NewClientComponent } from './new-client/new-client.component';
 import { AlarmsComponent } from './alarms/alarms/alarms.component';
 import { GroupsComponent } from './groups/groups.component';
+import { CongregatioComponent } from './congregatio/congregatio/congregatio.component';
+import { ViewCongregatiComponent } from './view-congregatio/view-congregati/view-congregati.component';
 
 
 const routes: Routes = [
@@ -27,11 +29,13 @@ const routes: Routes = [
               { path: 'usuarios',  component: UsersComponent , data:{ title:"Usuários"}},
               { path: 'clientes',  component: ClientsComponent , data:{ title:"Clientes"}},
               { path: 'editar-clientes/:id',  component: EditClientComponent , data:{ title:"Editar Clientes"}},
+              { path: 'ver-congregatio/:id',  component: ViewCongregatiComponent, data:{ title:"Ver Usúario "}},
               { path: 'editar-usuario/:id',  component: EditUserComponent , data:{ title:"Editar Usuário"}},
               { path: 'novo-usuario',  component: NewUserComponent , data:{ title:"Novo Usuário"}},
               { path: 'novo-cliente',  component: NewClientComponent , data:{ title:"Novo Cliente"}},
               { path: 'alarmes',  component: AlarmsComponent , data:{ title:"Alarmes"}},
               { path: 'grupos',  component: GroupsComponent , data:{ title:"Grupos"}},
+              { path: 'congregatio',  component: CongregatioComponent , data:{ title:"Congregatio"}},
             ]
   }
 

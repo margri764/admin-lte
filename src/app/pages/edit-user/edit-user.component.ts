@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import * as $ from 'jquery';
 import 'bootstrap-switch';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
 import { User } from 'src/app/shared/models/user.models';
@@ -89,6 +89,7 @@ phone : boolean = false;
 
 showLabelLinked : boolean = false;
 showSuccessDelDocument : boolean = false;
+showSuccessDelUser : boolean = false;
 fileNameBack : string = '';
 lastSetValue: { [key: string]: any } = {};
 readonlyFields: { [key: string]: boolean } = {};
@@ -97,7 +98,9 @@ userRole : boolean = false;
 role : string = '';
 stateLink : boolean = false;
 adminRole : boolean = false;
+
 dtOptions: DataTables.Settings = {};
+dtTrigger: Subject<any> = new Subject();
 
 userCongregatio : any = null ;
 pathImg : string = 'assets/no-image.jpg';
@@ -111,9 +114,9 @@ minDate = new Date();
 groups : any []=[];
 selectedGroups : any []=[];
 nameGroups : any []=[];
-userAlarms : any []=[];
+personalAlarms : any []=[];
 isChecked = false;
-
+idUser : any;
 
 
   constructor(
@@ -124,7 +127,8 @@ isChecked = false;
                 private congregatioService : CongregatioService,
                 private errorService : ErrorService,
                 private alarmGroupService : AlarmGroupService,
-                private localeService: BsLocaleService
+                private localeService: BsLocaleService,
+                private router : Router
                 ) 
                 
 { 
@@ -282,6 +286,7 @@ isChecked = false;
           this.getUsersGroups(id);
           this.getDocByUserId(user.iduser);
           this.getAlarmByUser(user.iduser);
+          this.idUser = id;
           console.log(user.Ruta_Imagen);
           if(user.Ruta_Imagen !== '' && user.Ruta_Imagen !== null ){
             this.pathImg = user.Ruta_Imagen;
@@ -362,9 +367,42 @@ isChecked = false;
 
     this.alarmGroupService.getAlarmByUser(id).subscribe(
       ( {success, alarm} )=>{
-        this.userAlarms = alarm;
+        if(success){
+          this.personalAlarms = alarm;
+          this.dtTrigger.next(null);
+
+        }
       })
   }
+
+  onRemoveAlarm( alarm:any ){
+
+    const id = alarm.idalarm;
+    console.log(id);
+  
+    this.alarmGroupService.authDelAlarm$.subscribe(
+      (auth)=>{
+        if(auth){
+          this.isLoading = true;
+          this.showSuccess = false;
+          this.alarmGroupService.deleteAlarm( id ).subscribe(
+            ( {success} )=>{
+              setTimeout(()=>{ this.isLoading = false },700)
+              if(success){
+                this.personalAlarms = this.personalAlarms.filter(a => a.idalarm !== alarm.idalarm);
+                this.msg = "Alarma eliminada com sucesso."
+                this.showSuccess = true;
+              }
+            })
+        }
+      })
+  
+  }
+
+  continueDelAlarm(){
+    this.alarmGroupService.authDelAlarm$.emit(true);
+  }
+  
 
     // activeAccount( active:any){
 
@@ -561,8 +599,6 @@ isChecked = false;
       }
     }
     
-    
-
     uploadDocument( file:any ){
 
       this.userService.uploadDocument(this.user.iduser, file).subscribe(
@@ -632,6 +668,32 @@ isChecked = false;
     continue(){
         this.userService.authDelDocument$.emit( true );
     }
+
+    continueDelUser(){
+      this.userService.authDelUser$.emit( true );
+    }
+
+    deleteUser( ){
+
+      this.userService.authDelUser$.subscribe( (emmited)=>{ 
+        if(emmited){
+          this.isLoading = true;
+          this.showSuccessDelDocument = false;
+          this.showSuccessDelUser = false;
+          this.userService.deleteUser( this.idUser ).subscribe(
+            ( {success} )=>{
+                if(success){
+                  this.msg = "Us'uario removido com sucesso";
+                  this.isLoading = false;
+                  this.showSuccess = true;
+                  setTimeout(()=>{ this.router.navigateByUrl('dashboard/usuarios')},2700)
+                }
+            })
+        } 
+      })
+     
+    }
+  
 
     deleteDocById( doc:any){
 

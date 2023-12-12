@@ -18,7 +18,6 @@ export class UsersComponent implements OnInit , AfterViewInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
 
-
   constructor(
               private userService : UserService,
               private errorService : ErrorService
