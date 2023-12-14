@@ -565,12 +565,14 @@ simpleCodeSelected : boolean = false;
       this.userService.getDocByUserId(id).subscribe(
       ( {document} )=>{
         this.isLoading = false;
-        this.arrDocument = document;
-        this.arrDocument.forEach((doc) => {
-          this.thumbailsPdf(doc);
+        this.arrDocument = document.map( (doc:any) => {
+          const fileName = doc.filePath.split('/').pop();
+          const serverURL = 'https://arcanjosaorafael.org/documents/';
+          return {
+            ...doc,
+            filePath: `${serverURL}${fileName}`
+          };
         });
-
-        console.log(this.arrDocument);
   
 
       });
