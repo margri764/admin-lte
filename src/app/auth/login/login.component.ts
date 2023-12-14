@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   codeTimeRemaining!: number;
 
+  backgroundImage = 'url(\'../../../assets/background-1.jpg\')';
   
   constructor(
               private fb : FormBuilder,
@@ -61,6 +62,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     (screen.width <= 800) ? this.phone = true : this.phone = false;
      
    }
+
+   changeBackground(): void {
+    
+    this.backgroundImage = "url('../../../assets/background-2.jpg')";
+  }
 
    ngOnDestroy(): void {
     this.destroy$.next();

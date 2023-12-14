@@ -1,4 +1,6 @@
-<div class="login-page font"  >
+<div class="login-page font" [style.backgroundImage]="backgroundImage" >
+
+  <button (click)="changeBackground()">Cambiar Fondo</button>
   <div class="login-box" *ngIf="showLogin">
 
     <div class="card card-outline card-primary" style="background-color: rgb(234, 243, 250, 0.9);">
