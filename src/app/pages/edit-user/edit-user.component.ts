@@ -15,6 +15,9 @@ import { LanguageApp } from '../table.languaje';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { log } from 'console';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 
 
 
@@ -118,6 +121,8 @@ personalAlarms : any []=[];
 isChecked = false;
 idUser : any;
 disableOrdem : boolean = false;
+simpleCodeSelected : boolean = false;
+
 
 
   constructor(
@@ -129,7 +134,8 @@ disableOrdem : boolean = false;
                 private errorService : ErrorService,
                 private alarmGroupService : AlarmGroupService,
                 private localeService: BsLocaleService,
-                private router : Router
+                private router : Router,
+                private sanitizer: DomSanitizer
                 ) 
                 
 { 
@@ -220,6 +226,7 @@ disableOrdem : boolean = false;
       Nome_da_sede:  [ '', [Validators.required]],
       linkCongregatio: [ false],
       active: [''],
+      simpleCode: [''],
     });
 
   }
@@ -287,8 +294,11 @@ disableOrdem : boolean = false;
           this.getUsersGroups(id);
           this.getDocByUserId(user.iduser);
           this.getAlarmByUser(user.iduser);
+          if(user.simpleCode === 1){
+            this.simpleCodeSelected = true;
+          }
+
           this.idUser = id;
-          console.log(user.Ruta_Imagen);
           if(user.Ruta_Imagen !== '' && user.Ruta_Imagen !== null ){
             this.pathImg = user.Ruta_Imagen;
           }
@@ -515,21 +525,23 @@ disableOrdem : boolean = false;
         reader.readAsDataURL(this.files[index]);
       }
     }
-    
-  
+
+
+    // este va en prod
+      
     onView( doc:any ){
 
       const fileName = doc.filePath.split('/').pop() ;
 
-        // Configura la ruta del servidor en producción
-        const serverURL = 'https://arcanjosaorafael.org/documents/'; // Reemplaza con la URL de tu servidor
+      console.log(fileName);
+        const serverURL = 'https://arcanjosaorafael.org/documents/'; 
       
-        // Configura la URL completa del servidor junto con la ruta del archivo
         this.selectedPdfBack = `${serverURL}${fileName}`;
         console.log( this.selectedPdfBack);
         this.fileNameBack = doc.originalName;
-      
+
     }
+    
 
     getDocByUserId( id:any ){
       this.isLoading = true;
@@ -537,6 +549,7 @@ disableOrdem : boolean = false;
       ( {document} )=>{
         this.arrDocument = document;
         this.isLoading = false;
+        console.log(this.arrDocument);
   
 
       });
@@ -760,6 +773,30 @@ disableOrdem : boolean = false;
     
      }) 
   }
+
+
+  simpleCode(event: any): void{
+
+    this.simpleCodeSelected = (event.target as HTMLInputElement).checked;
+
+    
+    const email = this.myForm.get('Email')?.value;
+    
+    if(!email || email === ''){
+      return;
+    }
+    
+    
+    const body = {
+      email,
+      simpleCode: (this.simpleCodeSelected) ? 1 : 0
+    }
+    console.log(body);
+
+
+     this.authService.simpleCode(body).subscribe();
+    
+    }
 
 
    selectUser(user: any){

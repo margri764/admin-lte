@@ -209,18 +209,23 @@
             <div *ngIf="validFieldCode('code')" class="invalid" > Dado obrigatório </div>
 
           </div>
+          <p class="font fs-10" *ngIf="codeTimeRemaining && codeTimeRemaining !== 0"> <b> Faltam {{codeTimeRemaining | date: 'mm:ss'}} minutos para expirar o código. </b> </p>
+          <p class="font fs-10" style="color: red;" *ngIf="codeTimeRemaining === 0">
+            <b>O código expirou. Por favor, solicite um novo código.</b>
+          </p>
         </form>
+
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary btn-block shadow" (click)="doubleAuth()" *ngIf="!sendingAuth"> Continuar</button>
-        <button type="button" class="btn btn-primary btn-block shadow "  (click)="doubleAuth()" *ngIf="sendingAuth"> <span class="animate__animated  animate__flash" #flash>Enviando ...</span></button>
+        <button type="button" class="btn btn-primary btn-block shadow "   *ngIf="sendingAuth"> <span class="animate__animated  animate__flash" #flash>Enviando ...</span></button>
         <div class="d-flex flex-column align-items-end mb-3" style="margin-top: 30px;">
       
      
           <div >
             <span class="mb-0" style="margin-right: 15px;"> <a href="register.html" class="text-center">  <i class="fas fa-window-close" style="margin-right: 2px;"></i>  Cancelar</a> </span>
-            <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fas fa-reply-all fa-flip-horizontal"></i>         
+            <span class="mb-0" > <a class="text-center cursor" (click)="resendCode()"> <i class="fas fa-reply-all fa-flip-horizontal"></i>         
               Reenviar</a> </span>
             &nbsp; &nbsp;
         </div>  

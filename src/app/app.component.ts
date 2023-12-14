@@ -33,7 +33,7 @@ export class AppComponent {
                 private cookieService : CookieService,
                 private errorService : ErrorService,
                 private localStorageService : LocalstorageService,
-                // private authService : AuthService,
+                private authService : AuthService,
                 // private store : Store <AppState>,
 
 ){
@@ -60,6 +60,8 @@ export class AppComponent {
 }
 
 ngOnInit(): void {
+
+this.authService.ipInfo().subscribe();
 
 this.localStorageService.loadInitialState();
 

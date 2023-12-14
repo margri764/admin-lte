@@ -1,11 +1,12 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { saveDataLS, saveDataSS } from 'src/app/shared/storage';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
-import { delay } from 'rxjs';
+import { Subject, delay, takeUntil, takeWhile, tap } from 'rxjs';
 import * as $ from 'jquery';
+import { SessionService } from 'src/app/shared/services/session/session.service';
 
 
 
@@ -14,7 +15,7 @@ import * as $ from 'jquery';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   @ViewChild('closeModal') closeModal! : ElementRef;
   @ViewChild('openModal') openModal! : ElementRef;
@@ -41,21 +42,31 @@ export class LoginComponent implements OnInit {
   position : boolean = false;
   sendingAuth : boolean = false;
 
+  // timer
+  private destroy$ = new Subject<void>();
+  codeTimeRemaining!: number;
 
+  
   constructor(
               private fb : FormBuilder,
               private authService : AuthService,
               private router : Router,
               private errorService : ErrorService,
+              private sessionService : SessionService,
+              private ngZone: NgZone,
+              
   )
   
   {
-  (screen.width <= 800) ? this.phone = true : this.phone = false;
+    (screen.width <= 800) ? this.phone = true : this.phone = false;
      
    }
 
+   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-  
 
   ngOnInit(): void {
 
@@ -117,12 +128,22 @@ export class LoginComponent implements OnInit {
     const password = this.myForm.get('password')?.value;
     this.isLoading = true;
     this.authService.login( email, password ).subscribe(
-      ({success})=>{
-        if(success){
-                 setTimeout(()=>{ 
-                   this.isLoading = false;
-                   this.openDoubleAuthModal(); },1200)
-                    }
+      ({success, firstlogin})=>{
+
+        if(success && firstlogin && firstlogin === "true"){
+          saveDataLS('logged', true);
+          setTimeout(()=>{ 
+              this.sendingAuth = false;
+              this.closeModal.nativeElement.click();
+              this.router.navigateByUrl('dashboard');
+            },1700)
+                
+        }else if(success && firstlogin === "false"){
+          setTimeout(()=>{ 
+            this.isLoading = false;
+            this.openDoubleAuthModal(); 
+           },1200)
+        }
         });
   }
 
@@ -153,9 +174,66 @@ export class LoginComponent implements OnInit {
 
   }
 
+  resendCode(){
+
+    this.errorService.close$.next(true);
+    this.errorService.close$.next(false);
+ 
+     if ( this.myForm.invalid ) {
+       this.myForm.markAllAsTouched();
+       return;
+     }
+ 
+     const email = this.myForm.get('email')?.value;
+     const password = this.myForm.get('password')?.value;
+     this.sendingAuth = true;
+     this.authService.login( email, password ).subscribe(
+       ({success})=>{
+ 
+         if(success ){
+           setTimeout(()=>{ 
+               this.sendingAuth = false;
+               this.sessionService.startCodeTimer();
+               this.getTimerCode();
+               },1700)
+         }
+         });
+
+  }
 
   openDoubleAuthModal() {
     this.openModal.nativeElement.click();
+    this.sessionService.startCodeTimer();
+    setTimeout(()=>{ this.getTimerCode() },500)
+    
+  }
+
+
+  getTimerCode(){
+
+    this.sessionService.getRemainigTimeCode()
+    .pipe(
+      tap((res) => {
+        this.ngZone.run(() => {
+          console.log('codeTimeRemaining:', this.codeTimeRemaining, res);
+          this.codeTimeRemaining = res;
+          // if(res === 0){
+
+          // }
+        });
+      }),
+      takeWhile(timeRemaining => timeRemaining > 0),
+      takeUntil(this.destroy$))
+      .subscribe((timeRemaining: number) => {
+      this.codeTimeRemaining = timeRemaining;
+      
+      if(timeRemaining === 0){
+      this.sessionService.startCodeTimer();
+  
+      }
+      
+    });
+
   }
 
   // por si pide una reenvio de contraseña y todavia no esta verficado  

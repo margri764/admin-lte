@@ -1,19 +1,19 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { AppState } from '../../redux/app.reducer';
 import { Store } from '@ngrx/store';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.models';
 import { environment } from 'src/environments/environment';
-import { map, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import * as authActions from 'src/app/shared/redux/auth.actions'
 import { LocalstorageService } from '../localstorage/localstorage.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnInit{
 
   token : string = '';
   user! : User;
@@ -27,6 +27,36 @@ export class AuthService {
                 private router : Router
   ) { }
 
+  ngOnInit(): void {
+  }
+
+
+  ipInfo(){
+  
+    return this.http.get<any>(`${this.baseUrl}api/auth/ipInfo`) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from ipInfo service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+  simpleCode( body : any){
+  
+    return this.http.patch<any>(`${this.baseUrl}api/auth/simpleCode`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from simpleCode service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
 
   login(email: string, password : string){
     
@@ -36,18 +66,18 @@ export class AuthService {
     return this.http.post<any>(`${this.baseUrl}api/auth/login`, body) 
     
     .pipe(
-      // tap( ( {user, token, success}) =>{
-      //                 if(success){
-      //                     this.token = token;
-      //                     this.cookieService.set('token',token);
-      //                     this.user = user;
-      //                     this.store.dispatch(authActions.setUser({user}));
-      //                     const userToLS = { name: user.Nome_Completo, role:user.role};
-      //                     this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
-      //                 }           
+      tap( ( {user, token, success, firstlogin}) =>{
+                      if(success && firstlogin && firstlogin === "true"){
+                          this.token = token;
+                          this.cookieService.set('token',token);
+                          this.user = user;
+                          this.store.dispatch(authActions.setUser({user}));
+                          const userToLS = { name: user.Nome_Completo, role:user.role};
+                          this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
+                      }           
                     
-      //           }  
-      // ),            
+                }  
+      ),            
       map( res => {console.log("from login Service: ",res);return res} )
     )
   }

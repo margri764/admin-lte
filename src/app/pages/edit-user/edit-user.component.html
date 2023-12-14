@@ -301,18 +301,24 @@
 
             <div class="tab-pane fade" id="access" role="tabpanel" aria-labelledby="access" style="padding: 20px;">
                 
+       
+
+              <!-- <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 30px;" >
+                <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="activeDeacTive($event)" [checked]="myForm.get('active')?.value === 1">
+                <label class="custom-control-label cursor" for="customSwitch1"> Ativar usúario  </label>
+              </div> -->
+
               <div class="row">
-                  <div class="input-group mb-3 mt-3" >
-                    <label style="margin-left: 0px;">Código de acceso simples</label>
-                    <div class="" style="margin-left: 30px;">
-                        <input type="checkbox"  checked data-bootstrap-switch data-off-color="danger" data-on-color="success"   >
-                    </div>
-                    <p style="color: rgb(152, 152, 152);">Esta opção permite que você insira no aplicativo com um código de 6 dígitos, caso ele seja desativado, seu código de acesso será mais complexo</p>
+                <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 0px;" >
+                  <input type="checkbox" class="custom-control-input " id="customSwitch2" (change)="simpleCode($event)" [checked]="simpleCodeSelected">
+                  <label class="custom-control-label" for="customSwitch2">Código de acceso simples</label>
                 </div>
-              </div>
-              
+                <p style="color: rgb(152, 152, 152); margin-top: 10px;">Esta opção permite que você insira no aplicativo com um código de 6 dígitos, caso ele seja desativado, seu código de acesso será mais complexo</p>
+                  
+            </div>
+            
               <div class="row" >
-                <div style="border: 1px solid rgb(197, 197, 197); width: 100%; margin-bottom: 20px; margin-top: 45px;"></div>
+                <div style="border: 1px solid rgb(197, 197, 197); width: 100%; margin-bottom: 20px; margin-top: 10px;"></div>
                 <button type="button" class="btn btn-primary shadow d-flex mr-auto "> <i class="fas fa-key"></i> &nbsp; Generar nova senha</button>
               </div>
             
@@ -354,6 +360,7 @@
       
                       <thead>
                           <tr>
+                              <th>img</th>
                               <th>Nome</th>
                               <th>Data</th>
                               <th class="text-center">Baixar</th>
@@ -362,6 +369,7 @@
                       <tbody>
                           <!-- Ejemplo 1: Activo -->
                           <tr *ngFor="let doc of arrDocument, index as i ">
+                              <td> </td>
                               <td class="cursor selected" (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack"> {{ doc.originalName }} </td>
                               <td> {{ doc.timestamp}} </td>
                               <td class="text-center"> 
