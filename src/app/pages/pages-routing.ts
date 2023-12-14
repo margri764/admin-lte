@@ -15,6 +15,7 @@ import { AlarmsComponent } from './alarms/alarms/alarms.component';
 import { GroupsComponent } from './groups/groups.component';
 import { CongregatioComponent } from './congregatio/congregatio/congregatio.component';
 import { ViewCongregatiComponent } from './view-congregatio/view-congregati/view-congregati.component';
+import { BackgroundComponent } from './background/background.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,7 @@ const routes: Routes = [
               { path: 'alarmes',  component: AlarmsComponent , data:{ title:"Alarmes"}},
               { path: 'grupos',  component: GroupsComponent , data:{ title:"Grupos"}},
               { path: 'congregatio',  component: CongregatioComponent , data:{ title:"Congregatio"}},
+              { path: 'fundos',  component: BackgroundComponent , data:{ title:"Images de fundo"}},
             ]
   }
 

@@ -63,6 +63,13 @@ select{
     line-height: 20px;
   }
 
+  .custom-size-viewer {
+    max-width: 600px;
+    height: 350px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+
   .invalid{
     color: red; 
     margin-top: 5px;

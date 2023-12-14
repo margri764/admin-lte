@@ -23,6 +23,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GroupsComponent } from './groups/groups.component';
 import { CongregatioComponent } from './congregatio/congregatio/congregatio.component';
 import { ViewCongregatiComponent } from './view-congregatio/view-congregati/view-congregati.component';
+import { BackgroundComponent } from './background/background.component';
 
 
 
@@ -42,7 +43,8 @@ import { ViewCongregatiComponent } from './view-congregatio/view-congregati/view
     AlarmsComponent,
     GroupsComponent,
     CongregatioComponent,
-    ViewCongregatiComponent
+    ViewCongregatiComponent,
+    BackgroundComponent
   ],
   exports: [
     DashboardComponent,

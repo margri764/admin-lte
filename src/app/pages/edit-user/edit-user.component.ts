@@ -211,10 +211,6 @@ simpleCodeSelected : boolean = false;
   }
 
 
-  showDocPreview(fileInfo: any): void {
-   
-  }
-  
 
   getUsersGroups( id:any ){
     this.alarmGroupService.getGroupByUserId(id).subscribe( 
@@ -400,33 +396,32 @@ simpleCodeSelected : boolean = false;
   }
   
 
-    onSelect(event: any): void {
+  onSelect(event: any): void {
 
-      const addedFiles: File[] = event.addedFiles;
-  
-      for (const file of addedFiles) {
-        this.readAndShowPDF(file);
-        this.files.push(file);
-      }
-      console.log(this.files);
+    const addedFiles: File[] = event.addedFiles;
 
+    for (const file of addedFiles) {
+      this.readAndShowPDF(file);
+      this.files.push(file);
     }
-  
-    onRemove(file: File): void {
+    console.log(this.files);
 
-      this.userService.authDelDocument$.subscribe( (emmited)=>{ 
-        if(emmited){
-            const index = this.files.indexOf(file);
-            if (index !== -1) {
-              this.files.splice(index, 1);
-        
-              if (this.selectedPdfSrc === this.pdfSrcList[index]) {
-                this.selectedPdfSrc = null;
-              }
-            }
+  }
+
+  onRemove(file: File): void {
+
+    this.userService.authDelDocument$.subscribe( (emmited)=>{ 
+      if(emmited){
+          const index = this.files.indexOf(file);
+          if (index !== -1) {
+            this.files.splice(index, 1);
+            this.pdfSrcList.splice(index, 1);
+            console.log(this.pdfSrcList);
           }
-        })
-    }
+
+        }
+      })
+  }
 
     readAndShowPDF(file: any): void {
 
