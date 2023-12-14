@@ -15,8 +15,7 @@ import { LanguageApp } from '../table.languaje';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
-import { log } from 'console';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 
@@ -152,29 +151,9 @@ simpleCodeSelected : boolean = false;
     this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers', responsive:true }
 }
 
-
-
-// activeAccount( active:any){
-
-//   this.isLoading = true;
-//   this.showSuccess = false;
-//   const email = this.myForm.get('Email')?.value;
-
-//   this.authService.activeAccount( email, active ).subscribe
-//   ( ({success})=>{
-//     if(success){
-//       this.showSuccess = true,
-//       (active === "1") ? this.msg = 'Usúario ativado com sucesso' : this.msg = 'Usúario desativado com sucesso'; 
-//       setTimeout( ()=>{ this.getUserById( this.user.iduser ); this.isLoading = false;  }, 1000);
-      
-//     }
-
-//    })   
-// }
-
-
-
   ngOnInit(): void {
+
+
 
     this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
     this.minDate.setFullYear(this.bsValue.getFullYear() - 100);
@@ -230,6 +209,12 @@ simpleCodeSelected : boolean = false;
     });
 
   }
+
+
+  showDocPreview(fileInfo: any): void {
+   
+  }
+  
 
   getUsersGroups( id:any ){
     this.alarmGroupService.getGroupByUserId(id).subscribe( 
@@ -445,6 +430,28 @@ simpleCodeSelected : boolean = false;
 
     readAndShowPDF(file: any): void {
 
+      console.log(file);
+
+      const reader = new FileReader();
+      this.loadingPdf = true;
+    
+      reader.onload = (e) => {
+        const base64Data = e.target?.result as string;
+        const downloadLink = base64Data;
+        
+        this.pdfSrcList.push({ preview: base64Data, downloadLink });
+        this.loadingPdf = false;
+      };
+    
+      reader.readAsDataURL(file);
+
+      console.log(reader);
+    }
+
+    readAndShowPDFBack(file: any): void {
+
+      console.log(file);
+
       const reader = new FileReader();
       this.loadingPdf = true;
     
@@ -541,14 +548,28 @@ simpleCodeSelected : boolean = false;
         this.fileNameBack = doc.originalName;
 
     }
+
+    thumbailsPdf(doc:any ){
+
+      const fileName = doc.filePath.split('/').pop() ;
+
+      const serverURL = 'https://arcanjosaorafael.org/documents/'; 
+      
+      console.log( `${serverURL}${fileName}`);
+       return  `${serverURL}${fileName}`;
+    }
     
 
     getDocByUserId( id:any ){
       this.isLoading = true;
       this.userService.getDocByUserId(id).subscribe(
       ( {document} )=>{
-        this.arrDocument = document;
         this.isLoading = false;
+        this.arrDocument = document;
+        this.arrDocument.forEach((doc) => {
+          this.thumbailsPdf(doc);
+        });
+
         console.log(this.arrDocument);
   
 
@@ -796,8 +817,7 @@ simpleCodeSelected : boolean = false;
 
      this.authService.simpleCode(body).subscribe();
     
-    }
-
+  }
 
    selectUser(user: any){
 
@@ -875,8 +895,6 @@ simpleCodeSelected : boolean = false;
 
 
    }
-
-  
 
    ngAfterViewInit() {
   

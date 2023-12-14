@@ -367,23 +367,19 @@
                           </tr>
                       </thead>
                       <tbody>
-                          <!-- Ejemplo 1: Activo -->
                           <tr *ngFor="let doc of arrDocument, index as i ">
-                              <td> </td>
+
+                              <td>  
+                                <pdf-viewer [src]="doc.filePath" [render-text]="true" [original-size]="false" style="width: 100%; height: 40px"></pdf-viewer>
+                              </td>
+
                               <td class="cursor selected" (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack"> {{ doc.originalName }} </td>
                               <td> {{ doc.timestamp}} </td>
                               <td class="text-center"> 
                                   <span class="badge badge-success right cursor shadow" style="padding: 6px 8px 6px 8px;" (click)="downloadPdf(doc)"> <i class="fas fa-cloud-download-alt" style="font-size: 16px;"> </i> </span> &nbsp; <span class="badge badge-danger right cursor shadow" style="padding: 6px 8px 6px 8px; " data-toggle="modal" data-target="#modalAskDelDocument" (click)="deleteDocById(doc)"> <i class="fas fa-trash-alt" style="font-size: 16px;"> </i> </span>
                               </td>
                           </tr>
-      
-<!--                          
-                          <tr>
-                              <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
-                              <td style="visibility: hidden;">zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</td>
-                              <td style="visibility: hidden;"> zzzzzzzzzzz</td>
-                          </tr> -->
-      
+
                       
                       </tbody>
                   </table>
