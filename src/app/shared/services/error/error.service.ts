@@ -37,6 +37,7 @@ export class ErrorService {
   status429Error$ : EventEmitter<response> = new EventEmitter<response>; 
   status400VerifyError$ : EventEmitter<response> = new EventEmitter<response>; 
   status401Credentials$ : EventEmitter<response401Credentials> = new EventEmitter<response401Credentials>; 
+  status401WronCode$ : EventEmitter<response> = new EventEmitter<response>; 
   backIsDown$ : EventEmitter<response> = new EventEmitter<response>; 
   
   constructor(
@@ -86,6 +87,21 @@ export class ErrorService {
         this.closeIsLoading$.emit(true);
       return of(null);
     }
+
+    if (error.status === 401 && error.error.message === "Código de autenticação incorreto") {
+      this.closeIsLoading$.emit(true);
+      this.status401WronCode$.emit({emmited: true, msg:error.error.message})
+      return of(null);
+  }
+
+  
+  if (error.status === 401 && error.error.message === "O código de autenticação expirou. É necessário um novo código") {
+    this.closeIsLoading$.emit(true);
+    this.status401WronCode$.emit({emmited: true, msg:error.error.message})
+    return of(null);
+}
+
+
 
     if (error.status === 401 && error.error.message === "Credenciais incorretas") {
        this.status401Credentials$.emit( {emmited:true, msg:error.error.message, remainingAttempts: error.error.remainingAttempts } )

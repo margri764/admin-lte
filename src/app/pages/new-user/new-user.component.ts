@@ -86,7 +86,7 @@ export class NewUserComponent implements OnInit{
         ordem: [ '', [Validators.required] ],
         name:  ['', [Validators.required]],
         lastName:  [ '', [Validators.required]],
-        Nome_Completo:  [ '', [Validators.required]],
+        Nome_Completo:  [ '' ],
         Telefone1:  [ '', [Validators.required]],
         Data_Nascimento:  [ '', [Validators.required] ],
         Email:  [ '', [Validators.required]],
@@ -146,12 +146,15 @@ export class NewUserComponent implements OnInit{
 
     onSave(){
 
-      // alert(JSON.stringify(this.myForm.value));
+      alert(JSON.stringify(this.myForm.value));
      
       if ( this.myForm.invalid ) {
         this.myForm.markAllAsTouched();
         return;
       }
+
+      alert("llego ");
+
 
       const role = this.myForm.get('role')?.value;
 

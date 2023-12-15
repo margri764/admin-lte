@@ -309,13 +309,25 @@
                       <th scope="col" style="width: 20%;"> Ip </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody *ngIf="arrLogs.length !== 0">
                     <tr *ngFor="let log of arrLogs">
                       <td > {{ log.date | date: 'dd-MM-yyyy HH:mm:ss'}}  </td>
                       <td> {{ log.city }} </td>
                       <td> {{ log.country}} </td>
                       <td> {{ log.ip}} </td>
                     </tr>
+                  </tbody>
+
+                  <tbody *ngIf="arrLogs.length === 0">
+                    <tr>
+                      <td colspan="100%" class="text-center" style="border: 1px solid;">
+                        <div class="d-flex  justify-content-center">
+                          <span class="font fs-11" style="margin-top: 30px;">O usuário ainda não acessou o site</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                  
                   
               </table>
             
@@ -511,7 +523,7 @@
                 
                   <div class="boxSelection font" style="padding: 15px;" >
                         {{ user && user.Historico_Sedes }}
-                       <span *ngIf="user?.Historico_Sedes === '' || user?.Historico_Sedes === undefined "> Sem histórico de sede para mostrar </span> 
+                       <span *ngIf="user?.Historico_Sedes === '' || user?.Historico_Sedes === undefined  || user?.Historico_Sedes === null" class="font fs-11"> Sem histórico de sede para mostrar </span> 
                   </div>
 
                </div>

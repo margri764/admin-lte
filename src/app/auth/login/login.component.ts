@@ -46,11 +46,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   // timer
   private destroy$ = new Subject<void>();
   codeTimeRemaining!: number;
-
+  msg : string = '';
+  wrongCode : boolean = false;
   arrBackground : any []=[]
-
   backgroundImage = '';
-  // backgroundImage = 'url(\'../../../assets/background-1.jpg\')';
   
   constructor(
               private fb : FormBuilder,
@@ -78,6 +77,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
 
+
   ngOnInit(): void {
     this.getInitBackground();
   
@@ -85,10 +85,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
 
-    this.errorService.status400VerifyError$.pipe(delay(1000)).subscribe( (emmited)=>{ if(emmited){ this.isLoading = false; this.noVerified = true; }  })
+    this.errorService.status400VerifyError$.pipe(delay(1000)).subscribe( (emmited)=>{ if(emmited){ this.isLoading = false; this.noVerified = true; this.noRole = false; this.wrongCode = false, this.sendingAuth = false;}  })
+
+    this.errorService.status401WronCode$.pipe(delay(1200)).subscribe(( {emmited, msg } )=>{ if(emmited) {this.wrongCode = true; this.msg= ''; this.msg = msg; this.noVerified = false, this.noRole = false; this.isLoading = false; this.sendingAuth = false;}} )
 
     // si tiene verficado el email pero falta que se le asigne un role. Muestro Toast cona aviso("Usuário sem função")
-    this.errorService.noRoleError$.subscribe( (emmited)=>{ if(emmited){  setTimeout(()=>{  this.isLoading = false; this.noRole = true; },1000)}  })
+    this.errorService.noRoleError$.subscribe( (emmited)=>{ if(emmited){  setTimeout(()=>{  this.isLoading = false; this.noRole = true; this.wrongCode = false, this.sendingAuth = false;},1000)}  })
 
 
     this.myForm = this.fb.group({
@@ -253,7 +255,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     .pipe(
       tap((res) => {
         this.ngZone.run(() => {
-          console.log('codeTimeRemaining:', this.codeTimeRemaining, res);
+      
           this.codeTimeRemaining = res;
           // if(res === 0){
 
