@@ -40,7 +40,7 @@ export class BackgroundComponent implements OnInit {
         if(success){
           this.arrBackground = backgrounds.map( (doc:any) => {
             const fileName = doc.filePath.split('/').pop();
-            const serverURL = 'https://arcanjosaorafael.org/documents/';
+            const serverURL = 'https://arcanjosaorafael.org/backgrounds/';
             return {
               ...doc,
               filePath: `${serverURL}${fileName}`
