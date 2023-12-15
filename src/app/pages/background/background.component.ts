@@ -38,7 +38,14 @@ export class BackgroundComponent implements OnInit {
     this.imageUploadService.getAllBackground().subscribe(
       ( {success, backgrounds} )=>{
         if(success){
-          this.arrBackground = backgrounds;
+          this.arrBackground = backgrounds.map( (doc:any) => {
+            const fileName = doc.filePath.split('/').pop();
+            const serverURL = 'https://arcanjosaorafael.org/documents/';
+            return {
+              ...doc,
+              filePath: `${serverURL}${fileName}`
+            };
+          });
           setTimeout(()=>{ this.isLoading= false },700)
           
         }
@@ -87,6 +94,8 @@ closeToast(){
             if(success){
               setTimeout(()=>{this.isLoading = false });
               alert('Upload bem-sucedido');
+              this.selectedFile = null;
+              this.getInitBackground();
             } }
         )
           

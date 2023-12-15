@@ -930,6 +930,20 @@ simpleCodeSelected : boolean = false;
         
   
    }
+
+   resendPassword(){
+
+    const email = this.myForm.get('Email')?.value;
+
+    if(!email || email === '')return;
+    this.isLoading = true;
+    this.authService.resendPasword(email).subscribe(
+      ( {success} )=>{
+        if(success){
+            setTimeout(()=>{ this.isLoading = false },1200)
+        }
+      })
+   }
 }
 
   

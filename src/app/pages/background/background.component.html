@@ -25,7 +25,7 @@
       <tbody>
         <tr *ngFor="let pic of arrBackground">
           <th scope="row"> {{ pic.idbackground }}  </th>
-          <td> <img src="assets/background-1.jpg" alt="" class="img-fluid"></td>
+          <td> <img [src]="[pic.filePath]" alt="" class="img-fluid"></td>
           <td class="d-flex justify-content-end" style="padding: 0px !important;"> 
               <div class="custom-control custom-switch d-flex align-items-center justify-content-center" style="margin-right: 10px;" >
                 <input type="checkbox" class="custom-control-input "  id="customSwitch{{ pic.idbackground }}" (change)="backgroundOption($event, pic.idbackground)" [checked]="pic.active">

@@ -57,7 +57,6 @@ export class AuthService implements OnInit{
     )
   }
 
-
   login(email: string, password : string){
     
     const body = { email, password }

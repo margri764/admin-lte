@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
@@ -7,6 +7,7 @@ import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { Subject, delay, takeUntil, takeWhile, tap } from 'rxjs';
 import * as $ from 'jquery';
 import { SessionService } from 'src/app/shared/services/session/session.service';
+import { ImageUploadService } from 'src/app/shared/services/ImageUpload/image-upload.service';
 
 
 
@@ -46,7 +47,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   codeTimeRemaining!: number;
 
-  backgroundImage = 'url(\'../../../assets/background-1.jpg\')';
+  arrBackground : any []=[]
+
+  backgroundImage = '';
+  // backgroundImage = 'url(\'../../../assets/background-1.jpg\')';
   
   constructor(
               private fb : FormBuilder,
@@ -55,18 +59,18 @@ export class LoginComponent implements OnInit, OnDestroy {
               private errorService : ErrorService,
               private sessionService : SessionService,
               private ngZone: NgZone,
+              private imageUploadService : ImageUploadService,
+              private cdr: ChangeDetectorRef
               
   )
   
   {
+
+
     (screen.width <= 800) ? this.phone = true : this.phone = false;
      
    }
 
-   changeBackground(): void {
-    
-    this.backgroundImage = "url('../../../assets/background-2.jpg')";
-  }
 
    ngOnDestroy(): void {
     this.destroy$.next();
@@ -75,17 +79,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    this.getInitBackground();
+  
 
-                // setTimeout(()=>{this.closeModal.nativeElement.click();},3000)
 
     this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
 
-
     this.errorService.status400VerifyError$.pipe(delay(1000)).subscribe( (emmited)=>{ if(emmited){ this.isLoading = false; this.noVerified = true; }  })
-
 
     // si tiene verficado el email pero falta que se le asigne un role. Muestro Toast cona aviso("Usuário sem função")
     this.errorService.noRoleError$.subscribe( (emmited)=>{ if(emmited){  setTimeout(()=>{  this.isLoading = false; this.noRole = true; },1000)}  })
+
 
     this.myForm = this.fb.group({
       email:     [ '', [Validators.required] ],
@@ -117,6 +121,34 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
 
+  }
+
+
+  changeBackground(): void {
+    var fondoAleatorio =  this.arrBackground[Math.floor(Math.random() * this.arrBackground.length)];
+    this.backgroundImage = fondoAleatorio.filePath;
+    this.cdr.detectChanges();
+  }
+
+
+  getInitBackground(){
+    this.isLoading = true;
+    this.imageUploadService.getAllBackground().subscribe(
+      ( {success, backgrounds} )=>{
+        if(success){
+          this.arrBackground = backgrounds.map( (doc:any) => {
+            const fileName = doc.filePath.split('/').pop();
+            const serverURL = 'https://arcanjosaorafael.org/documents/';
+            return {
+              ...doc,
+              filePath: `${serverURL}${fileName}`
+            };
+          });
+          this.changeBackground()
+          setTimeout(()=>{ this.isLoading= false },700)
+          
+        }
+      })
   }
 
   login(){
