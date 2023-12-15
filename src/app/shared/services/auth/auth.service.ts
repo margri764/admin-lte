@@ -31,13 +31,26 @@ export class AuthService implements OnInit{
   }
 
 
-  ipInfo(){
+  getUserLogs( id:any ){
   
-    return this.http.get<any>(`${this.baseUrl}api/auth/ipInfo`) 
+    return this.http.get<any>(`${this.baseUrl}api/auth/getUserLogs/${id}`) 
     
     .pipe(
       tap( ( res) =>{
-                    console.log("from ipInfo service: ",res);
+                    console.log("from ipgetUserLogsInfo service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+  setUserLogs( body:any ){
+  
+    return this.http.post<any>(`${this.baseUrl}api/auth/setUserLogs`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from setUserLogs service: ",res);
                 }  
       ),            
       map( res => res )
@@ -92,7 +105,7 @@ export class AuthService implements OnInit{
                           this.cookieService.set('token',token);
                           this.user = user;
                           this.store.dispatch(authActions.setUser({user}));
-                          const userToLS = { name: user.Nome_Completo, role:user.role};
+                          const userToLS = { name: user.Nome_Completo, role:user.role, email: user.Email};
                           this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
                       }           
                     

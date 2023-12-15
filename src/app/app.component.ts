@@ -7,7 +7,7 @@ import { AuthService } from './shared/services/auth/auth.service';
 import { ErrorService } from './shared/services/error/error.service';
 import { getDataLS, getDataSS } from './shared/storage';
 import { LocalstorageService } from './shared/services/localstorage/localstorage.service';
-import { delay } from 'rxjs';
+import { delay, filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -33,8 +33,9 @@ export class AppComponent {
                 private cookieService : CookieService,
                 private errorService : ErrorService,
                 private localStorageService : LocalstorageService,
+                private store : Store <AppState>,
+
                 private authService : AuthService,
-                // private store : Store <AppState>,
 
 ){
 
@@ -61,7 +62,8 @@ export class AppComponent {
 
 ngOnInit(): void {
 
-this.authService.ipInfo().subscribe();
+
+
 
 this.localStorageService.loadInitialState();
 

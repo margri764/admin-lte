@@ -122,6 +122,8 @@ idUser : any;
 disableOrdem : boolean = false;
 simpleCodeSelected : boolean = false;
 
+arrLogs : any []=[];
+
 
 
   constructor(
@@ -275,6 +277,7 @@ simpleCodeSelected : boolean = false;
           this.getUsersGroups(id);
           this.getDocByUserId(user.iduser);
           this.getAlarmByUser(user.iduser);
+          this.getUserLogs();
           if(user.simpleCode === 1){
             this.simpleCodeSelected = true;
           }
@@ -289,6 +292,17 @@ simpleCodeSelected : boolean = false;
         }
       })
   }
+
+  getUserLogs(){
+    this.authService.getUserLogs( this.user.iduser ).subscribe(
+      ( {success, logs} )=>{
+        if(success){
+          this.arrLogs = logs
+        }
+      })
+  }
+  
+
 
   onSave(){
 
@@ -504,7 +518,6 @@ simpleCodeSelected : boolean = false;
    
       return new Uint8Array();
     }
-    // no pude lograr q ande asi-----------------------------------------------------------
 
     onViewClick(name: string, index: number): void {
       if (this.pdfSrcList[index]) {
@@ -528,8 +541,6 @@ simpleCodeSelected : boolean = false;
       }
     }
 
-
-    // este va en prod
       
     onView( doc:any ){
 
