@@ -21,6 +21,7 @@ export class BackgroundComponent implements OnInit {
               private imageUploadService : ImageUploadService,
               private errorService : ErrorService
   ) { 
+    
   (screen.width <= 800) ? this.phone = true : this.phone = false;
 
   }
@@ -46,6 +47,8 @@ export class BackgroundComponent implements OnInit {
               filePath: `${serverURL}${fileName}`
             };
           });
+
+          console.log( this.arrBackground);
           setTimeout(()=>{ this.isLoading= false },700)
           
         }
