@@ -146,14 +146,12 @@ export class NewUserComponent implements OnInit{
 
     onSave(){
 
-      alert(JSON.stringify(this.myForm.value));
      
       if ( this.myForm.invalid ) {
         this.myForm.markAllAsTouched();
         return;
       }
 
-      alert("llego ");
 
 
       const role = this.myForm.get('role')?.value;

@@ -281,13 +281,13 @@ arrLogs : any []=[];
           if(user.simpleCode === 1){
             this.simpleCodeSelected = true;
           }
-
+          
           this.idUser = id;
           if(user.Ruta_Imagen !== '' && user.Ruta_Imagen !== null ){
             this.pathImg = user.Ruta_Imagen;
           }
           (user.linkCongregatio === 1) ? this.isLinkedToCongregatio = true : this.isLinkedToCongregatio = false; 
-
+          
 
         }
       })
