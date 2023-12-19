@@ -82,7 +82,7 @@
                     <tr >
                         <th>Nome</th>
                         <th >Nome alarme</th>
-                        <th>Descrição</th>
+                        <th>Texto do alarme</th>
                         <th>Data</th>
                         <th>Ação</th>
                     </tr>
@@ -92,11 +92,15 @@
                         <td ><a [routerLink]="['/dashboard/editar-usuario/',pes.iduser]"> {{pes.Nome_Completo }} </a></td>
                         <td > {{ pes.name }} </td>
                         <td> {{ pes.description }} </td>
-                        <td> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
-                        <td>
-                          <i class="far fa-edit " style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;"(click)="editPessoalAlarm(pes)"  data-toggle="modal" data-target="#modalEditGroup" ></i>
-                          <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelAlarm" (click)="onRemove(pes)"></i>
-                        </td>
+                        <td class="align-top"> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
+                        <td class="d-flex align-items-center justify-content-start" style="align-items: start;">
+                          <i class="fas fa-pencil-alt" style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;"   data-toggle="modal" data-target="#modalEditGroup"   [ngbTooltip]="'Editar alarme'"  ></i>
+  
+                          <i class="far fa-play-circle" style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(27, 188, 24); margin-right: 5px;"  [ngbTooltip]="'Ativar alarme'" *ngIf="pes.status === 'paused'" (click)="activePauseAlarm(pes, 'active')" ></i>
+  
+                          <i class="far fa-pause-circle " style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(0, 123, 255); margin-right: 5px;" [ngbTooltip]="'Pausar alarme'" *ngIf="pes.status !== 'paused'" (click)="activePauseAlarm(pes, 'paused')" ></i> 
+  
+                          <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; color: red; margin-left: 5px;"[ngbTooltip]="'Excluir alarme'" (click)="onRemove(pes)" data-toggle="modal"  data-target="#modalAskDelAlarm"></i>
                     </tr>
                 </tbody>
             </table>
@@ -118,7 +122,7 @@
                   <tr >
                       <th>Grupos</th>
                       <th>Nome alarme</th>
-                      <th>Descrição</th>
+                      <th>Texto do alarme</th>
                       <th>Data</th>
                       <th>Ação</th>
                   </tr>
@@ -130,10 +134,17 @@
                       </span></td>
                       <td> {{ pes.name }} </td>
                       <td> {{ pes.description }} </td>
-                      <td> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
-                      <td>
-                        <i class="far fa-edit " style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;"(click)="editPessoalAlarm(pes)"  data-toggle="modal" data-target="#modalEditGroup" ></i>
-                        <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelAlarm" (click)="onRemove(pes)"></i>
+                      <td class="align-top"> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
+                      <td class="d-flex align-items-center">
+           
+                        <i class="fas fa-pencil-alt" style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;" (click)="editPessoalAlarm(pes)"  data-toggle="modal" data-target="#modalEditGroup" [ngbTooltip]="'Editar alarme'"   ></i>
+
+                        <i class="far fa-play-circle" style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(27, 188, 24); margin-right: 5px;"  [ngbTooltip]="'Ativar alarme'" *ngIf="pes.status === 'paused'" ></i>
+
+                        <i class="far fa-pause-circle " style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(0, 123, 255); margin-right: 5px;" [ngbTooltip]="'Pausar alarme'" *ngIf="pes.status !== 'paused'"></i> 
+
+                        <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; color: red; margin-left: 5px;"[ngbTooltip]="'Excluir alarme'" (click)="onRemove(pes)" data-toggle="modal"  data-target="#modalAskDelAlarm"></i>
+                     
                       </td>
                   </tr>
 
@@ -203,7 +214,7 @@
                 <div *ngFor="let item of suggested"   >
                   
                   <div class="font selectUser"  (click)="selectUser(item)">   
-                     <img class="img-fluid" [src]="item.Ruta_Imagen ?? 'assets/no-image.jpg'" alt="Foto do Perfil do Usuário" width="40px" >
+                     <img class="img-fluid br-6"  [src]="item.Ruta_Imagen ?? 'assets/no-image.jpg'" alt="Foto do Perfil do Usuário" width="40px" >
                      &nbsp; {{ item.Nome_Completo }}
                   </div>
                 </div>
@@ -258,7 +269,7 @@
             </div>
 
             <div class="input-group mb-3" >
-              <label class="text w-100"> Descrição </label>
+              <label class="text w-100"> Texto do alarme </label>
                 <textarea class="form-control " formControlName="description" [attr.disabled]="(!pessoal && !grupal) ? '' : null"></textarea>
 
             </div>

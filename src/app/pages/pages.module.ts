@@ -24,8 +24,9 @@ import { GroupsComponent } from './groups/groups.component';
 import { CongregatioComponent } from './congregatio/congregatio/congregatio.component';
 import { ViewCongregatiComponent } from './view-congregatio/view-congregati/view-congregati.component';
 import { BackgroundComponent } from './background/background.component';
+import { ViewGroupComponent } from './modals/view-group/view-group/view-group.component';
 
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { BackgroundComponent } from './background/background.component';
     GroupsComponent,
     CongregatioComponent,
     ViewCongregatiComponent,
-    BackgroundComponent
+    BackgroundComponent,
+    ViewGroupComponent
   ],
   exports: [
     DashboardComponent,
@@ -63,6 +65,7 @@ import { BackgroundComponent } from './background/background.component';
     BsDatepickerModule.forRoot(),
     NgxDropzoneModule,
     PdfViewerModule,
+    NgbModule
 
   ]
 })

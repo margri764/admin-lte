@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, OnInit, Renderer2 } from '@angular/core';
 import { AppState } from '../../redux/app.reducer';
 import { Store } from '@ngrx/store';
 import { CookieService } from 'ngx-cookie-service';
@@ -13,7 +13,7 @@ import { LocalstorageService } from '../localstorage/localstorage.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements OnInit{
+export class AuthService {
 
   token : string = '';
   user! : User;
@@ -27,8 +27,8 @@ export class AuthService implements OnInit{
                 private router : Router
   ) { }
 
-  ngOnInit(): void {
-  }
+
+
 
 
   getUserLogs( id:any ){
@@ -79,6 +79,7 @@ export class AuthService implements OnInit{
     
     .pipe(
       tap( ( {user, token, success, firstlogin}) =>{
+        
                       if(success && firstlogin && firstlogin === "true"){
                           this.token = token;
                           this.cookieService.set('token',token);

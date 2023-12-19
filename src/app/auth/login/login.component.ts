@@ -5,7 +5,6 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { saveDataLS, saveDataSS } from 'src/app/shared/storage';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { Subject, delay, takeUntil, takeWhile, tap } from 'rxjs';
-import * as $ from 'jquery';
 import { SessionService } from 'src/app/shared/services/session/session.service';
 import { ImageUploadService } from 'src/app/shared/services/ImageUpload/image-upload.service';
 
@@ -48,6 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   codeTimeRemaining!: number;
   msg : string = '';
   wrongCode : boolean = false;
+  showCron : boolean = true;
   arrBackground : any []=[]
   backgroundImage = '';
   
@@ -71,12 +71,13 @@ export class LoginComponent implements OnInit, OnDestroy {
    }
 
 
+  //  me desuscribo al timer
    ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-
+counter : number = 0;
 
   ngOnInit(): void {
     this.getInitBackground();
@@ -87,7 +88,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.errorService.status400VerifyError$.pipe(delay(1000)).subscribe( (emmited)=>{ if(emmited){ this.isLoading = false; this.noVerified = true; this.noRole = false; this.wrongCode = false, this.sendingAuth = false;}  })
 
-    this.errorService.status401WronCode$.pipe(delay(1200)).subscribe(( {emmited, msg } )=>{ if(emmited) {this.wrongCode = true; this.msg= ''; this.msg = msg; this.noVerified = false, this.noRole = false; this.isLoading = false; this.sendingAuth = false;}} )
+    this.errorService.status401WronCode$.pipe(delay(1200)).subscribe(( {emmited, msg } )=>{ if(emmited) {console.log("Se disparo", this.counter, "vez" ); this.wrongCode = true; this.msg= ''; this.msg = msg; if(this.msg = "O código de autenticação expirou. É necessário um novo código"){ this.destroy$.next(); this.destroy$.complete(); this.showCron = false  } this.noVerified = false, this.noRole = false; this.isLoading = false; this.sendingAuth = false; this.counter ++;}} )
 
     // si tiene verficado el email pero falta que se le asigne un role. Muestro Toast cona aviso("Usuário sem função")
     this.errorService.noRoleError$.subscribe( (emmited)=>{ if(emmited){  setTimeout(()=>{  this.isLoading = false; this.noRole = true; this.wrongCode = false, this.sendingAuth = false;},1000)}  })
@@ -126,6 +127,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
 
+
   changeBackground(): void {
     var fondoAleatorio =  this.arrBackground[Math.floor(Math.random() * this.arrBackground.length)];
     this.backgroundImage = fondoAleatorio.filePath;
@@ -155,7 +157,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   login(){
 
-   this.changeModalsStates(),
    this.errorService.close$.next(true);
    this.errorService.close$.next(false);
 
@@ -175,9 +176,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           setTimeout(()=>{ 
               this.sendingAuth = false;
               this.closeModal.nativeElement.click();
-              this.router.navigateByUrl('dashboard');
+              saveDataLS("shouldReloadPage", "true")
+              this.router.navigateByUrl('/');
             },1700)
-                
+              
         }else if(success && firstlogin === "false"){
           setTimeout(()=>{ 
             this.isLoading = false;
@@ -188,7 +190,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   doubleAuth(){
-    
+
+
     const code = this.myFormCode.get('code')?.value;
     const email = this.myForm.get('email')?.value;
     const body = { code, email };
@@ -207,7 +210,8 @@ export class LoginComponent implements OnInit, OnDestroy {
                 setTimeout(()=>{ 
                     this.sendingAuth = false;
                     this.closeModal.nativeElement.click();
-                    this.router.navigateByUrl('dashboard');
+                    saveDataLS("shouldReloadPage", "true")
+                    this.router.navigateByUrl('/');
                   },1700)
                 }
               });
@@ -218,12 +222,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.errorService.close$.next(true);
     this.errorService.close$.next(false);
+    this.changeModalsStates();
  
      if ( this.myForm.invalid ) {
        this.myForm.markAllAsTouched();
        return;
      }
- 
+     this.myFormCode.get('code')?.setValue('');
      const email = this.myForm.get('email')?.value;
      const password = this.myForm.get('password')?.value;
      this.sendingAuth = true;
@@ -234,6 +239,7 @@ export class LoginComponent implements OnInit, OnDestroy {
            setTimeout(()=>{ 
                this.sendingAuth = false;
                this.sessionService.startCodeTimer();
+               this.showCron = true;
                this.getTimerCode();
                },1700)
          }
@@ -255,21 +261,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     .pipe(
       tap((res) => {
         this.ngZone.run(() => {
-      
           this.codeTimeRemaining = res;
-          // if(res === 0){
-
-          // }
         });
       }),
       takeWhile(timeRemaining => timeRemaining > 0),
       takeUntil(this.destroy$))
       .subscribe((timeRemaining: number) => {
       this.codeTimeRemaining = timeRemaining;
-      
       if(timeRemaining === 0){
       this.sessionService.startCodeTimer();
-  
       }
       
     });
@@ -369,6 +369,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.successContactUs = false;
       this.successResendPass = false;
       this.showResendPass = false;
+      this.wrongCode = false;
+      this.showCron = false;
+      this.destroy$.next();
+      this.destroy$.complete();
    }
 
    validField(field: string) {

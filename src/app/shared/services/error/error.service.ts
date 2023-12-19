@@ -123,14 +123,13 @@ export class ErrorService {
  }
 
 
-    if (error.status === 401) {
-      this.logout();
-      this.openDialogLogin();
-      this.close$.next(true);
-      this.close$.next(false);
-      // this.closeIsLoading$.emit(true);
-      return of(null);
-    }
+    // if (error.status === 401) {
+    //   this.logout();
+    //   this.openDialogLogin();
+    //   this.close$.next(true);
+    //   this.close$.next(false);
+    //   return of(null);
+    // }
 
 
   if (error.status === 500 && error.error.error === 'Usuário não encontrado' ) {

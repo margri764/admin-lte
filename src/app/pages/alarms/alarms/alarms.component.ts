@@ -28,8 +28,6 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
   @Output() onEnter   : EventEmitter<string> = new EventEmitter();
   debouncer: Subject<string> = new Subject();
 
-  @ViewChild(DataTableDirective, { static: false }) dtElement!: DataTableDirective;
-
 
       // start search
   itemSearch : string = '';
@@ -58,9 +56,15 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
    isHovered: boolean = false;
    isHovered2: boolean = false;
    isHovered3: boolean = false;
+
    dtOptions: DataTables.Settings = {};
    dtTrigger: Subject<any> = new Subject();
    dtTrigger2: Subject<any> = new Subject();
+   dtElement1!: DataTableDirective;
+   dtElement2!: DataTableDirective;
+   isDtInitialized1:boolean = false;
+   isDtInitialized2:boolean = false;
+ 
    groupSelection : boolean = false;
    userSelection : boolean = false;
    user : any | null;
@@ -170,11 +174,24 @@ initDtOptions(): void {
 
 initPersonalAlarms(){
 
+  this.isLoading = true;
+
   this.alarmGroupService.getAllPersonalAlarms().subscribe(
     ( {success, personalAlarms} )=>{
       if(success){
+     
+        setTimeout(()=>{ this.isLoading = false },1200)
+
       this.personalAlarms = personalAlarms;
-      this.dtTrigger2.next(null);
+      if (this.isDtInitialized2) {
+        this.dtElement2.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.destroy();
+          this.dtTrigger2.next(null);
+        });
+      } else {
+        this.isDtInitialized2 = true
+        this.dtTrigger2.next(null);
+      }
       this.isLoading = false;
       }
     })  
@@ -206,48 +223,6 @@ selectPessoalOrGrupal( option:string ){
 
   }
 }
-
-
-// dtInstance!: DataTables.Api;
-
-// showPessoalAlarmsOrGrupal( alarm : string ){
-
-//    this.dtTrigger.unsubscribe();
-//    this.dtTrigger2.unsubscribe();
- 
-//    if (this.dtElement && this.dtElement.dtInstance) {
-//     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-//       dtInstance.destroy();
-//     });
-//   }
- 
-//   switch (alarm) {
-//     case 'pessoal':
-//                   this.showPessoalAlarms = true;
-//                   this.showGrupalAlarms = false;
-//                   this.dtTrigger2 = new Subject();
-//                   this.initDtOptions();  
-                  
-//       break;
-
-//     case 'grupal':
-//                   this.showGrupalAlarms = true;
-//                   this.showPessoalAlarms = false;
-//                   this.dtTrigger = new Subject();
-//                   this.initDtOptions();  
-//     break;
-  
-//     default:
-        
-//       break;
-//   }
-
-//   if (this.dtElement && this.dtElement.dtInstance) {
-//     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-//       this.dtInstance = dtInstance;
-//     });
-//   }
-// }
 
 
 onSave(){
@@ -343,7 +318,6 @@ onSave(){
 
 }
 
-
 onRemove( alarm:any ){
 
   let id: any;
@@ -383,6 +357,19 @@ continue( ){
 
 editPessoalAlarm( alarm:any ){
 
+}
+
+activePauseAlarm( alarm:any, action:string ){
+
+
+  this.alarmGroupService.activePauseAlarm( alarm.idalarm, action).subscribe( 
+    ( {success})=>{
+          if(success){
+                     
+            this.initPersonalAlarms();
+    
+          }
+    } )
 }
 
 closeToast(){

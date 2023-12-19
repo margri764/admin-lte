@@ -46,7 +46,7 @@ export class SessionService {
 
   getSessionTimeRemaining(): number {
     const now = new Date();
-    const sessionDuration = 10 * 10 * 1000; // Duración de la sesión en milisegundos (por ejemplo, 30 minutos)
+    const sessionDuration = 10 * 10 * 1000; 
     const elapsedTime = now.getTime() - this.sessionStartTime.getTime();
     const timeRemaining = sessionDuration - elapsedTime;
     return timeRemaining > 0 ? timeRemaining : 0;
@@ -56,7 +56,7 @@ export class SessionService {
   getCodeTimeRemaining(): number {
     const now = new Date();
     // const sessionDuration = 1 * 10 * 1000; 
-    const sessionDuration = 30 * 10 * 1000; 
+    const sessionDuration =  5 * 60 * 1000; 
     const elapsedTime = now.getTime() - this.codeStartTime.getTime();
     const timeRemaining = sessionDuration - elapsedTime;
     return timeRemaining > 0 ? timeRemaining : 0;

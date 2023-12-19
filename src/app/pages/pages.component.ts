@@ -10,6 +10,16 @@ export class PagesComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
+    const shouldReloadPage = localStorage.getItem('shouldReloadPage');
+    if (shouldReloadPage !== 'false') {
+      this.reloadPage();
+      localStorage.setItem('shouldReloadPage', 'false');
+    }
+  }
+
+  reloadPage(): void {
+    window.location.reload();
   }
 
 }

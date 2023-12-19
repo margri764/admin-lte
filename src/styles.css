@@ -115,3 +115,17 @@ body .bs-datepicker-container .bs-datepicker-head {
   background-color: white;
 }
 
+.br-6{
+  border-radius: 6px;
+}
+
+.br-7{
+  border-radius: 7px;
+}
+
+.br-10{
+  border-radius: 10px;
+}
+
+
+

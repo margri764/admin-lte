@@ -1,19 +1,28 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject, delay } from 'rxjs';
+import { Subject, debounceTime, delay, takeUntil } from 'rxjs';
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { LanguageApp } from '../table.languaje';
+// import * as $ from 'jquery';
+// import 'datatables.net';
+// import 'datatables.net-bs4';
+// import '@types/datatables.net';
+import { DataTableDirective } from 'angular-datatables';
+
 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.css']
 })
-export class GroupsComponent implements OnInit {
+export class GroupsComponent implements OnInit, OnDestroy {
 
   @ViewChild('closebutton') closebutton! : ElementRef;
   @ViewChild('closebutton2') closebutton2! : ElementRef;
+
+
+ 
 
   groups : any[]=[];
   isLoading : boolean = false;
@@ -21,16 +30,29 @@ export class GroupsComponent implements OnInit {
   myFormEdit!: FormGroup;
   showSuccess : boolean = false;
   showSuccessCreateGroup : boolean = false;
-  phone : boolean = false;
   msg : string = '';
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
+  dtTrigger2: Subject<any> = new Subject();
+  dtElement!: DataTableDirective;
+  dtElement2!: DataTableDirective;
+  isDtInitialized:boolean = false;
+  isDtInitialized2:boolean = false;
+
+  private unsubscribe$: Subject<void> = new Subject<void>();
+  tempId= null;
+  usersGroup : any []=[];
+  selectedGroup = {name: '', length: 0};
+  phone : boolean = false;
+  groupID : any;
+
+
 
 
   constructor(
               private errorService : ErrorService,
               private fb : FormBuilder,
-              private alarmGroupService : AlarmGroupService 
+              private alarmGroupService : AlarmGroupService,
     
               ) 
 
@@ -48,8 +70,10 @@ export class GroupsComponent implements OnInit {
     });
 
 
+
     (screen.width <= 800) ? this.phone = true : this.phone = false;
    }
+
 
 
   ngOnInit(): void {
@@ -58,7 +82,35 @@ export class GroupsComponent implements OnInit {
     this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
     this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers', responsive: true }
 
+
+    
   }
+
+
+
+getUsersGroup( group:any ){
+
+  this.alarmGroupService.getUsersFromGroup(group.idgroup)
+  .subscribe(
+    ( {success, users} )=>{
+      if(success){
+        this.usersGroup = users;
+        this.selectedGroup = {name:group.name, length: users.length};
+        this.groupID = group.idgroup;
+
+
+        if (this.isDtInitialized) {
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger2.next(null);
+          });
+        } else {
+          this.isDtInitialized = true
+          this.dtTrigger2.next(null);
+        }
+      }
+    })
+}
 
 
 onSave(){
@@ -78,7 +130,6 @@ onSave(){
     })
 }
 
-tempId= null;
 
 editGroup( group:any ){
   console.log(group);
@@ -136,6 +187,7 @@ getInitialGroups(){
 
   this.alarmGroupService.getAllGroups().subscribe(
     ( {success, groups} )=>{
+      console.log(groups);
       if(success){
         this.groups = groups;
         this.dtTrigger.next(null);
@@ -143,8 +195,6 @@ getInitialGroups(){
       }
     })
 }
-
-
 
 onRemove( group:any ){
 
@@ -174,13 +224,64 @@ onRemove( group:any ){
 
 }
 
+removeUserFromGroup( group:any ){
+
+
+  this.alarmGroupService.authDelUserGroup$.subscribe(
+    (auth)=>{
+      if(auth){
+        this.isLoading = true;
+        this.alarmGroupService.deleteUserFromGroup( group.idusersgroups ).subscribe(
+          ( {success} )=>{
+            setTimeout(()=>{ this.isLoading = false },700)
+            if(success){
+
+                this.usersGroup = this.usersGroup .filter(a => a.idusersgroups !== group.idusersgroups);
+            
+
+              
+            }
+          })
+      }
+    })
+
+}
+
 continue( ){
   this.alarmGroupService.authDelGroup$.emit(true);
+}
+
+continueUserDel( ){
+  this.alarmGroupService.authDelUserGroup$.emit(true);
 }
 
 closeToast(){
   this.showSuccess = false;
 }
+
+
+ngOnDestroy(): void {
+  // if (this.dtTrigger) {
+  //   this.dtTrigger.unsubscribe();
+  //   this.dtTrigger.complete();
+  // }
+
+  // if (this.dtTrigger2) {
+  //   this.dtTrigger2.unsubscribe();
+  //   this.dtTrigger2.complete();
+  // }
+
+  // if (this.dtElement && this.dtElement.dtInstance) {
+  //   this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+  //     dtInstance.destroy();
+  //   });
+  // }
+
+
+}
+
+
+
 
 
 }

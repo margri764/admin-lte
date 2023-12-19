@@ -11,6 +11,7 @@ export class AlarmGroupService {
   private baseUrl = environment.baseUrl;
 
   authDelGroup$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  authDelUserGroup$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authDelAlarm$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
 
   constructor(
@@ -77,6 +78,36 @@ export class AlarmGroupService {
 
   }
 
+  getUsersFromGroup( id:any ){
+    
+    return this.http.get<any>(`${this.baseUrl}api/group/getUsersFromGroup/${id}`) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getUsersFromGroup service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+  searchUserInGroup( id:any, query:any ){
+    
+    return this.http.get<any>(`${this.baseUrl}api/group/searchUserInGroup/${id}?querySearch= ${query}`) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from searchUserInGroup service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+ 
+
   getAllGrupalAlarms(){
     
     return this.http.get<any>(`${this.baseUrl}api/alarm/getAllGrupalAlarms`) 
@@ -119,6 +150,38 @@ export class AlarmGroupService {
 
   }
 
+  activePauseAlarm( id:any, action:any ){
+    
+    return this.http.patch<any>(`${this.baseUrl}api/alarm/activePauseAlarm/${id}?action=${action}`, null) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from activePauseAlarm service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+  
+  deleteUserFromGroup( id:any ){
+    
+    return this.http.patch<any>(`${this.baseUrl}api/group/deleteUserFromGroup/${id}`, null) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from deleteUserFromGroup service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+  
+
+  
 
   getAllGroups(){
     

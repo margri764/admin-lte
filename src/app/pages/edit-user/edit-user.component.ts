@@ -207,7 +207,7 @@ arrLogs : any []=[];
       Nome_da_sede:  [ '', [Validators.required]],
       linkCongregatio: [ false],
       active: [''],
-      simpleCode: [''],
+      simpleCode: [0],
     });
 
   }

@@ -25,19 +25,20 @@ import { PagesModule } from './pages/pages.module';
 import { AuthModule } from './auth/auth.module';
 import { environment } from 'src/environments/environment';
 import { InterceptorService } from './shared/services/interceptor/interceptor.service';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NoPageFoundComponent
+    NoPageFoundComponent,
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    PagesModule,
+    HttpClientModule,
     AuthModule,
+    PagesModule,
     DataTablesModule,
     NgxDropzoneModule,
     PdfViewerModule,

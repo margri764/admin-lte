@@ -211,11 +211,14 @@
             <div *ngIf="validFieldCode('code')" class="invalid" > Dado obrigatório </div>
 
           </div>
-          <p class="font fs-10" *ngIf="codeTimeRemaining && codeTimeRemaining !== 0"> <b> Faltam {{codeTimeRemaining | date: 'mm:ss'}} minutos para expirar o código. </b> </p>
-          <p class="font fs-10" style="color: red;" *ngIf="codeTimeRemaining === 0">
-            <b>O código expirou. Por favor, solicite um novo código.</b>
-          </p>
+          <div *ngIf="showCron">
+            <p class="font fs-10" *ngIf="codeTimeRemaining && codeTimeRemaining !== 0"> <b> Faltam {{codeTimeRemaining | date: 'mm:ss'}} minutos para expirar o código. </b> </p>
+            <p class="font fs-10" style="color: red;" *ngIf="codeTimeRemaining === 0">
+              <b>O código expirou. Por favor, solicite um novo código.</b>
+            </p>
+          </div>
         </form>
+        
 
 
       </div>

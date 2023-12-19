@@ -14,6 +14,12 @@
   transform: rotate(90deg);
   transition-duration: 0.8s;
 }
+.selected:hover{
+  color: rgb(0, 128, 255);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 
 #custom-toast {
     position: fixed;
