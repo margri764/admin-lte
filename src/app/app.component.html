@@ -15,14 +15,15 @@
     <h5 ><i class="icon fas fas fa-user-lock"></i> Credenciais incorretas!</h5>
     {{msg}}
     <span class="font fs-12 w-100">Você tem mais {{ remainingAttemps}} tentativas para inserir a senha corretamente</span>
-
-    <!-- 401 status -->
-    <div id="custom-toast" class="alert alert-danger alert-dismissible " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showBackDown"  >
-      <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5 style="font-size: 1.2em;"><i class="icon fas fas fa-user-lock"></i> Error!</h5>
-      <span class="font fs-12 w-100"> {{msg}}lorem </span> 
-
-      <!-- <p class="cursor mt-1" style="color: blue;" data-toggle="modal" data-target="#exampleModalCenter">Entre em contato conosco</p> -->
     </div>
+
+    
+   <!-- 429 status -->
+   <div id="custom-toast" class="alert alert-danger alert-dismissible" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="show429"  >
+    <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5 ><i class="icon fas fas fa-user-lock"></i> Espere!</h5>
+    {{msg}}
+    </div>
+
 
 

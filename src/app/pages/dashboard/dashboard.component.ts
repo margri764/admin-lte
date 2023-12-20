@@ -34,30 +34,22 @@ export class DashboardComponent implements OnInit {
 
   this.errorService.closeIsLoading$.subscribe((emmited)=>{if(emmited){this.isLoading = false}});
   
-      this.authService.getRequestedPermissions().subscribe(
-        ({success, requests})=>{
-          if(success){
-            this.reqRegister = requests;
-            this.reqLength = requests.length;
-          }
-        })
+   
 
   //         this.store.dispatch(authActions.setUser({user}));
   // const userToLS = { name: user.Nome_Completo, role:user.role};
   // this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
 
-  // this.store.select('auth')
-  // .pipe(
-  //   filter( ({user})=>  user != null && user != undefined),
-  // ).subscribe(
-  //   ({user})=>{
-  //     this.user = { nombre:user?.nombre, permisos:user?.permisos} ;
-  //     this.isLoading = false;
-  //   })
+  this.store.select('auth')
+  .pipe(
+    filter( ({user})=>  user != null && user != undefined),
+  ).subscribe(
+    ()=>{
+      this.getRequestedPermissions()
+      this.isLoading = false;
+    })
 
   this.setUserLogs();
-     
-    
   
   }
 
@@ -67,6 +59,17 @@ export class DashboardComponent implements OnInit {
      const body = { email: user.email}
     this.authService.setUserLogs(body).subscribe(
       ( {success} )=>{})
+  }
+
+  getRequestedPermissions(){
+
+  this.authService.getRequestedPermissions().subscribe(
+    ({success, requests})=>{
+      if(success){
+        this.reqRegister = requests;
+        this.reqLength = requests.length;
+      }
+    })
   }
 
 

@@ -1,8 +1,8 @@
 import { ThisReceiver } from '@angular/compiler';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { Subject, debounceTime } from 'rxjs';
+import { Subject, debounceTime, delay } from 'rxjs';
 import { LanguageApp } from 'src/app/pages/table.languaje'
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
@@ -10,6 +10,8 @@ import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { DataTableDirective } from 'angular-datatables';
+import { Alarm } from 'src/app/shared/interfaces/alarm.interface';
+import { ErrorService } from 'src/app/shared/services/error/error.service';
 
 
 @Component({
@@ -22,6 +24,8 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
   @ViewChild('groupSelect') groupSelect! : ElementRef;
   @ViewChild('excluir') excluir! : ElementRef;
   @ViewChild('closebutton') closebutton! : ElementRef;
+  @ViewChild('closebuttonEdit') closebuttonEdit! : ElementRef;
+  @Input() userViewModal: any;
 
   // start search
   @Output() onDebounce: EventEmitter<string> = new EventEmitter();
@@ -29,10 +33,11 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
   debouncer: Subject<string> = new Subject();
 
 
-      // start search
+
+  // start search
   itemSearch : string = '';
   mostrarSugerencias: boolean = false;
-  sugested : string= "";
+  showSuggested : boolean = false;
   suggested : any[] = [];
   spinner : boolean = false;
   fade : boolean = false;
@@ -48,6 +53,8 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
 
    myForm!: FormGroup;
    myFormSearch!: FormGroup;
+   myFormEditPersAlarm!: FormGroup;
+   myFormEditGrupalAlarm!: FormGroup;
    submitted : boolean = false;
    bsValue = new Date();
    bsRangeValue!:Date[];
@@ -60,10 +67,10 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
    dtOptions: DataTables.Settings = {};
    dtTrigger: Subject<any> = new Subject();
    dtTrigger2: Subject<any> = new Subject();
-   dtElement1!: DataTableDirective;
-   dtElement2!: DataTableDirective;
    isDtInitialized1:boolean = false;
    isDtInitialized2:boolean = false;
+   dtElement1!: DataTableDirective;
+   dtElement2!: DataTableDirective;
  
    groupSelection : boolean = false;
    userSelection : boolean = false;
@@ -84,6 +91,7 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
    showGrupalAlarms : boolean = true;
    isLoading : boolean = false;
    showSuccess : boolean = false;
+   show : boolean = false;
    msg : string=''
 
 
@@ -92,7 +100,7 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
               private alarmGroupService : AlarmGroupService,
               private userService : UserService,
               private localeService: BsLocaleService,
-
+              private errorService : ErrorService
               
   ) {
 
@@ -100,8 +108,7 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
       this.minDate.setFullYear(this.bsValue.getFullYear() - 100);
       this.bsRangeValue = [this.bsValue, this.maxDate];
       defineLocale('pt-br', ptBrLocale);
-      this.localeService.use('pt-br')
-
+      this.localeService.use('pt-br');
 
       this.myFormSearch = this.fb.group({
         itemSearch:  [ '',  ],
@@ -120,6 +127,8 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
 
 
 ngOnInit(): void {
+
+  this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
 
   this.isLoading = true;
   this.initDtOptions();
@@ -143,7 +152,25 @@ ngOnInit(): void {
     description: ['']
   });
 
+  this.myFormEditPersAlarm = this.fb.group({
+    idalarm:[],
+    personalName:     [ '', [Validators.required] ],
+    alarmPersonalDate:  [ '', [Validators.required] ],
+    notifPersonalFrequency:  [ null ],
+    descriptionPersonal: [ '', [Validators.required] ],
+  });
+
   
+  this.myFormEditGrupalAlarm = this.fb.group({
+    idalarm:[],
+    grupalName:     [ '', [Validators.required] ],
+    alarmGrupalDate:  [ '', [Validators.required] ],
+    notifGrupalFrequency:  [ null ],
+    descriptionGrupal: [ '', [Validators.required] ],
+  });
+
+  
+
   this.myFormSearch.get('itemSearch')?.valueChanges.subscribe(newValue => {
     this.itemSearch = newValue;
 
@@ -172,39 +199,55 @@ initDtOptions(): void {
   };
 }
 
+
 initPersonalAlarms(){
 
   this.isLoading = true;
 
   this.alarmGroupService.getAllPersonalAlarms().subscribe(
     ( {success, personalAlarms} )=>{
+
       if(success){
      
         setTimeout(()=>{ this.isLoading = false },1200)
 
-      this.personalAlarms = personalAlarms;
-      if (this.isDtInitialized2) {
-        this.dtElement2.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
+        this.personalAlarms = personalAlarms;
+        if (this.isDtInitialized2) {
+            this.dtElement2.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger2.next(null);
+          });
+        } else {
+          this.isDtInitialized2 = true
           this.dtTrigger2.next(null);
-        });
-      } else {
-        this.isDtInitialized2 = true
-        this.dtTrigger2.next(null);
-      }
-      this.isLoading = false;
-      }
+        }
+        }
     })  
 
 }
 
 initGrupalAlarms(){
+
+  this.isLoading = true;
+  
   this.alarmGroupService.getAllGrupalAlarms().subscribe(
     ( {success, groupAlarms} )=>{
+
       if(success){
-      this.grupalAlarms = groupAlarms;
-      this.dtTrigger.next(null);
-      this.isLoading = false;
+      
+        this.grupalAlarms = groupAlarms;
+
+        setTimeout(()=>{ this.isLoading = false },1200)
+
+        if(this.isDtInitialized1) {
+          this.dtElement1.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next(null);
+          });
+        } else {
+          this.isDtInitialized1 = true
+          this.dtTrigger.next(null);
+        }
       }
     })
 }
@@ -226,6 +269,7 @@ selectPessoalOrGrupal( option:string ){
 
 
 onSave(){
+
 
   if ( this.myForm.invalid ) {
     this.myForm.markAllAsTouched();
@@ -253,12 +297,9 @@ onSave(){
     groups?.push(element.idgroup)
   })
 
-  console.log(this.isChecked);
 
 
   if(this.pessoal){
-
-    
     const body = {
       ...this.myForm.value,
       alarmDate: formattedDate,
@@ -280,6 +321,7 @@ onSave(){
             this.msg = "Alarme criado com sucesso";
             this.pessoal = false;
             this.grupal = false;
+            this.initPersonalAlarms()
           },1000)
           
         }
@@ -355,19 +397,148 @@ continue( ){
   this.alarmGroupService.authDelAlarm$.emit(true);
 }
 
-editPessoalAlarm( alarm:any ){
+launchPersonalAlarm(alarm: any) {
+
+  this.nameFreq = alarm.notifFrequency.map((day: number) => {
+    switch (day) {
+      case 0:
+              this.frequencySelected.push(0);
+        return 'No mesmo dia';
+      case 1:
+              this.frequencySelected.push(1);
+        return '1 dia antes';
+      case 7:
+              this.frequencySelected.push(7);
+        return '7 dias antes';
+      case 15:
+              this.frequencySelected.push(15);
+        return '15 dias antes';
+      default:
+        return 'Día Desconocido';
+    }
+  });
+
+    
+  this.myFormEditPersAlarm.patchValue({
+    personalName: alarm.name,
+    alarmPersonalDate: alarm.alarmDate,
+    descriptionPersonal: alarm.description,
+    idalarm: alarm.idalarm
+  });
+
+  this.myFormEditPersAlarm.get('personalName')?.setValidators([Validators.required]);
+  this.myFormEditPersAlarm.get('alarmPersonalDate')?.setValidators([Validators.required]);
+  this.myFormEditPersAlarm.get('descriptionPersonal')?.setValidators([Validators.required]);
+  // this.myFormEditPersAlarm.get('notifPersonalFrequency')?.setValidators([Validators.required]);
 
 }
 
-activePauseAlarm( alarm:any, action:string ){
+editPersonalAlarm( ){
 
 
-  this.alarmGroupService.activePauseAlarm( alarm.idalarm, action).subscribe( 
+  if ( this.myFormEditPersAlarm.invalid ) {
+    this.myFormEditPersAlarm.markAllAsTouched();
+    return;
+  }
+
+  const alarmDate = this.myForm.get('alarmPersonalDate')?.value;
+
+  let formattedDate = '';
+
+  if(alarmDate !== null && alarmDate !== ''){
+    formattedDate = moment(alarmDate).toISOString();
+  }
+
+
+  const body : Alarm = {
+    name : this.myFormEditPersAlarm.get('personalName')?.value,
+    alarmDate : formattedDate,
+    notifFrequency : this.frequencySelected,
+    description : this.myFormEditPersAlarm.get('descriptionPersonal')?.value,
+    idalarm : this.myFormEditPersAlarm.get('idalarm')?.value
+  }
+
+  console.log(body);
+ 
+  this.isLoading = true;
+  this.showSuccess = false;
+
+  this.alarmGroupService.editPersonalAlarm(body.idalarm, body).subscribe(
+    ( {success} )=>{
+            if(success){
+              setTimeout(()=>{ this.isLoading = false },1700)
+              // this.personalAlarms = this.personalAlarms.filter( (item)=>item.idalarm !== body.idalarm);
+              this.initPersonalAlarms();
+              this.showSuccess = true;
+              this.msg = "Alarme editada com sucesso";
+              this.pessoal = false;
+              this.grupal = false;
+              this.frequencySelected = [];
+              this.nameFreq = [];
+              this.myFormEditPersAlarm.reset();
+              setTimeout(()=>{
+                // asi cierro el modal
+                this.closebuttonEdit.nativeElement.click();
+              },1)
+            }
+    })
+}
+
+launchGrupalAlarm(alarm: any) {
+
+  this.nameFreq = alarm.notifFrequency.map((day: number) => {
+    switch (day) {
+      case 0:
+              this.frequencySelected.push(0);
+        return 'No mesmo dia';
+      case 1:
+              this.frequencySelected.push(1);
+        return '1 dia antes';
+      case 7:
+              this.frequencySelected.push(7);
+        return '7 dias antes';
+      case 15:
+              this.frequencySelected.push(15);
+        return '15 dias antes';
+      default:
+        return 'Día Desconocido';
+    }
+  });
+
+    
+  this.myFormEditPersAlarm.patchValue({
+    personalName: alarm.name,
+    alarmPersonalDate: alarm.alarmDate,
+    descriptionPersonal: alarm.description,
+    idalarm: alarm.idalarm
+  });
+
+  this.myFormEditPersAlarm.get('personalName')?.setValidators([Validators.required]);
+  this.myFormEditPersAlarm.get('alarmPersonalDate')?.setValidators([Validators.required]);
+  this.myFormEditPersAlarm.get('descriptionPersonal')?.setValidators([Validators.required]);
+  // this.myFormEditPersAlarm.get('notifPersonalFrequency')?.setValidators([Validators.required]);
+
+}
+editPGrupalAlarm(){
+
+}
+
+activePausePersonalAlarm( alarm:any, action:string ){
+
+  this.alarmGroupService.activePausePersonalAlarm( alarm.idalarm, action).subscribe( 
     ( {success})=>{
           if(success){
-                     
             this.initPersonalAlarms();
-    
+          }
+    } )
+}
+
+activePauseGrupalAlarm( alarm:any, action:string ){
+
+  this.alarmGroupService.activePauseGrupalAlarm( alarm.idgroupalarm, action).subscribe( 
+    ( {success})=>{
+          if(success){
+            this.initGrupalAlarms();
           }
     } )
 }
@@ -386,6 +557,12 @@ validField( field: string ) {
     const control = this.myForm.controls[field];
     return control && control.errors && control.touched;
 }
+
+validFieldEdit( field: string ) {
+  const control = this.myFormEditPersAlarm.controls[field];
+  return control && control.errors && control.touched;
+}
+
 
 removeGroup(nameToRemove: string): void {
 
@@ -426,6 +603,7 @@ onSelectFreq( event: any){
   const name = selectedValue.split(',')[1];
   this.frequencySelected.push(id);
   this.nameFreq.push(name);
+
 }
 
 removeFreq(nameToRemove: string): void {
@@ -465,40 +643,30 @@ removeFreq(nameToRemove: string): void {
 
 }
 
-toggleHover(isHovered: boolean): void {
-  this.isHovered = isHovered;
-}
-
-toggleHover2(isHovered2: boolean): void {
-  this.isHovered2 = isHovered2;
-}
-
-toggleHover3(isHovered3: boolean): void {
-  this.isHovered3 = isHovered3;
-}
-
 resetForm(){
-  this.myForm.reset();
-  this.selectedGroups = [];
-  this.nameGroups = [];
-  this.nameFreq = [];
-  this.suggested = [];
-  this.myFormSearch.get('itemSearch')?.setValue('');
-  this.selectedGroups = [];
-  this.frequencySelected = [];
-  this.exclude = false;
-  this.isChecked = false;
-  this.pessoal = false;
-  this.grupal = false;
+    this.myForm.reset();
+    this.selectedGroups = [];
+    this.nameGroups = [];
+    this.nameFreq = [];
+    this.suggested = [];
+    this.showSuggested = false;
+    this.myFormSearch.get('itemSearch')?.setValue('');
+    this.selectedGroups = [];
+    this.frequencySelected = [];
+    this.exclude = false;
+    this.isChecked = false;
+    this.pessoal = false;
+    this.grupal = false;
+    console.log(this.grupal, this.isChecked);
 }
 
  // search
-   
  close(){
   this.mostrarSugerencias = false;
   this.itemSearch = '';
   this.suggested = [];
   this.spinner= false;
+  this.showSuggested = false;
   this.myFormSearch.get('itemSearch')?.setValue('');
   // this.noMatches = false;
   this.clientFound= null;
@@ -507,11 +675,12 @@ resetForm(){
 
  teclaPresionada(){
 // this.noMatches = false;
-this.debouncer.next( this.itemSearch );  
+    this.debouncer.next( this.itemSearch );  
+    this.showSuggested = true;
  };
 
  sugerencias(value : string){
-  this.spinner = true;
+  // this.spinner = true;
   this.itemSearch = value;
   this.mostrarSugerencias = true;  
   this.userService.searchUser(value)
@@ -529,29 +698,44 @@ this.debouncer.next( this.itemSearch );
  }
 
  Search( item: any ){
-setTimeout(()=>{
-  this.mostrarSugerencias = true;
-  this.spinner = false;
-  this.fade = false;
-  this.clientFound = item;
-  this.isClientFound = true;
-  this.myForm.get('itemSearch')?.setValue('');
-  this.suggested = [];
-  // this.noMatches = false;
-},500)
+    setTimeout(()=>{
+      this.mostrarSugerencias = true;
+      this.spinner = false;
+      this.fade = false;
+      this.clientFound = item;
+      this.isClientFound = true;
+      this.myForm.get('itemSearch')?.setValue('');
+      this.suggested = [];
+      // this.noMatches = false;
+    },500)
  }
 // search
 
+
 selectUser( user:any ){
+
 
 this.myFormSearch.get('itemSearch')?.setValue(user.Nome_Completo);
 this.user = user;
 this.suggested = [];
-
+this.showSuggested = false;
+this.show = true;
+this.userViewModal = user;
 }
 
+viewUser( user:any ){
+  this.show = true;
+
+  this.userViewModal = user;
+}
+
+closeModal(){
+  this.userViewModal = {};
+  this.show = false;
+}
+
+
 ngOnDestroy(): void {
-  // Do not forget to unsubscribe the event
   this.dtTrigger.unsubscribe();
   this.dtTrigger2.unsubscribe();
 }

@@ -1,13 +1,9 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, debounceTime, delay, takeUntil } from 'rxjs';
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { LanguageApp } from '../table.languaje';
-// import * as $ from 'jquery';
-// import 'datatables.net';
-// import 'datatables.net-bs4';
-// import '@types/datatables.net';
 import { DataTableDirective } from 'angular-datatables';
 
 
@@ -21,8 +17,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
   @ViewChild('closebutton') closebutton! : ElementRef;
   @ViewChild('closebutton2') closebutton2! : ElementRef;
 
+  @Input() user: any;
 
- 
 
   groups : any[]=[];
   isLoading : boolean = false;
@@ -44,7 +40,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
   usersGroup : any []=[];
   selectedGroup = {name: '', length: 0};
   phone : boolean = false;
+  show : boolean = false;
   groupID : any;
+  
 
 
 
@@ -258,6 +256,12 @@ continueUserDel( ){
 closeToast(){
   this.showSuccess = false;
 }
+
+selectUser( user:any ){
+  this.show = true;
+ this.user = user;
+}
+
 
 
 ngOnDestroy(): void {

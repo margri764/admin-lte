@@ -81,6 +81,11 @@ body .bs-datepicker-container .bs-datepicker-head {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
+/* primary */
+.customPrimary{
+  color: #007BFF;
+}
+
 .loading-overlay {
   position: fixed;
   top: 0;

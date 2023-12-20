@@ -92,7 +92,60 @@ select{
     font-size: 1.2em;
 }
 
+.pdfSelection.card:hover{
+  /* border: 2px solid rgb(0, 136, 255, 0.2); */
+  
+  transition: opacity 3s ease;
+  box-shadow: 0 0.5rem 1.1rem rgba(0, 0, 0, 0.3) !important;
 
+}
+
+.form-check-input {
+  transform: scale(1.5);
+}
+
+.contextual-menu {
+  position: fixed;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 8px;
+  box-shadow: 0px 0px 5px 0px #000000;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  cursor: pointer;
+  padding: 8px;
+}
+
+
+
+.uploadImg:hover{
+  /* border: 2px solid blue; */
+  cursor: pointer;
+  background-image: url('../../../assets/upload.png');
+  background-position: center;
+  background-size: cover;
+
+  transition: opacity 3s ease;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  
+
+}
+
+
+
+.uploadImg:hover img {
+  /* Al hacer hover, ajustar la opacidad de la imagen original */
+  opacity: 0;
+  transition: opacity 0.3s ease
+
+}
 
 
   .text{
@@ -111,6 +164,21 @@ select{
 
   option{
     font-size: 1.1em;
+  }
+
+  .menu-desplegable {
+    position: fixed; /* Fijar la posición */
+    top: 50px; /* Ajusta según sea necesario */
+    left: 50px; /* Ajusta según sea necesario */
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 5px 0px #000000;
+    padding: 8px;
+    cursor: pointer;
+    width: 250px;
+    color: red;
+    z-index: 999;
+    
   }
 
   

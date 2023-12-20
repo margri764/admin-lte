@@ -30,7 +30,7 @@
                 <th scope="col"> E-mail</th>
                 <th scope="col"> Ordem</th>
                 <th scope="col"> Nacionalidade</th>
-                <th scope="col"> Ação</th>
+                <!-- <th scope="col"> Ação</th> -->
               </tr>
             </thead>
             <tbody>
@@ -38,14 +38,15 @@
                 <td> 
                      <img class=" img-fluid br-6" src="https://congregatio.info/{{ con['Ruta Imagen'] }}" alt="Foto do Perfil do Usuário" width="40px"> 
                 </td>
-                <td> <a class="selected" [routerLink]="['../ver-congregatio', con['Número ID']]">{{ con['Nome Completo'] }} </a> </td>
+                <td> <a class="selected" (click)="selectUserCongregatio(con)"  data-toggle="modal" data-target="#modalFichaCompleta">{{ con['Nome Completo'] }} </a> </td>
+                <!-- <td> <a class="selected" [routerLink]="['../ver-congregatio', con['Número ID']]">{{ con['Nome Completo'] }} </a> </td> -->
                 <td> {{ con.Email }} </td>
                 <td> {{ con.Ordem }} </td>
                 <td> {{ con.Nacionalidade }} </td>
-                <td> 
+                <!-- <td> 
                     <span class="badge badge-success right shadow cursor" data-toggle="modal" data-target="#modalFichaCompleta"  style="padding: 8px 10px 8px 10px;" (click)="selectUserCongregatio(con)"> Ver ficha completa </span>
 
-                </td>
+                </td> -->
             </tr>
              
           </table>
@@ -57,30 +58,19 @@
   <!-- Modal Ficha completa-->
   <div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95; ">
 
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header" style="padding: 20px;">
           <h5 class="modal-title font" id="exampleModalCenterTitle"> Ficha completa</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
       
         </div>
         <div class="modal-body">
 
-          <div class="table-responsive  font" >
-            <table class="table  table-hover" >
-              <thead>
-                <tr>
-                  <th scope="col">Propiedad</th>
-                  <th scope="col">Valor</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let prop of getObjectProperties()">
-                  <td> <b>{{ prop.key }}</b> </td>
-                  <td>{{ prop.value }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <app-view-congregati *ngIf="show" [userCongregatio]="userCongregatio"></app-view-congregati>
+         
 
         </div>
 

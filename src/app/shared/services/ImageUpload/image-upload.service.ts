@@ -36,6 +36,27 @@ export class ImageUploadService {
       )
   }
 
+  uploadUserImg( file: File, id:any) {
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+
+      return this.http.post<any>(`${this.baseUrl}api/image/uploadUserImg/${id}`, formData) 
+      
+      .pipe(
+        tap( ( res) =>{
+                      console.log("from uploadUserImg service: ",res);
+                  }  
+        ),            
+        map( res => res )
+      )
+  }
+
+
+
+  
+
   getAllBackground( ) {
 
 
@@ -72,6 +93,19 @@ export class ImageUploadService {
       .pipe(
         tap( ( res) =>{
                       console.log("from deleteBackgroundById service: ",res);
+                  }  
+        ),            
+        map( res => res )
+      )
+  }
+
+  bulkDeleteDocuments( body:any ) {
+
+      return this.http.patch<any>(`${this.baseUrl}api/document/bulkDeleteDocuments/`, body) 
+      
+      .pipe(
+        tap( ( res) =>{
+                      console.log("from bulkDeleteDocuments service: ",res);
                   }  
         ),            
         map( res => res )

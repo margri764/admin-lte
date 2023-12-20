@@ -1,9 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { delay } from 'rxjs';
 import { User } from 'src/app/shared/models/user.models';
 import { CongregatioService } from 'src/app/shared/services/congregatio/congregatio.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
+import { UserService } from 'src/app/shared/services/user/user.service';
 
 @Component({
   selector: 'app-view-congregati',
@@ -11,42 +12,65 @@ import { ErrorService } from 'src/app/shared/services/error/error.service';
   styleUrls: ['./view-congregati.component.css']
 })
 
-export class ViewCongregatiComponent implements OnInit {
+export class ViewCongregatiComponent implements OnInit, OnChanges {
 
   @ViewChild('gallery') gallery!: ElementRef;
-user! : any;
-isLoading : boolean = false;
+  @Input() userCongregatio: any;
+  @Input() userFromGroup: any;
+  user! : any;
+  isLoading : boolean = false;
 
   constructor(
-                private activatedRoute : ActivatedRoute,
-                private congregatioService : CongregatioService,
-                private errorService : ErrorService
+                private errorService : ErrorService,
+                private userService : UserService,
 
   ) {
 
-    this.activatedRoute.params.subscribe(
-      ({id})=>{ this.getUserById(id) });
+    // this.activatedRoute.params.subscribe(
+    //   ({id})=>{ this.getUserById(id) });
    }
 
   ngOnInit(): void {
 
     this.errorService.closeIsLoading$.pipe(delay(700)).subscribe(emitted => emitted && (this.isLoading = false));
-
+      this.getUserById()
   }
 
-  getUserById( id:any ){
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['userCongregatio'] && !changes['userCongregatio'].firstChange) {
+      this.getUserById();
+    }
+  }
 
-    this.isLoading = true;
+  getUserById(  ){
 
-    this.congregatioService.getUserCongregatioById(id).subscribe(
-    ( {success, user})=>{
-      if(success){
-        this.user = user;
-        this.getImages(user);
-        this.isLoading = false;
-        console.log(user);
-      }
-    })
+    console.log(this.userFromGroup);
+    console.log(this.userCongregatio);
+
+    //el usuario viene de la pestaña Congregatio
+    if(this.userFromGroup !== undefined){
+
+      this.isLoading = true;
+
+      this.userService.getUserById(this.userFromGroup.iduser).subscribe(
+      ( {success, user})=>{
+        if(success){
+          this.user = user;
+          this.getImages(user);
+          this.isLoading = false;
+          console.log(user);
+        }
+      })
+
+    }else{ //el usuario viene de los grupos
+
+      this.user = this.userCongregatio;
+      this.getImages(this.user);
+      this.isLoading = false;
+    }
+
+
+
 
   }
 
@@ -59,9 +83,33 @@ isLoading : boolean = false;
   }
 
   getImages(user: any) {
-    const total = user['Ruta Imagen'];
+
+    let total = null;
+    if(this.userFromGroup !== undefined){
+       total = user.Ruta_Imagen;
+       console.log(total);
+    }else{
+      total = user['Ruta Imagen'];
+    }
+
+    if(total === null || total === undefined){
+
+      const img = document.createElement("img");
+  
+      img.className = "img-fluid";
+      img.src = 'assets/no-image.jpg';
+  
+      img.alt = `Foto do Perfil do Usuário`;
+  
+      // Aplicar el estilo de borde blanco
+      img.style.border = "2px solid white";
+  
+      this.gallery.nativeElement.appendChild(img);
+      return;
+    }
   
     const match = total.match(/\[(\d+)\]/);
+
     const indice = match ? parseInt(match[1], 10) : null;
   
     const restoDelPath = total.replace(/\[\d+\]\.jpg$/, '');
@@ -80,7 +128,6 @@ isLoading : boolean = false;
         this.imageExists(img.src, (exists) => {
           if (exists) {
             img.style.border = "2px solid white";
-            console.log(img.src);
             this.gallery.nativeElement.appendChild(img);
           }
         });

@@ -42,6 +42,9 @@ export class CongregatioComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject();
   congregatio : any []=[];
   user! : User;
+  show : boolean = false;
+  userCongregatio : any;
+
 
 
   constructor(
@@ -147,9 +150,9 @@ export class CongregatioComponent implements OnInit {
   }
 
   selectUserCongregatio( user:any ){
-
-    this.user = user;
-
+    // this.user = user;
+    this.show = true;
+   this.userCongregatio = user;
   }
 
 

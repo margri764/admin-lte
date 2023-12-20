@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import * as $ from 'jquery';
 import 'bootstrap-switch';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,20 +15,12 @@ import { LanguageApp } from '../table.languaje';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
-import { DomSanitizer } from '@angular/platform-browser';
-
-
-
-
+import { ImageUploadService } from 'src/app/shared/services/ImageUpload/image-upload.service';
+import { DataTableDirective } from 'angular-datatables';
 
 interface CustomFile extends File {
   previewUrl?: string;
   downloadLink?: string;
-}
-
-interface Event {
-  date: string;
-  description: string;
 }
 
 
@@ -103,6 +95,11 @@ adminRole : boolean = false;
 
 dtOptions: DataTables.Settings = {};
 dtTrigger: Subject<any> = new Subject();
+dtTrigger2: Subject<any> = new Subject();
+isDtInitialized1:boolean = false;
+isDtInitialized2:boolean = false;
+dtElement1!: DataTableDirective;
+dtElement2!: DataTableDirective;
 
 userCongregatio : any = null ;
 pathImg : string = 'assets/no-image.jpg';
@@ -121,8 +118,14 @@ isChecked = false;
 idUser : any;
 disableOrdem : boolean = false;
 simpleCodeSelected : boolean = false;
-
 arrLogs : any []=[];
+selectedImg : File | null = null;
+showClose : boolean = false;
+
+menuVisible = false;
+menuDocument: any;
+showBulk : boolean = false;
+arrIds : any []=[];
 
 
 
@@ -136,7 +139,7 @@ arrLogs : any []=[];
                 private alarmGroupService : AlarmGroupService,
                 private localeService: BsLocaleService,
                 private router : Router,
-                private sanitizer: DomSanitizer
+                private imageUploadService : ImageUploadService
                 ) 
                 
 { 
@@ -297,11 +300,12 @@ arrLogs : any []=[];
     this.authService.getUserLogs( this.user.iduser ).subscribe(
       ( {success, logs} )=>{
         if(success){
-          this.arrLogs = logs
+          this.arrLogs = logs;
+          this.dtTrigger2.next(null);
         }
       })
   }
-  
+
 
 
   onSave(){
@@ -315,6 +319,9 @@ arrLogs : any []=[];
        let body = null;
        this.showSuccess = false;
 
+       this.uploadImg();
+
+
        //esto es para la primera vez q lo linkeo, xq la segunda vez ya esta linqueado pero userCongregatio no existe ya q viene del back
        //y es una edicion simple
        if(this.isLinkedToCongregatio && this.userCongregatio){
@@ -322,6 +329,7 @@ arrLogs : any []=[];
         body = {...body, groups: [...this.selectedGroups]}
 
         console.log(body);
+
 
         this.userService.editUserCongregatio(this.user.iduser, body).subscribe(
           ( {success} )=>{
@@ -729,6 +737,7 @@ arrLogs : any []=[];
       this.showSuccess = false;
       this.showLabelLinked = false;
       this.showSuccessDelDocument = false;
+      this.showBulk = false;
       this.msg = '';
     }
 
@@ -882,17 +891,7 @@ arrLogs : any []=[];
     this.wasLinked = true;
 
 
-    // this.user = {
-    //     ...user,
-    //      history: user['Histórico Sedes'],
-    //      capuzManager: user['Encarregado Com Capuz'],
-    //      capuzDate: user['Data Hábito Com Capuz'],
-    //      semCapuzManager: user['Encarregado Sem Capuz'],
-    //      semCapuzDate: user['Data Hábito Sem Capuz'],
-    //      semCapuz: user['Hábito sem capuz (s/n)'],
-    //      capuz: user['Hábito com capuz (s/n)'],
-         
-    //     }
+
     
         this.suggested = [];
         this.myFormSearch.get('itemSearch')?.setValue('');
@@ -905,10 +904,6 @@ arrLogs : any []=[];
    }
 
    ngAfterViewInit() {
-  
-    // $("input[data-bootstrap-switch]").each(function() {
-    //   $(this).bootstrapSwitch('state',  $(this).prop('checked'));
-    // });
   
     // Inicializar Bootstrap Switch
     $(this.link.nativeElement).bootstrapSwitch();
@@ -955,6 +950,99 @@ arrLogs : any []=[];
         }
       })
    }
+
+   uploadImg( ){
+
+      if (this.selectedImg) {
+        this.imageUploadService.uploadUserImg(this.selectedImg, this.user.iduser).subscribe( 
+          ( {success} )=> {
+              if(success){
+                setTimeout(()=>{this.isLoading = false });
+                this.selectedImg = null;
+              } }
+          )
+    }
+   
+   }
+
+   onFileSelected(event: any) {
+    this.selectedImg = event.target.files[0];
+    this.showPreview();
+  }
+
+  showPreview() {
+    const reader = new FileReader();
+
+    reader.onload = (event: any) => {
+      this.pathImg = event.target.result;
+      this.showClose = true;
+    };
+
+    if (this.selectedImg) {
+      reader.readAsDataURL(this.selectedImg);
+    }
+  }
+
+  removePreview(){
+    if(this.user.Ruta_Imagen === ''){
+      this.pathImg = 'assets/no-image.jpg';
+    }else{
+   this.pathImg = this.user.Ruta_Imagen;
+    }
+    this.showClose = false;
+  }
+
+
+  onCheckboxChange(  event:any, doc:any ){
+
+    const isChecked = event.target.checked;
+    const id = doc.iddocument;
+
+    if(isChecked){
+      this.arrIds.push(id)
+    }else{
+      this.arrIds = this.arrIds.filter((item)=>item !== id)
+    }
+
+    if(this.arrIds.length === 0){
+      this.closeMenu()
+    }
+
+  }
+
+  bulkDeleteDocuments(){
+
+    if(this.arrIds.length !== 0){
+
+      this.isLoading = true;
+
+      const body = { ids: this.arrIds}
+
+      this.imageUploadService.bulkDeleteDocuments(body).subscribe( 
+        ( {success})=>{
+          if(success){
+            this.showBulk = false;
+            this.msg = 'Documentos excluídos com sucesso';
+            this.showSuccess = true;
+            this.getDocByUserId(this.user.iduser)
+          }
+          
+        });
+      }else{
+        return;
+      }    
+  }
+
+  mostrarMenu(event: MouseEvent): void {
+    event.preventDefault();
+    if (event.button === 2 && this.arrIds.length !== 0) { 
+      this.showBulk = true;
+    }
+  }
+  
+  closeMenu(): void {
+    this.menuDocument = null;
+  }
 }
 
   

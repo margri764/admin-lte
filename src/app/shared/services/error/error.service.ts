@@ -61,9 +61,6 @@ export class ErrorService {
       localStorage.removeItem('logged');
       this.cookieService.delete('token');
       this.closeIsLoading$.emit(true);
-      setTimeout(()=>{
-        this.openDialogLogin();
-      },500)
       return of(null);
     }
 
@@ -109,6 +106,13 @@ export class ErrorService {
        return of(null);
     }
 
+    if (error.status === 401 && error.error.message === "There is no token in the header. Please log in again with your credentials") {
+     this.closeIsLoading$.emit(true);
+     this.router.navigateByUrl('/login')
+      return of(null);
+   }
+
+
     if (error.status === 400 && error.error.message === 'Usuário não encontrado' ) {
 
       this.closeIsLoading$.emit(true);
@@ -123,31 +127,22 @@ export class ErrorService {
  }
 
 
-    // if (error.status === 401) {
-    //   this.logout();
-    //   this.openDialogLogin();
-    //   this.close$.next(true);
-    //   this.close$.next(false);
-    //   return of(null);
-    // }
-
-
   if (error.status === 500 && error.error.error === 'Usuário não encontrado' ) {
      this.closeIsLoading$.emit(true);
      this.status429Error$.emit({emmited:true, msg: error.error.message });
     return of(null);
   }
 
-  if (error.status === 429 && error.error.message === "Você excedeu o limite de 3 tentativas de login. Por favor, aguarde 1 minutos antes de tentar novamente") {
+  if (error.status === 429 && error.error.message.includes("Você excedeu o limite de tentativas de login") ) {
       this.status429Error$.emit( {emmited:true, msg:error.error.message } )
      this.closeIsLoading$.emit(true);
       return of(null);
   }
     
   if (error.status === 500) {
+    this.closeIsLoading$.emit(true);
       alert("Error en el back")
       // this.openDialogBackendDown();
-      // this.closeIsLoading$.emit(true);
       return of(null);
   }
 

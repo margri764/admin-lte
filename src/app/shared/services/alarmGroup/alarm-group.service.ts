@@ -150,20 +150,27 @@ export class AlarmGroupService {
 
   }
 
-  activePauseAlarm( id:any, action:any ){
-    
-    return this.http.patch<any>(`${this.baseUrl}api/alarm/activePauseAlarm/${id}?action=${action}`, null) 
-    
+  activePausePersonalAlarm( id:any, action:any ){
+    return this.http.patch<any>(`${this.baseUrl}api/alarm/activePausePersonalAlarm/${id}?action=${action}`, null) 
     .pipe(
       tap( ( res) =>{
-                    console.log("from activePauseAlarm service: ",res);
+                    console.log("from activePausePersonalAlarm service: ",res);
                 }  
       ),            
       map( res => res )
     )
-
   }
-
+  
+  activePauseGrupalAlarm( id:any, action:any ){
+    return this.http.patch<any>(`${this.baseUrl}api/alarm/activePauseGrupalAlarm/${id}?action=${action}`, null) 
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from activePauseGrupalAlarm service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
   
   deleteUserFromGroup( id:any ){
     
@@ -178,10 +185,6 @@ export class AlarmGroupService {
     )
 
   }
-
-  
-
-  
 
   getAllGroups(){
     
@@ -223,6 +226,22 @@ export class AlarmGroupService {
     )
 
   }
+
+  
+  editPersonalAlarm( id:any, body:any ){
+    
+    return this.http.put<any>(`${this.baseUrl}api/alarm/editPersonalAlarm/${id}`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from editPersonalAlarm service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
 
   deleteGroup( id:any ){
     
