@@ -42,35 +42,37 @@ export class DashboardComponent implements OnInit {
 
   this.store.select('auth')
   .pipe(
-    filter( ({user})=>  user != null && user != undefined),
+    filter( ({user})=>  user !== null && user !== undefined),
   ).subscribe(
-    ()=>{
-      this.getRequestedPermissions()
+    ( {user} )=>{
       this.isLoading = false;
+      this.setUserLogs(user!.email);
+      this.getRequestedPermissions()
     })
-
-  this.setUserLogs();
+    
   
   }
 
-  setUserLogs(){
-     const user = getDataLS('user');
-     console.log(user);
-     const body = { email: user.email}
-    this.authService.setUserLogs(body).subscribe(
-      ( {success} )=>{})
+  setUserLogs( email:string ){
+    if(email){
+      const body = { email}
+      this.authService.setUserLogs(body).subscribe();
+    } 
   }
 
   getRequestedPermissions(){
 
-  this.authService.getRequestedPermissions().subscribe(
-    ({success, requests})=>{
-      if(success){
-        this.reqRegister = requests;
-        this.reqLength = requests.length;
-      }
-    })
-  }
+    const token = this.cookieService.get('token');
+    if(token){
+        this.authService.getRequestedPermissions().subscribe(
+          ({success, requests})=>{
+            if(success){
+              this.reqRegister = requests;
+              this.reqLength = requests.length;
+            }
+          })
+        }
+    }
 
 
 }

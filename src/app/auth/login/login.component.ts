@@ -7,6 +7,7 @@ import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { Subject, delay, takeUntil, takeWhile, tap } from 'rxjs';
 import { SessionService } from 'src/app/shared/services/session/session.service';
 import { ImageUploadService } from 'src/app/shared/services/ImageUpload/image-upload.service';
+import { ValidateService } from 'src/app/shared/services/validate/validate.service';
 
 
 
@@ -48,6 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   msg : string = '';
   wrongCode : boolean = false;
   showCron : boolean = true;
+  show500 : boolean = false;
   arrBackground : any []=[]
   backgroundImage = '';
   
@@ -59,7 +61,8 @@ export class LoginComponent implements OnInit, OnDestroy {
               private sessionService : SessionService,
               private ngZone: NgZone,
               private imageUploadService : ImageUploadService,
-              private cdr: ChangeDetectorRef
+              private cdr: ChangeDetectorRef,
+              private validatorService : ValidateService
               
   )
   
@@ -88,6 +91,8 @@ counter : number = 0;
 
     this.errorService.status400VerifyError$.pipe(delay(1000)).subscribe( (emmited)=>{ if(emmited){ this.isLoading = false; this.noVerified = true; this.noRole = false; this.wrongCode = false, this.sendingAuth = false;}  })
 
+    this.errorService.status500Error$.pipe(delay(1000)).subscribe( ( {emmited, msg})=>{ if(emmited){  this.show500 = true; this.noRole = false; this.wrongCode = false, this.sendingAuth = false; this.msg = msg}  })
+
     this.errorService.status401WronCode$.pipe(delay(1200)).subscribe(( {emmited, msg } )=>{ if(emmited) {console.log("Se disparo", this.counter, "vez" ); this.wrongCode = true; this.msg= ''; this.msg = msg; if(this.msg = "O código de autenticação expirou. É necessário um novo código"){ this.destroy$.next(); this.destroy$.complete(); this.showCron = false  } this.noVerified = false, this.noRole = false; this.isLoading = false; this.sendingAuth = false; this.counter ++;}} )
 
     // si tiene verficado el email pero falta que se le asigne un role. Muestro Toast cona aviso("Usuário sem função")
@@ -95,7 +100,7 @@ counter : number = 0;
 
 
     this.myForm = this.fb.group({
-      email:     [ '', [Validators.required] ],
+      email:     [ '', [Validators.required,Validators.pattern(this.validatorService.emailPattern)] ],
       password:  [ '', [Validators.required]],
   
     });
@@ -103,15 +108,10 @@ counter : number = 0;
     this.myForm2 = this.fb.group({
       fullName: [ '', [Validators.required] ],
       headquarter: [ '', [Validators.required] ],
-      userEmail: [ '', [Validators.required] ],
+      userEmail: [ '', [Validators.required, Validators.pattern(this.validatorService.emailPattern)] ],
       subject: [ '', [Validators.required] ],
     });
 
-    
-    this.myFormResendPass = this.fb.group({
-       resendEmail:  [ '', [Validators.required] ],
-  
-    });
 
     this.myFormCode = this.fb.group({
       code:     [ '', [Validators.required] ],
@@ -119,7 +119,7 @@ counter : number = 0;
     });
 
     this.myFormResend = this.fb.group({
-      resendEmail:     [ '', [Validators.required] ],
+      resendEmail:     [ '', [Validators.required, Validators.pattern(this.validatorService.emailPattern)] ],
   
     });
 
@@ -155,10 +155,30 @@ counter : number = 0;
       })
   }
 
+  resetToasts(){
+    this.submitted  = false;
+    this.showLogin  = true;
+    this.isLoading  = false;
+    this.isSending  = false;
+    this.noVerified  = false;
+    this.noRole  = false;
+    this.show500  = false;
+    this.successContactUs  = false;
+    this.successResendPass  = false;
+    this.showResendPass  = false;
+    this.successResendVerify  = false;
+    this.phone  = false;
+    this.isDivVisible  = false;
+    this.position  = false;
+    this.sendingAuth  = false;
+    this.wrongCode  = false;
+    this.errorService.close$.next(true);
+    this.errorService.close$.next(false);
+  }
+
   login(){
 
-   this.errorService.close$.next(true);
-   this.errorService.close$.next(false);
+    this.resetToasts();
 
     if ( this.myForm.invalid ) {
       this.myForm.markAllAsTouched();

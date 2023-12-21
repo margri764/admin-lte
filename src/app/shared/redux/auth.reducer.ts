@@ -5,7 +5,7 @@ import { User } from '../models/user.models';
 
 
 export interface Auth {
-    user: User | null; 
+    user: any | null; 
    
 }
 

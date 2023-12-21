@@ -85,7 +85,7 @@ export class AuthService {
                           this.cookieService.set('token',token);
                           this.user = user;
                           this.store.dispatch(authActions.setUser({user}));
-                          const userToLS = { name: user.Nome_Completo, role:user.role};
+                          const userToLS = { name: user.Nome_Completo, role:user.role, email: user.Email};
                           this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
                       }           
                     

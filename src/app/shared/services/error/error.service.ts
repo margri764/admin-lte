@@ -35,6 +35,7 @@ export class ErrorService {
   labelInvalidCredential$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   status400Error$ : EventEmitter<response> = new EventEmitter<response>; 
   status429Error$ : EventEmitter<response> = new EventEmitter<response>; 
+  status500Error$ : EventEmitter<response> = new EventEmitter<response>; 
   status400VerifyError$ : EventEmitter<response> = new EventEmitter<response>; 
   status401Credentials$ : EventEmitter<response401Credentials> = new EventEmitter<response401Credentials>; 
   status401WronCode$ : EventEmitter<response> = new EventEmitter<response>; 
@@ -55,7 +56,6 @@ export class ErrorService {
       this.backIsDown$.emit({emmited:true, msg: 'Erro Interno do Servidor. Desculpe, algo deu errado em nosso servidor. Por favor, tente novamente mais tarde' });     
       return of(null);
     }
-
 
     if (error.status === 401 && error.error.message === "Token expired") {
       localStorage.removeItem('logged');
@@ -129,7 +129,8 @@ export class ErrorService {
 
   if (error.status === 500 && error.error.error === 'Usuário não encontrado' ) {
      this.closeIsLoading$.emit(true);
-     this.status429Error$.emit({emmited:true, msg: error.error.message });
+   console.log(error.error.error);
+     this.status500Error$.emit({emmited:true, msg: error.error.error });
     return of(null);
   }
 

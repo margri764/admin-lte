@@ -184,8 +184,8 @@
                             <!-- <button type="button" class="btn btn-warning shadow fs-11"  style="margin-left: 30px; color: white;" (click)="activeAccount('0')" *ngIf="myForm.get('active')?.value === 1"> <i class="fas fa-check-circle" ></i> &nbsp; Desativar</button> -->
 
                             <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 30px;" >
-                              <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="activeDeacTive($event)" [checked]="myForm.get('active')?.value === 1">
-                              <label class="custom-control-label cursor" for="customSwitch1"> Ativar usúario  </label>
+                              <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="activeDeacTive($event)" [checked]="myForm.get('active')?.value === 1" >
+                              <label class="custom-control-label cursor" for="customSwitch1" [ngbTooltip]="'Salvar primeiro'"> Ativar usúario  </label>
                             </div>
                             <!-- [attr.disabled]="(!grupal) ? '' : null"  -->
                   
@@ -324,15 +324,6 @@
                     </tr>
                   </tbody>
 
-                  <tbody *ngIf="arrLogs.length === 0">
-                    <tr>
-                      <td colspan="100%" class="text-center" style="border: 1px solid;">
-                        <div class="d-flex  justify-content-center">
-                          <span class="font fs-11" style="margin-top: 30px;">O usuário ainda não acessou o site</span>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
                   
                   
               </table>

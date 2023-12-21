@@ -9,7 +9,7 @@ import { LoginComponent } from './auth/login/login.component';
 const routes: Routes = [
 
   // { path: 'dashboard', loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule), data: { preload: true } },
-  // { path: 'verificar-email/:code', component: ValidateEmailComponent  },
+  { path: 'verificar-email/:code', component: ValidateEmailComponent  },
   // { path: 'login',  component: LoginComponent  },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: '**', component: NoPageFoundComponent },
@@ -18,8 +18,8 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes),
-    PagesRoutingModule,
     AuthRoutingModule,
+    PagesRoutingModule,
   ],
   exports: [RouterModule]
 })

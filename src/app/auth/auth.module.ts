@@ -25,7 +25,7 @@ import { ResendPasswordComponent } from './resend-password/resend-password.compo
   ],
   imports: [
     CommonModule,
-    // AuthRoutingModule,
+    AuthRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),

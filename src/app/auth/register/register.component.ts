@@ -8,6 +8,7 @@ import { delay } from 'rxjs';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { ValidateService } from 'src/app/shared/services/validate/validate.service';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +30,8 @@ export class RegisterComponent implements OnInit {
               private fb : FormBuilder,
               private authService : AuthService,
               private errorService : ErrorService,
-              private localeService: BsLocaleService
+              private localeService: BsLocaleService,
+              private validatorService : ValidateService
   ) {
 
       this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
@@ -47,7 +49,7 @@ export class RegisterComponent implements OnInit {
     this.myForm = this.fb.group({
       name:     [ '', [Validators.required] ],
       lastName:  [ '', [Validators.required]],
-      email:  [ '', [Validators.required]],
+      email:     [ '', [Validators.required, Validators.pattern(this.validatorService.emailPattern)]],
       Data_Nascimento:  [ '', [Validators.required]],
       Telefone1:  [ '', [Validators.required]],
       Cidade_da_sede:  [ '', [Validators.required]],

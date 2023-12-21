@@ -79,9 +79,10 @@ this.errorService.status400Error$.pipe(delay(1200)).subscribe(( {emmited, msg} )
 
 this.errorService.status429Error$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{if(emmited){this.show429 = true; this.msg = msg, this.show401 = false; this.show400 = false}});
 
+
 this.errorService.status401Credentials$.pipe(delay(1200)).subscribe(( {emmited, msg, remainingAttempts} )=>{ if(emmited){this.show401 = true; this.msg = msg; this.remainingAttemps = remainingAttempts; this.show400 = false; this.show429 = false}} )
 
-this.errorService.backIsDown$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{ if(emmited){this.showBackDown = true; this.msg = msg; this.show400 = false; this.show429 = false; this.gotoDashboard() }});
+this.errorService.backIsDown$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{ if(emmited){this.showBackDown = true; this.msg = msg; this.show400 = false; this.show429 = false; this.goToLogin() }});
 
 
 }
@@ -95,5 +96,9 @@ closeToast(){
 
 gotoDashboard(){
   this.router.navigateByUrl('/dashboard');
+}
+
+goToLogin(){
+  this.router.navigateByUrl('/login');
 }
 }

@@ -116,6 +116,7 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
         itemSearch:  [ '',  ],
       });   
 
+
    }
 
    ngAfterViewInit(): void {
@@ -256,11 +257,34 @@ selectPessoalOrGrupal( option:string ){
   if(option === "pessoal"){
     this.pessoal = true;
     this.grupal = false;
+    this.frequencySelected = [];
+    this.nameFreq = [];
+    this.suggested = [];
+    this.user = {};
+    this.myForm.reset();
+    this.myFormSearch.reset();
+    this.isChecked = false;
+    this.mostrarSugerencias = false;
+    this.showSuggested = false;
+    this.exclude = false;
+    this.nameGroups = [];
+    this.groupSelection = false;
 
   }else if(option === "grupal"){
     this.grupal = true;
     this.pessoal = false;
-
+    this.frequencySelected = [];
+    this.nameFreq = [];
+    this.suggested = [];
+    this.user = {};
+    this.myForm.reset();
+    this.myFormSearch.reset();
+    this.isChecked = false;
+    this.mostrarSugerencias = false;
+    this.showSuggested = false;
+    this.exclude = false;
+    this.nameGroups = [];
+    this.groupSelection = false;
 
   }
 }
@@ -600,7 +624,8 @@ editGrupalAlarm(){
                  this.closebuttonEditGrupal.nativeElement.click();
               },1700)
 
-              setTimeout( ()=>{ this.resetEdition(); 
+              setTimeout( ()=>{ 
+                 this.resetEdition(); 
                  this.msg = "Alarme editada com sucesso";
                  this.showSuccess = true; 
               },2000)
@@ -683,12 +708,20 @@ onSelectGroup( event: any){
   const name= selectedValue.split(',')[0];
   const idgroup = parseInt(selectedValue.split(',')[1], 10);
 
-  this.selectedGroups.push({idgroup, name});
-  this.nameGroups.push(name);
+console.log(this.selectedGroups);
+  // Verificar si ya existe un grupo con el mismo idgroup
+    const existingGroup = this.selectedGroups.find(group => group.idgroup === idgroup);
+  
+    // Agregar solo si no existe
+    if (!existingGroup) {
+      this.selectedGroups.push({ idgroup, name });
+      this.nameGroups.push(name);
+    }
 
   if (this.groupSelect) {
     this.groupSelect.nativeElement.selectedIndex = 0;
   }
+console.log(this.selectedGroups);
  
 
 }
@@ -698,8 +731,13 @@ onSelectFreq( event: any){
   let id= selectedValue.split(',')[0];
   id = parseInt(id);
   const name = selectedValue.split(',')[1];
-  this.frequencySelected.push(id);
-  this.nameFreq.push(name);
+
+    const existingFreq = this.frequencySelected.find(item => item === id);
+   
+    if (!existingFreq) {
+      this.frequencySelected.push(id);
+      this.nameFreq.push(name);
+    }
 
 }
 

@@ -21,7 +21,7 @@
                 <span class="fas fa-envelope" style="color: rgb(0, 123, 255);"></span>
               </div>
             </div>
-            <div *ngIf="validField('email')" class="invalid" > Dado obrigatório </div>
+            <div *ngIf="validField('email')" class="invalid" > Dado obrigatório / Não tem formato de e-mail </div>
           </div>
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
@@ -41,17 +41,11 @@
         <div class=" fs-9 col-12 font" style="margin-top: 30px; ">
           
                <div class="d-flex justify-content-end">
-                  <span class="mb-0" > <a routerLink="../register" class="text-center cursor"> <i class="fa fa-user"></i> Registrar-se</a> </span> &nbsp; &nbsp; &nbsp;
+                  <span class="mb-0" > <a routerLink="/register" class="text-center cursor"> <i class="fa fa-user"></i> Registrar-se</a> </span> &nbsp; &nbsp; &nbsp;
 
-                  <span class="mb-0"> <a  routerLink="/resend-password" href="" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Recuperar senha</a> </span>
-
-               </div>
-               <div class="col-12 d-flex justify-content-end mt-2">
-                
-        
+                  <span class="mb-0"> <a routerLink="/resend-password" class="text-center cursor">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Recuperar senha</a> </span>
 
                </div>
-      
 
          </div>
         
@@ -94,7 +88,7 @@
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
             <p class="custom-text w-100"> Digite seu email </p>
             <input type="email" class="form-control"  required [ngStyle]="( validField2('userEmail')) ? {'border':'1px solid red'}:{}" formControlName="userEmail">
-            <div *ngIf="validField2('userEmail')" class="invalid" > Dado obrigatório </div>
+            <div *ngIf="validField2('userEmail')" class="invalid" > Dado obrigatório / Não tem formato de e-mail</div>
           </div>
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
@@ -155,7 +149,7 @@
             <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
               <label class="text w-100"> Digite seu email</label>
               <input type="email" class="form-control"  required [ngStyle]="( validField('userEmail')) ? {'border':'1px solid red'}:{}" formControlName="userEmail">
-              <div *ngIf="validField('userEmail')" class="invalid" > Dado obrigatório </div>
+              <div *ngIf="validField('userEmail')" class="invalid" > Dado obrigatório / Não tem formato de e-mail </div>
             </div>
 
             <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
@@ -258,13 +252,15 @@
     <form [formGroup]="myFormResend" class="needs-validation mt-1"  novalidate  [autocomplete]="false"  >
   
         <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
+
           <input type="email" class="form-control fs-10" placeholder="Email" required [ngStyle]="( validFieldResend('resendEmail')) ? {'border':'1px solid red'}:{}" formControlName="resendEmail">
+          
           <div class="input-group-append">
             <div class="input-group-text fs-8">
               <span class="fas fa-envelope" style="color: rgb(0, 123, 255);"></span>
             </div>
           </div>
-          <div *ngIf="validFieldResend('resendEmail')" class="invalid fs-10" > Dado obrigatório </div>
+          <div *ngIf="validFieldResend('resendEmail')" class="invalid fs-10" > Dado obrigatório / Não tem formato de e-mail </div>
         </div>
         
         <button type="button" class="btn btn-primary shadow fs-11 w-100" (click)="verifyEmail()" >
@@ -297,6 +293,13 @@
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5 ><i class="icon fas fa-exclamation-triangle"></i> Sucesso!</h5>
     <span class="fs-12"> Em breve entraremos em contato </span>
+  </div>
+
+     <!-- 500 status Nao encontrado -->
+     <div id="custom-toast" class="alert alert-danger alert-dismissible" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="show500"  >
+      <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <h5 ><i class="icon fas fas fa-user-lock"></i> Espere!</h5>
+      {{msg}}
   </div>
 
    

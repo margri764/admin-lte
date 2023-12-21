@@ -19,11 +19,20 @@
 
     
    <!-- 429 status -->
-   <div id="custom-toast" class="alert alert-danger alert-dismissible" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="show429"  >
+  <div id="custom-toast" class="alert alert-danger alert-dismissible" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="show429"  >
+      <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <h5 ><i class="icon fas fas fa-user-lock"></i> Espere!</h5>
+      {{msg}}
+  </div>
+
+        
+   <!-- showBackDown -->
+   <div id="custom-toast" class="alert alert-danger alert-dismissible" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showBackDown"  >
     <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <h5 ><i class="icon fas fas fa-user-lock"></i> Espere!</h5>
+    <h5 ><i class="icon fas fa-server"></i> Servidor fora do ar!</h5>
     {{msg}}
     </div>
+
 
 
 

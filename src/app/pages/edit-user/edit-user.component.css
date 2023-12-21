@@ -157,9 +157,18 @@ li {
 
   .frame-work{
     border-radius: 10px; 
-    padding: 10px;
-    background-color: rgb(250, 250, 250);
-    border: 1px solid rgb(1, 1, 1);
+    padding: 20px;
+    border: 1px solid rgb(233, 233, 233);
+    background-color: rgb(240, 240, 240);
+  
+    box-shadow: 5px 9px 11px -2px rgba(196,196,196,0.75);
+  -webkit-box-shadow: 5px 9px 11px -2px rgba(196,196,196,0.75);
+  -moz-box-shadow: 5px 9px 11px -2px rgba(196,196,196,0.75);
+  }
+  
+  .frame-work:hover{
+    background-color: rgb(230, 230, 230);
+  
   }
 
   option{
@@ -182,11 +191,7 @@ li {
   }
 
   
-  .frame-work:hover{
-    background-color: rgb(244, 244, 244);
-    cursor: pointer;
-  }
-  
+
   #custom-toast {
     position: fixed;
     bottom: 10px;
