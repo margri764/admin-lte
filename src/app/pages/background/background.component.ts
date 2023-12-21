@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { delay } from 'rxjs';
+import { delay, take } from 'rxjs';
 import { ImageUploadService } from 'src/app/shared/services/ImageUpload/image-upload.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 
@@ -67,7 +67,7 @@ closeToast(){
 
   removePicture( picture:any) {
 
-    this.imageUploadService.authDelBackground$.subscribe((auth)=>{
+    this.imageUploadService.authDelBackground$.pipe(take(1)).subscribe((auth)=>{
       if(auth){
         this.isLoading = true;
         this.imageUploadService.deleteBackgroundById(picture.idbackground).subscribe(

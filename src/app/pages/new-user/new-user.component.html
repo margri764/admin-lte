@@ -94,7 +94,7 @@
                               <div class="input-group mb-3 mt-3 col-6" >
                                 <label class="text w-100" >Email</label>
                                 <input type="email" class="form-control" formControlName="Email" [ngStyle]="( validField('Email')) ? {'border':'1px solid red'}:{}" [readonly]="readonlyFields['Email'] || isLinkedToCongregatio">
-                                <div *ngIf="validField('Email')" class="invalid" > Dado obrigatório </div>
+                                <div *ngIf="validField('Email')" class="invalid" > Dado obrigatório / Não tem formato de e-mail </div>
                               </div>
 
                               <div class="input-group mb-3 mt-3 col-6">
@@ -192,7 +192,7 @@
 
 
   <!-- Modal Congregatio-->
-  <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95; ">
+  <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
 
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
@@ -251,16 +251,13 @@
 
 
   <!-- no role selected  -->
-  <div id="custom-toast" class="alert alert-warning alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showLabelNoRole"  >
+  <!-- <div id="custom-toast" class="alert alert-warning alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showLabelNoRole"  >
     <button type="button" class="close" (click)="closeToastRole()" data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5 ><i class="icon fas fas fa-user-lock"></i> Erro</h5>
     <p class="cursor mt-1 fs-11" >Pode adicionar uma função ou editar mais tarde o usuário</p>
     <p class="cursor mt-1 fs-11 cursor" style="color: blue; text-decoration: underline; "  (click)="addRole()">Adicionar função</p>
-  </div>
+  </div> -->
 
-
-  
-  
   
 <div class="loading-overlay" *ngIf="isLoading">
   <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >

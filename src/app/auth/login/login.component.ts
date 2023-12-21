@@ -188,7 +188,8 @@ counter : number = 0;
     const email = this.myForm.get('email')?.value;
     const password = this.myForm.get('password')?.value;
     this.isLoading = true;
-    this.authService.login( email, password ).subscribe(
+    const session = "false"
+    this.authService.login( email, password, session ).subscribe(
       ({success, firstlogin})=>{
 
         if(success && firstlogin && firstlogin === "true"){
@@ -252,7 +253,8 @@ counter : number = 0;
      const email = this.myForm.get('email')?.value;
      const password = this.myForm.get('password')?.value;
      this.sendingAuth = true;
-     this.authService.login( email, password ).subscribe(
+     const session = "false";
+     this.authService.login( email, password, session ).subscribe(
        ({success})=>{
  
          if(success ){

@@ -2,7 +2,7 @@ import { ThisReceiver } from '@angular/compiler';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { Subject, debounceTime, delay } from 'rxjs';
+import { Subject, debounceTime, delay, take } from 'rxjs';
 import { LanguageApp } from 'src/app/pages/table.languaje'
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
@@ -391,7 +391,7 @@ onRemove( alarm:any ){
 
   (!alarm.idalarm || alarm.idalarm === undefined ) ? [id = alarm.idgroupalarm, grupal = true] : [id = alarm.idalarm, personal = true];
 
-  this.alarmGroupService.authDelAlarm$.subscribe(
+  this.alarmGroupService.authDelAlarm$.pipe(take(1)).subscribe(
     (auth)=>{
       if(auth){
         this.isLoading = true;

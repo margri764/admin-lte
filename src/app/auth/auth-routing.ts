@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ResendPasswordComponent } from './resend-password/resend-password.component';
+import { LockscreenComponent } from './pages/lockscreen/lockscreen/lockscreen.component';
 
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'login',  component: LoginComponent  },
   { path: 'register',  component: RegisterComponent },
   { path: 'resend-password',  component: ResendPasswordComponent },
+  { path: 'sessao-expirada',  component: LockscreenComponent },
  ];
 
 @NgModule({

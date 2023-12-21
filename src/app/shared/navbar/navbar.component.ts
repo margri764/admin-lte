@@ -3,7 +3,8 @@ import { SessionService } from '../services/session/session.service';
 import { AppState } from '../redux/app.reducer';
 import { Store } from '@ngrx/store';
 import { distinctUntilChanged, filter } from 'rxjs';
-import { getDataLS } from '../storage';
+import { getDataLS, saveDataSS } from '../storage';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -17,6 +18,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
               private sessionService : SessionService,
+              private router : Router,
               private store : Store <AppState>,
   )
    {
@@ -28,25 +30,23 @@ export class NavbarComponent implements OnInit {
 
     this.sessionService.getClock().subscribe((timeRemaining: number) => {
       this.sessionTimeRemaining = timeRemaining;
-      if(timeRemaining === 0){
-      this.sessionService.startSession();
-
-      }
+      
       const user = getDataLS("user");
-      if(user !== undefined){
-        this.user = { name: user?.name, role:user?.role} ;
+
+
+      if(timeRemaining === 0){
+        this.sessionService.startSession();
+
+        saveDataSS('session', user)
+        
+        this.router.navigateByUrl('/sessao-expirada')
       }
+      if(user !== undefined){
+        this.user = { name: user?.name, role:user?.role } ;
+      }
+
     });
 
-  //   this.store.select('auth')
-  //   .pipe(
-  //   filter( ({user})=>  user != null && user != undefined),
-  //   distinctUntilChanged((prev, curr) => prev.user === curr.user)
-  //   ).subscribe(
-  //   ({user})=>{
-  //   this.user = { name:user?.Nome_Completo, role:user?.role} ;
-  //   // this.isLoading = false;
-  // })
   }
 
 }

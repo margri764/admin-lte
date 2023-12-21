@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthRoutingModule } from './auth-routing';
 import { ResendPasswordComponent } from './resend-password/resend-password.component';
+import { LockscreenComponent } from './pages/lockscreen/lockscreen/lockscreen.component';
 
 
 
@@ -15,6 +16,7 @@ import { ResendPasswordComponent } from './resend-password/resend-password.compo
     LoginComponent,
     RegisterComponent,
     ResendPasswordComponent,
+    LockscreenComponent,
   ],
 
   exports: [

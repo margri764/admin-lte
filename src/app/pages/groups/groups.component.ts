@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject, debounceTime, delay, takeUntil } from 'rxjs';
+import { Subject, debounceTime, delay, take, takeUntil } from 'rxjs';
 import { AlarmGroupService } from 'src/app/shared/services/alarmGroup/alarm-group.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { LanguageApp } from '../table.languaje';
@@ -225,7 +225,7 @@ onRemove( group:any ){
 removeUserFromGroup( group:any ){
 
 
-  this.alarmGroupService.authDelUserGroup$.subscribe(
+  this.alarmGroupService.authDelUserGroup$.pipe(take(1)).subscribe(
     (auth)=>{
       if(auth){
         this.isLoading = true;

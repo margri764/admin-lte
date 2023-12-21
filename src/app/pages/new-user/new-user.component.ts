@@ -4,12 +4,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { UserService } from 'src/app/shared/services/user/user.service';
 import * as moment from 'moment';
 import { User } from 'src/app/shared/models/user.models';
-import { Subject, debounceTime, delay } from 'rxjs';
+import { Subject, debounceTime, delay, take } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { CongregatioService } from 'src/app/shared/services/congregatio/congregatio.service';
+import { ValidateService } from 'src/app/shared/services/validate/validate.service';
 
 
 @Component({
@@ -65,7 +66,7 @@ export class NewUserComponent implements OnInit{
     readonlyFields: { [key: string]: boolean } = {};
     @ViewChild('closebutton') closebutton! : ElementRef;
     disableOrdem:boolean = false;
-    linkCongregatio:any = 0;
+    linkCongregatio : any = 0;
 
 
 
@@ -75,7 +76,8 @@ export class NewUserComponent implements OnInit{
                 private userService : UserService,
                 private errorService : ErrorService,
                 private congregatioService : CongregatioService,
-                private localeService: BsLocaleService
+                private localeService: BsLocaleService,
+                private validatorService : ValidateService
 
     ) {
 
@@ -89,7 +91,7 @@ export class NewUserComponent implements OnInit{
         Nome_Completo:  [ '' ],
         Telefone1:  [ '', [Validators.required]],
         Data_Nascimento:  [ '', [Validators.required] ],
-        Email:  [ '', [Validators.required]],
+        Email:     [ '', [Validators.required, Validators.pattern(this.validatorService.emailPattern)] ],
         Nacionalidade:  [ '', [Validators.required] ],
         Residencia_atual:  [ '', [Validators.required] ],
         Pais_da_sede:  [ '', [Validators.required] ],
@@ -105,6 +107,7 @@ export class NewUserComponent implements OnInit{
      }
   
     ngOnInit(): void {
+
 
         
 
@@ -152,152 +155,146 @@ export class NewUserComponent implements OnInit{
         return;
       }
 
-
-
       const role = this.myForm.get('role')?.value;
 
-      if(role === '' || role === undefined){
+      this.showSuccess = false;
+      this.showLabelNoRole = false;
+
+      if(role === '' || !role){
         this.showLabelNoRole = true;
       }
 
-      if(this.roleSelected){
-        this.userService.authAddRole$.emit(true);
-      }
+    const Data_Nascimento = this.myForm.get('Data_Nascimento')?.value;
 
-      this.userService.authAddRole$.subscribe( (auth)=>{
-        if(auth){
+    let birthdayFormatted = null;
+    if(Data_Nascimento !== null && Data_Nascimento !== ''){
+      birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
+    }else{
+      birthdayFormatted = null;
+    }
 
-          const Data_Nascimento = this.myForm.get('Data_Nascimento')?.value;
+    const body : User = {
+      ...this.myForm.value,
+      Data_Nascimento: birthdayFormatted,
+      linkCongregatio: this.linkCongregatio,
+      Ruta_Imagen: (this.pathImg==='') ? null : this.pathImg
+    }
 
-          let birthdayFormatted = null;
-          if(Data_Nascimento !== null && Data_Nascimento !== ''){
-            birthdayFormatted = moment(Data_Nascimento).format('YYYY-MM-DD');
-          }else{
-            birthdayFormatted = null;
-          }
-       
-          const body : User = {
-            ...this.myForm.value,
-            Data_Nascimento: birthdayFormatted,
-            linkCongregatio: this.linkCongregatio,
-            Ruta_Imagen: (this.pathImg==='') ? null : this.pathImg
-          }
+    this.isLoading = true;
 
-          this.isLoading = true;
-          this.userService.createUser(body).subscribe(
-            ( {success} )=>{
-              if( success ){
-                setTimeout(()=>{ this.isLoading = false }, 700);
-                this.showSuccess = true;
-              }
-            })
-
-        }else{
-          return
+    this.userService.createUser(body).subscribe(
+      ( {success} )=>{
+        if( success ){
+          setTimeout(()=>{ this.isLoading = false }, 700);
+          this.showSuccess = true;
+          this.isLinkedToCongregatio = false;
+          this.userCongregatio = null;
+          this.myForm.reset();
+          this.myForm.clearValidators(); 
+          this.disableOrdem = false;
+          this.resetReadonlyFields();
         }
       })
-
-
-         
     }
-  
+
     
-    handleRoleChange( value:string ){
+handleRoleChange( value:string ){
 
-      this.myForm.get('role')?.setValue(value);
-      const role =    this.myForm.get('role')?.value;
-      if(role !== '' || role !== undefined){
-        this.roleSelected = true;
-      }
+this.myForm.get('role')?.setValue(value);
+const role =    this.myForm.get('role')?.value;
+if(role !== '' || role !== undefined){
+  this.roleSelected = true;
+}
 
-     }
+}
 
-     validField( field: string ) {
-      const control = this.myForm.get(field);
-      return control && control.errors && control.touched;
-  }
+validField( field: string ) {
+const control = this.myForm.get(field);
+return control && control.errors && control.touched;
+}
 
-  closeToast(){
-    this.showSuccess = false;
-  }
+closeToast(){
+  this.showSuccess = false;
+}
 
+closeToastRole(){
+  this.showLabelNoRole = false;
+  this.userService.authAddRole$.emit(true);
+}
+
+selectUser(user: any){
+
+  console.log(user);
+
+//  user = { ...user, iduser: this.user.iduser};
+  this.userCongregatio = user;
+  this.linkCongregatio = 1;
   
-  closeToastRole(){
-    this.showLabelNoRole = false;
-    this.userService.authAddRole$.emit(true);
+  this.pathImg =`https://congregatio.info/${user['Ruta Imagen']}`
+
+  //back values references
+  const backFullName = user['Nome Completo'];
+  const backPhone = user.Telefone1;
+  const backBirthday = user['Data Nacimento'];
+  const backEmail = user.Email;
+  const backNationality = user.Nacionalidade;
+  const backActualAddress = user['Residência atual'];
+  const backSede = user['Sede onde entrou'];
+  const backOrdem = user['Ordem'];
+  const backName = " ";
+  const backLastName = " ";
+
+  // Definir los campos y sus valores iniciales (cámbialos según tu formulario)
+  const fields = [
+    { name: 'Nome_Completo', backValue: backFullName },
+    { name: 'Telefone1', backValue: backPhone },
+    { name: 'Data_Nascimento', backValue: backBirthday },
+    { name: 'Email', backValue: backEmail },
+    { name: 'Nacionalidade', backValue: backNationality },
+    { name: 'Residencia_atual', backValue: backActualAddress },
+    { name: 'Nome_da_sede', backValue: backSede },
+    { name: 'ordem', backValue: backOrdem },
+    { name: 'name', backValue: backName },
+    { name: 'lastName', backValue: backLastName },
+  ];
+
+  if(backOrdem && backOrdem !== ''){
+
+  this.disableOrdem = true;
   }
 
+  // Iterar sobre los campos
+  fields.forEach(field => {
+    const formControl = this.myForm.get(field.name);
 
-  selectUser(user: any){
+    if (formControl instanceof FormControl) {
+      if (field.backValue !== null && field.backValue !== undefined && field.backValue !== '') {
+        formControl.setValue(field.backValue);
 
-    console.log(user);
-
-  //  user = { ...user, iduser: this.user.iduser};
-   this.userCongregatio = user;
-   this.linkCongregatio = 1;
-   
-   this.pathImg =`https://congregatio.info/${user['Ruta Imagen']}`
- 
-   //back values references
-   const backFullName = user['Nome Completo'];
-   const backPhone = user.Telefone1;
-   const backBirthday = user['Data Nacimento'];
-   const backEmail = user.Email;
-   const backNationality = user.Nacionalidade;
-   const backActualAddress = user['Residência atual'];
-   const backSede = user['Sede onde entrou'];
-   const backOrdem = user['Ordem'];
-   const backName = " ";
-   const backLastName = " ";
-
-   // Definir los campos y sus valores iniciales (cámbialos según tu formulario)
-   const fields = [
-     { name: 'Nome_Completo', backValue: backFullName },
-     { name: 'Telefone1', backValue: backPhone },
-     { name: 'Data_Nascimento', backValue: backBirthday },
-     { name: 'Email', backValue: backEmail },
-     { name: 'Nacionalidade', backValue: backNationality },
-     { name: 'Residencia_atual', backValue: backActualAddress },
-     { name: 'Nome_da_sede', backValue: backSede },
-     { name: 'ordem', backValue: backOrdem },
-     { name: 'name', backValue: backName },
-     { name: 'lastName', backValue: backLastName },
-   ];
-
-   if(backOrdem && backOrdem !== ''){
-
-    this.disableOrdem = true;
-   }
-
-   // Iterar sobre los campos
-   fields.forEach(field => {
-     const formControl = this.myForm.get(field.name);
- 
-     if (formControl instanceof FormControl) {
-       if (field.backValue !== null && field.backValue !== undefined && field.backValue !== '') {
-         formControl.setValue(field.backValue);
- 
-         this.readonlyFields[field.name] = true;
-       } else {
-         this.readonlyFields[field.name] = false;
-       }
-     }
-   });
-
-   
-       this.suggested = [];
-       this.myFormSearch.get('itemSearch')?.setValue('');
-       setTimeout(()=>{
-         // asi cierro el modal
-         this.closebutton.nativeElement.click();
-       },1)
+        this.readonlyFields[field.name] = true;
+      } else {
+        this.readonlyFields[field.name] = false;
+      }
+    }
+  });
+  this.suggested = [];
+  this.myFormSearch.get('itemSearch')?.setValue('');
+  setTimeout(()=>{
+    // asi cierro el modal
+    this.closebutton.nativeElement.click();
+  },1)
+}
 
 
-  }
+// despues de hacer la peticion pero enviando el user congregatio, vacio los formularios
+resetReadonlyFields() {
+  Object.keys(this.readonlyFields).forEach(fieldName => {
+    this.readonlyFields[fieldName] = false;
+  });
+}
 
 
 // search
-
 close(){
   this.mostrarSugerencias = false;
   this.itemSearch = '';
@@ -306,46 +303,48 @@ close(){
   // this.noMatches = false;
   this.clientFound= null;
   this.isClientFound = false;
-  }
+}
 
-  teclaPresionada(){
+teclaPresionada(){
 // this.noMatches = false;
 this.debouncer.next( this.itemSearch );  
-  };
+};
 
-  sugerencias(value : string){
-  this.spinner = true;
-  this.itemSearch = value;
-  this.mostrarSugerencias = true;  
-  // this.loadindCongregatio = true;
-  this.congregatioService.searchUserCongregatio(value)
-  .subscribe ( ( {users} )=>{
-    if(users.length === 0){
-        this.spinner = false;
-        this.myForm.get('itemSearch')?.setValue('');
-    }else{
-      // this.loadindCongregatio = false;
-      this.suggested = users;
-    }
-    }
-  )
-  }
+sugerencias(value : string){
+    this.spinner = true;
+    this.itemSearch = value;
+    this.mostrarSugerencias = true;  
+    this.userCongregatio = null;
+    this.resetReadonlyFields();
+    this.myForm.reset();
+    this.congregatioService.searchUserCongregatio(value)
+    .subscribe ( ( {users} )=>{
+      if(users.length === 0){
+          this.spinner = false;
+          this.myForm.get('itemSearch')?.setValue('');
+      }else{
+        // this.loadindCongregatio = false;
+        this.suggested = users;
+      }
+      }
+    )
+}
 
-  Search( item: any ){
-    setTimeout(()=>{
-      this.mostrarSugerencias = true;
-      this.spinner = false;
-      this.fade = false;
-      this.clientFound = item;
-      this.isClientFound = true;
-      this.myForm.get('itemSearch')?.setValue('');
-      this.suggested = [];
-      // this.noMatches = false;
-    },500)
-  }
+Search( item: any ){
+  setTimeout(()=>{
+    this.mostrarSugerencias = true;
+    this.spinner = false;
+    this.fade = false;
+    this.clientFound = item;
+    this.isClientFound = true;
+    this.myForm.get('itemSearch')?.setValue('');
+    this.suggested = [];
+    // this.noMatches = false;
+  },500)
+}
 // search
-    
   
+
   
 
     

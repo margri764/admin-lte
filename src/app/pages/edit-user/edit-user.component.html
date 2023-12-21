@@ -82,7 +82,7 @@
                                     <input type="checkbox"  data-bootstrap-switch data-off-color="danger" data-on-color="success" #link >
                                     <label class=" font fs-11" style="color: rgb(4, 171, 4); margin-left: 10px;" *ngIf="stateLink && wasLinked"> Usuário vinculado com sucesso </label>
 
-                                    <button type="button" class="btn btn-primary shadow fs-9" style="margin-left: 30px; padding: 4.2px 9px 4.2px 9px !important; " data-toggle="modal" data-target="#modalFichaCompleta"  ><i class="fa fa-list-ul"></i> &nbsp; Ver ficha completa</button>
+                                    <button type="button" class="btn btn-primary shadow fs-9" style="margin-left: 30px; padding: 4.2px 9px 4.2px 9px !important; " data-toggle="modal" data-target="#modalFichaCompleta" (click)="selectUserFichaCompleta()" ><i class="fa fa-list-ul"></i> &nbsp; Ver ficha completa</button>
                                 </div>
 
                               </div>
@@ -479,7 +479,7 @@
                                 <td class="align-top"> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
                                 <td class="d-flex align-items-center justify-content-start" style="align-items: start;">
                                   <!-- (click)="editPessoalAlarm(pes)" -->
-                                  <i class="fas fa-pencil-alt" style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;" [ngbTooltip]="'Editar alarme'" ></i>
+                                  <!-- <i class="fas fa-pencil-alt" style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;" [ngbTooltip]="'Editar alarme'" ></i> -->
                                   <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelAlarm" (click)="onRemoveAlarm(pes)" [ngbTooltip]="'Excluir alarme'"></i>
                                 </td>
                             </tr>
@@ -623,7 +623,7 @@
     </div>
 
   <!-- Modal Congregatio-->
-  <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95; ">
+  <div class="modal fade" id="modalCongregatio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
 
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
@@ -673,41 +673,33 @@
   </div>
 
   <!-- Modal Ficha completa-->
-   <div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95; ">
+<div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header" style="padding: 20px;">
-            <h5 class="modal-title font" id="exampleModalCenterTitle"> Ficha completa</h5>
-        
-          </div>
-          <div class="modal-body">
-            <div class="table-responsive  font" >
-              <table class="table  table-hover" *ngIf="userCongregatio || user">
-                <thead>
-                  <tr>
-                    <th scope="col">Propiedad</th>
-                    <th scope="col">Valor</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let prop of getObjectProperties()">
-                    <td> <b>{{ prop.key }}</b> </td>
-                    <td>{{ prop.value }}</td>
-                  </tr>
-                </tbody>
-              </table>
-          </div>
-  
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close" #closebutton (click)="close()"> Sair</button>
-          </div>
-  
-        
-        </div>
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="padding: 20px;">
+        <h5 class="modal-title font" id="exampleModalCenterTitle"> Ficha completa</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeFichaCompleta()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    
       </div>
+      <div class="modal-body">
+
+        <app-view-congregati *ngIf="sendUser" [userFromGroup]="userFichaCompleta"></app-view-congregati>
+        <app-view-congregati *ngIf="sendUserCongregatio" [userCongregatio]="userFichaCompleta"></app-view-congregati>
+       
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-block shadow" style="width: 100px;" data-dismiss="modal" aria-label="Close" #closebutton (click)="close(); closeFichaCompleta()"> Sair</button>
+      </div>
+
+    
+    </div>
   </div>
+</div>
 
   <!-- no link selection  -->
   <div id="custom-toast" class="alert alert-danger alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showLabelLinked"  >

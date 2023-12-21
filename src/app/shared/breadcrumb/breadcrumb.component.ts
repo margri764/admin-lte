@@ -52,13 +52,6 @@ export class BreadcrumbComponent implements OnInit {
 
   }
 
-  // { path: '',  component: DashboardComponent, data:{ title:"Dashboard"}},
-  //             { path: 'progress',  component: ProgressComponent , data:{ title:"Progress"}},
-  //             { path: 'graphics',  component: Graphic1Component , data:{ title:"Graficas"}},
-  //             { path: 'editar-clientes/:id',  component: EditClientComponent , data:{ title:"Editar Clientes"}},
-  //             { path: 'editar-usuario/:id',  component: EditUserComponent , data:{ title:"Editar Usuário"}},
-  //             { path: 'novo-usuario',  component: NewUserComponent , data:{ title:"Novo Usuário"}},
-  //             { path: 'novo-cliente',  component: NewClientComponent , data:{ title:"Novo Cliente"}},
 
   changeIcons( url : string){
     switch (url) {

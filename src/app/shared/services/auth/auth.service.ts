@@ -70,9 +70,9 @@ export class AuthService {
     )
   }
 
-  login(email: string, password : string){
+  login(email: string, password : string, session: any){
     
-    const body = { email, password }
+    const body = { email, password, session }
   
   
     return this.http.post<any>(`${this.baseUrl}api/auth/login`, body) 
@@ -85,7 +85,7 @@ export class AuthService {
                           this.cookieService.set('token',token);
                           this.user = user;
                           this.store.dispatch(authActions.setUser({user}));
-                          const userToLS = { name: user.Nome_Completo, role:user.role, email: user.Email};
+                          const userToLS = { name: user.Nome_Completo, role:user.role, email: user.Email, Ruta_Imagen: user.Ruta_Imagen};
                           this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
                       }           
                     
@@ -106,7 +106,7 @@ export class AuthService {
                           this.cookieService.set('token',token);
                           this.user = user;
                           this.store.dispatch(authActions.setUser({user}));
-                          const userToLS = { name: user.Nome_Completo, role:user.role, email: user.Email};
+                          const userToLS = { name: user.Nome_Completo, role:user.role, email: user.Email, Ruta_Imagen: user.Ruta_Imagen};
                           this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
                       }           
                     

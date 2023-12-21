@@ -47,7 +47,7 @@ export class ViewCongregatiComponent implements OnInit, OnChanges {
     console.log(this.userFromGroup);
     console.log(this.userCongregatio);
 
-    //el usuario viene de la pestaña Congregatio
+   //el usuario viene de los grupos
     if(this.userFromGroup !== undefined){
 
       this.isLoading = true;
@@ -62,8 +62,8 @@ export class ViewCongregatiComponent implements OnInit, OnChanges {
         }
       })
 
-    }else{ //el usuario viene de los grupos
-
+    }else{ 
+ //el usuario viene de la pestaña Congregatio
       this.user = this.userCongregatio;
       this.getImages(this.user);
       this.isLoading = false;
@@ -85,6 +85,7 @@ export class ViewCongregatiComponent implements OnInit, OnChanges {
   getImages(user: any) {
 
     let total = null;
+
     if(this.userFromGroup !== undefined){
        total = user.Ruta_Imagen;
        console.log(total);
@@ -113,7 +114,11 @@ export class ViewCongregatiComponent implements OnInit, OnChanges {
     const indice = match ? parseInt(match[1], 10) : null;
   
     const restoDelPath = total.replace(/\[\d+\]\.jpg$/, '');
-    const path = "https://congregatio.info/";
+   let path = "https://congregatio.info/";
+
+    if(total.startsWith('https://congregatio.info/')){
+      path = '';
+    }
   
     // Verificar si hay un índice antes de entrar en el bucle
     if (indice !== null) {
@@ -139,6 +144,8 @@ export class ViewCongregatiComponent implements OnInit, OnChanges {
       const img = document.createElement("img");
   
       img.className = "img-fluid";
+
+
       img.src = `${path}${restoDelPath}`;
   
       img.alt = `Foto do Perfil do Usuário`;

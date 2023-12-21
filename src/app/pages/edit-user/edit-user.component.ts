@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
 import { User } from 'src/app/shared/models/user.models';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject, debounceTime, delay } from 'rxjs';
+import { Subject, debounceTime, delay, take } from 'rxjs';
 import { CongregatioService } from 'src/app/shared/services/congregatio/congregatio.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import * as moment from 'moment';
@@ -126,6 +126,7 @@ menuVisible = false;
 menuDocument: any;
 showBulk : boolean = false;
 arrIds : any []=[];
+show : boolean = false;
 
 
 
@@ -442,7 +443,7 @@ arrIds : any []=[];
     const id = alarm.idalarm;
     console.log(id);
   
-    this.alarmGroupService.authDelAlarm$.subscribe(
+    this.alarmGroupService.authDelAlarm$.pipe(take(1)).subscribe(
       (auth)=>{
         if(auth){
           this.isLoading = true;
@@ -479,7 +480,7 @@ arrIds : any []=[];
 
   onRemove(file: File): void {
 
-    this.userService.authDelDocument$.subscribe( (emmited)=>{ 
+    this.userService.authDelDocument$.pipe(take(1)).subscribe( (emmited)=>{ 
       if(emmited){
           const index = this.files.indexOf(file);
           if (index !== -1) {
@@ -738,7 +739,7 @@ arrIds : any []=[];
 
   deleteUser( ){
 
-    this.userService.authDelUser$.subscribe( (emmited)=>{ 
+    this.userService.authDelUser$.pipe(take(1)).subscribe( (emmited)=>{ 
       if(emmited){
         this.isLoading = true;
         this.showSuccessDelDocument = false;
@@ -760,7 +761,7 @@ arrIds : any []=[];
   deleteDocById( doc:any){
 
     
-    this.userService.authDelDocument$.subscribe( (emmited)=>{ 
+    this.userService.authDelDocument$.pipe(take(1)).subscribe( (emmited)=>{ 
       if(emmited){
         this.isLoading = true;
         this.showSuccessDelDocument = false;
@@ -1088,6 +1089,31 @@ mostrarMenu(event: MouseEvent): void {
 
 closeMenu(): void {
   this.menuDocument = null;
+}
+
+userFichaCompleta : any;
+sendUserCongregatio : boolean = false;
+sendUser : boolean = false;
+
+selectUserFichaCompleta(){
+  if(this.user && this.userCongregatio){
+    this.userFichaCompleta = this.userCongregatio;
+    this.sendUserCongregatio = true;
+    this.sendUser = false;
+  }else if(this.user && !this.userCongregatio){
+    this.userFichaCompleta = this.user;
+    this.sendUser = true;
+    this.sendUserCongregatio = false;
+
+  }
+  
+
+}
+
+closeFichaCompleta(){
+
+  this.userFichaCompleta = false;
+  this.sendUserCongregatio = false;
 }
 }
 
