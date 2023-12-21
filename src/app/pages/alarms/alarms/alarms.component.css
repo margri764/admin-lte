@@ -146,6 +146,23 @@
   color: whitesmoke;
 }
 
+.frame-work{
+  border-radius: 10px; 
+  padding: 20px;
+  border: 1px solid rgb(233, 233, 233);
+  background-color: rgb(240, 240, 240);
+
+  box-shadow: 5px 9px 11px -2px rgba(196,196,196,0.75);
+-webkit-box-shadow: 5px 9px 11px -2px rgba(196,196,196,0.75);
+-moz-box-shadow: 5px 9px 11px -2px rgba(196,196,196,0.75);
+}
+
+.frame-work:hover{
+  background-color: rgb(230, 230, 230);
+
+}
+
+
 .btnMenuClicked, .btnMenu {
   font-size: min(1em, 6vw); /* tamaño de fuente máximo: 16px o 5% del ancho de la pantalla */
   padding: 8px 10px; /* espaciado interno del botón */

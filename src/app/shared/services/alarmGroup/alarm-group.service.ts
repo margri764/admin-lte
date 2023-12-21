@@ -242,6 +242,21 @@ export class AlarmGroupService {
 
   }
 
+  editGrupalAlarm( id:any, body:any ){
+    
+    return this.http.put<any>(`${this.baseUrl}api/alarm/editGrupalAlarm/${id}`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from editGrupalAlarm service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+
+  }
+
+
 
   deleteGroup( id:any ){
     

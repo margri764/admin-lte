@@ -10,8 +10,9 @@ import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { DataTableDirective } from 'angular-datatables';
-import { Alarm } from 'src/app/shared/interfaces/alarm.interface';
+import { Alarm, AlarmGrupal } from 'src/app/shared/interfaces/alarm.interface';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
+import { log } from 'console';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
   @ViewChild('excluir') excluir! : ElementRef;
   @ViewChild('closebutton') closebutton! : ElementRef;
   @ViewChild('closebuttonEdit') closebuttonEdit! : ElementRef;
+  @ViewChild('closebuttonEditGrupal') closebuttonEditGrupal! : ElementRef;
   @Input() userViewModal: any;
 
   // start search
@@ -114,9 +116,6 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
         itemSearch:  [ '',  ],
       });   
 
-      // this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers', responsive: true };
-  
-        
    }
 
    ngAfterViewInit(): void {
@@ -149,7 +148,7 @@ ngOnInit(): void {
     idgroups:  [ null],
     alarmDate:  [ '', [Validators.required]],
     notifFrequency:  [ null, [Validators.required]],
-    description: ['']
+    description: ['',[Validators.required]],
   });
 
   this.myFormEditPersAlarm = this.fb.group({
@@ -162,7 +161,7 @@ ngOnInit(): void {
 
   
   this.myFormEditGrupalAlarm = this.fb.group({
-    idalarm:[],
+    idgroupalarm: [],
     grupalName:     [ '', [Validators.required] ],
     alarmGrupalDate:  [ '', [Validators.required] ],
     notifGrupalFrequency:  [ null ],
@@ -252,7 +251,6 @@ initGrupalAlarms(){
     })
 }
 
-
 selectPessoalOrGrupal( option:string ){
 
   if(option === "pessoal"){
@@ -266,7 +264,6 @@ selectPessoalOrGrupal( option:string ){
 
   }
 }
-
 
 onSave(){
 
@@ -321,7 +318,7 @@ onSave(){
             this.msg = "Alarme criado com sucesso";
             this.pessoal = false;
             this.grupal = false;
-            this.initPersonalAlarms()
+            this.initPersonalAlarms();
           },1000)
           
         }
@@ -348,8 +345,10 @@ onSave(){
             this.resetForm();
             this.showSuccess = true;
             this.msg = "Alarme criado com sucesso";
+            this.initGrupalAlarms();
             this.pessoal = false;
             this.grupal = false;
+            this.isChecked = false;
           },1000)
           
         }
@@ -471,11 +470,8 @@ editPersonalAlarm( ){
               this.initPersonalAlarms();
               this.showSuccess = true;
               this.msg = "Alarme editada com sucesso";
-              this.pessoal = false;
-              this.grupal = false;
-              this.frequencySelected = [];
-              this.nameFreq = [];
-              this.myFormEditPersAlarm.reset();
+              this.resetEdition();
+
               setTimeout(()=>{
                 // asi cierro el modal
                 this.closebuttonEdit.nativeElement.click();
@@ -484,7 +480,45 @@ editPersonalAlarm( ){
     })
 }
 
+resetEdition(){
+  this.pessoal = false;
+  this.grupal = false;
+  this.frequencySelected = [];
+  this.nameFreq = [];
+  this.myFormEditPersAlarm.reset();
+  this.myFormEditGrupalAlarm.reset();
+  this.suggested = [];
+  this.isChecked = false;
+  this.mostrarSugerencias = false;
+  this.selectedGroups = [];
+  this.nameGroups = [];
+
+}
+
+unSelectExludedUser( user:any ){
+  
+  console.log(user.iduser);
+
+  this.suggested = this.suggested.filter( (item)=>item.iduser !== user.iduser)
+}
+
 launchGrupalAlarm(alarm: any) {
+
+  console.log(alarm);
+
+  //esto es el user excluido q viene del back
+  this.suggested.push(alarm.user);
+
+  if(alarm.user.iduser !== null){
+    this.showSuggested = true;
+    this.mostrarSugerencias = true;
+  }
+
+  // creo el mismo tipo de objeto con el q se trabaja en el new alarm, para eso combino dos prop del back
+  const group_names = alarm.group_names;
+  const groups_ids = alarm.groups_ids;
+  this.selectedGroups = group_names.map((name: any, index: string | number) => ({ idgroup: groups_ids[index], name }));
+
 
   this.nameFreq = alarm.notifFrequency.map((day: number) => {
     switch (day) {
@@ -505,21 +539,73 @@ launchGrupalAlarm(alarm: any) {
     }
   });
 
+  this.nameGroups = alarm.group_names;
+
     
-  this.myFormEditPersAlarm.patchValue({
-    personalName: alarm.name,
-    alarmPersonalDate: alarm.alarmDate,
-    descriptionPersonal: alarm.description,
-    idalarm: alarm.idalarm
+  this.myFormEditGrupalAlarm.patchValue({
+    grupalName: alarm.name,
+    alarmGrupalDate: alarm.alarmDate,
+    descriptionGrupal: alarm.description,
+    idgroupalarm: alarm.idgroupalarm
   });
 
-  this.myFormEditPersAlarm.get('personalName')?.setValidators([Validators.required]);
-  this.myFormEditPersAlarm.get('alarmPersonalDate')?.setValidators([Validators.required]);
-  this.myFormEditPersAlarm.get('descriptionPersonal')?.setValidators([Validators.required]);
-  // this.myFormEditPersAlarm.get('notifPersonalFrequency')?.setValidators([Validators.required]);
+  this.myFormEditGrupalAlarm.get('grupalName')?.setValidators([Validators.required]);
+  this.myFormEditGrupalAlarm.get('alarmGrupalDate')?.setValidators([Validators.required]);
+  this.myFormEditGrupalAlarm.get('descriptionGrupal')?.setValidators([Validators.required]);
+  // onSelectGroup
 
 }
-editPGrupalAlarm(){
+
+editGrupalAlarm(){
+
+  
+  if ( this.myFormEditGrupalAlarm.invalid ) {
+    this.myFormEditGrupalAlarm.markAllAsTouched();
+    return;
+  }
+
+  const alarmDate = this.myForm.get('alarmGrupalDate')?.value;
+
+  let formattedDate = '';
+  let groups : any [] | null= [];
+
+  if(alarmDate !== null && alarmDate !== ''){
+    formattedDate = moment(alarmDate).toISOString();
+  }
+  this.selectedGroups.forEach( (element:any)=>{
+    groups?.push(element.idgroup)
+  })
+
+
+  const body : AlarmGrupal = {
+    name : this.myFormEditGrupalAlarm.get('grupalName')?.value,
+    alarmDate : formattedDate,
+    notifFrequency : this.frequencySelected,
+    description : this.myFormEditGrupalAlarm.get('descriptionGrupal')?.value,
+    idgroupalarm : this.myFormEditGrupalAlarm.get('idgroupalarm')?.value,
+    excludedUser: !this.isChecked ? null : this.user.iduser,
+    idgroups: groups.length > 0 ? groups : null,
+  }
+
+  console.log(body);
+  this.isLoading = true;
+  this.showSuccess = false;
+ 
+  this.alarmGroupService.editGrupalAlarm(body.idgroupalarm, body).subscribe(
+    ( {success} )=>{
+            if(success){
+              this.initGrupalAlarms();
+              setTimeout(()=>{
+                 this.isLoading = false; 
+                 this.closebuttonEditGrupal.nativeElement.click();
+              },1700)
+
+              setTimeout( ()=>{ this.resetEdition(); 
+                 this.msg = "Alarme editada com sucesso";
+                 this.showSuccess = true; 
+              },2000)
+            }
+    })
 
 }
 
@@ -553,6 +639,11 @@ onSelect(event: any): void {
     this.exclude = !this.exclude;
 }
 
+onSelectEdition(event: any): void {
+    this.isChecked = (event.target as HTMLInputElement).checked;
+    this.exclude = !this.exclude;
+}
+
 validField( field: string ) {
     const control = this.myForm.controls[field];
     return control && control.errors && control.touched;
@@ -563,8 +654,14 @@ validFieldEdit( field: string ) {
   return control && control.errors && control.touched;
 }
 
+validFieldEditGrupal( field: string ) {
+  const control = this.myFormEditGrupalAlarm.controls[field];
+  return control && control.errors && control.touched;
+}
 
 removeGroup(nameToRemove: string): void {
+
+  console.log('selectedGroups',  this.selectedGroups);
 
 
   // Filtrar el array para excluir el grupo con el nombre especificado
@@ -657,7 +754,7 @@ resetForm(){
     this.isChecked = false;
     this.pessoal = false;
     this.grupal = false;
-    console.log(this.grupal, this.isChecked);
+   
 }
 
  // search
@@ -668,7 +765,6 @@ resetForm(){
   this.spinner= false;
   this.showSuggested = false;
   this.myFormSearch.get('itemSearch')?.setValue('');
-  // this.noMatches = false;
   this.clientFound= null;
   this.isClientFound = false;
  }

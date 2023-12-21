@@ -23,7 +23,7 @@
                         <th >Nome alarme</th>
                         <th>Texto do alarme</th>
                         <th>Data</th>
-                        <th>Ação</th>
+                        <th style="text-align: center;">Ação</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="personalAlarms.length !== 0">
@@ -32,14 +32,14 @@
                         <td > {{ pes.name }} </td>
                         <td> {{ pes.description }} </td>
                         <td class="align-top"> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
-                        <td class="d-flex align-items-center justify-content-start" style="align-items: start;">
+                        <td style="text-align: center;">
                           <i class="fas fa-pencil-alt" style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;"  (click)="launchPersonalAlarm(pes)"  data-toggle="modal" data-target="#modalEditAlarm"     [ngbTooltip]="'Editar alarme'"  ></i>
   
                           <i class="far fa-play-circle" style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(27, 188, 24); margin-right: 5px;"  [ngbTooltip]="'Ativar alarme'" *ngIf="pes.status === 'paused'" (click)="activePausePersonalAlarm(pes, 'active')" ></i>
   
                           <i class="far fa-pause-circle " style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(0, 123, 255); margin-right: 5px;" [ngbTooltip]="'Pausar alarme'" *ngIf="pes.status !== 'paused'" (click)="activePausePersonalAlarm(pes, 'paused')" ></i> 
   
-                          <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; color: red; margin-left: 5px;"[ngbTooltip]="'Excluir alarme'" (click)="onRemove(pes)" data-toggle="modal"  data-target="#modalAskDelAlarm"></i>
+                          <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; color: red; margin-left: 5px; margin-right: 10px;"[ngbTooltip]="'Excluir alarme'" (click)="onRemove(pes)" data-toggle="modal"  data-target="#modalAskDelAlarm"></i>
                     </tr>
                 </tbody>
             </table>
@@ -63,7 +63,7 @@
                       <th>Nome alarme</th>
                       <th>Texto do alarme</th>
                       <th>Data</th>
-                      <th>Ação</th>
+                      <th style="text-align: center;">Ação</th>
                   </tr>
               </thead>
               <tbody *ngIf="grupalAlarms.length !== 0">
@@ -74,7 +74,7 @@
                       <td> {{ pes.name }} </td>
                       <td> {{ pes.description }} </td>
                       <td class="align-top"> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
-                      <td class="d-flex align-items-center">
+                      <td style="text-align: center">
            
                         <i class="fas fa-pencil-alt" style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;" [ngbTooltip]="'Editar alarme'" (click)="launchGrupalAlarm(pes)" data-toggle="modal" data-target="#modalEditGrupalAlarm" ></i>
 
@@ -82,7 +82,7 @@
 
                         <i class="far fa-pause-circle " style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(0, 123, 255); margin-right: 5px;" [ngbTooltip]="'Pausar alarme'" *ngIf="pes.status !== 'paused'" (click)="activePauseGrupalAlarm(pes, 'paused')"></i> 
 
-                        <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; color: red; margin-left: 5px;"[ngbTooltip]="'Excluir alarme'" (click)="onRemove(pes)" data-toggle="modal"  data-target="#modalAskDelAlarm"></i>
+                        <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; color: red; margin-left: 5px; margin-right: 10px;"[ngbTooltip]="'Excluir alarme'" (click)="onRemove(pes)" data-toggle="modal"  data-target="#modalAskDelAlarm"></i>
                      
                       </td>
                   </tr>
@@ -174,7 +174,7 @@
               </select>
               <div *ngIf="groupSelection" class="invalid" > Dado obrigatório </div>
 
-              <div class="mt-3 col-12 ">
+              <div class="mt-3 col-12 frame-work" *ngIf="nameGroups.length !== 0">
                 <div class="font fs-11 groups" *ngFor="let sel of nameGroups" >{{ sel }} &nbsp; <i class="fas fa-times-circle cursor" (click)="removeGroup(sel)"></i></div>
               </div>
 
@@ -208,14 +208,15 @@
                   </select>
               <div *ngIf="validField('notifFrequency')" class="invalid" > Dado obrigatório </div>
 
-              <div class="mt-3 col-12" >
-                <div class="font fs-10 groups"  *ngFor="let sel of nameFreq" >{{ sel }} <i class="fas fa-times-circle cursor" (click)="removeFreq(sel)"></i></div> 
+              <div class="mt-3 col-12 frame-work" *ngIf="nameFreq.length !== 0" >
+                <div class="font fs-11 groups"  *ngFor="let sel of nameFreq" >{{ sel }} <i class="fas fa-times-circle cursor" (click)="removeFreq(sel)"></i></div> 
               </div>
             </div>
 
             <div class="input-group mb-3" >
               <label class="text w-100"> Texto do alarme </label>
-                <textarea class="form-control " formControlName="description" [attr.disabled]="(!pessoal && !grupal) ? '' : null"></textarea>
+                <textarea class="form-control " formControlName="description" [attr.disabled]="(!pessoal && !grupal) ? '' : null" [ngStyle]="( validField('description')) ? {'border':'1px solid red'}:{}"></textarea>
+                <div *ngIf="validField('description')" class="invalid" > Dado obrigatório </div>
 
             </div>
 
@@ -244,13 +245,13 @@
 
  <!-- Edit Personal Alarm -->
  <div class="modal fade font" id="modalEditAlarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered modal-md " role="document" style="max-width: 600px;" >
+  <div class="modal-dialog modal-dialog-centered modal-lg " role="document">
     <div class="modal-content">
 
       <div class="modal-header" style="padding: 20px;">
         <h3 class="font" > Editar alarme </h3> 
         <i class="fas fa-pencil-alt" style="font-size: 19px; color: rgb(255, 200, 0); margin-left: 20px; margin-top: 5px;" ></i> 
-        <button type="button"   class="close" data-dismiss="modal" aria-label="Close" #closebuttonEdit>
+        <button type="button"   class="close" data-dismiss="modal" aria-label="Close" #closebuttonEdit (click)="resetEdition()">
           <i class="fas fa-times"></i>
         </button>
       </div>
@@ -261,7 +262,7 @@
         <form [formGroup]="myFormEditPersAlarm" class="needs-validation font fs-11"  novalidate  [autocomplete]="false" >
 
 
-              <input type="text" class="form-control" style="display: none;" formControlName="idalarm"  >
+            <input type="text" class="form-control" style="display: none;" formControlName="idalarm"  >
 
           <div class="input-group mb-3" >
             <label class="text w-100"> Nome do alarme </label>
@@ -297,10 +298,12 @@
                 </select>
             <div *ngIf="frequencySelected.length === 0" class="invalid" > Dado obrigatório </div>
 
-            <div class="mt-3 col-12" >
+            <div class="mt-3 col-12 frame-work" *ngIf="nameFreq.length !==0" >
               <div class="font fs-10 groups"  *ngFor="let sel of nameFreq" >{{ sel }} <i class="fas fa-times-circle cursor" (click)="removeFreq(sel)"></i></div> 
             </div>
           </div>
+
+          
 
           <div class="input-group mb-3" >
             <label class="text w-100"> Texto do alarme </label>
@@ -333,13 +336,13 @@
 
  <!-- Edit GrupalAlarm -->
  <div class="modal fade font" id="modalEditGrupalAlarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered modal-md " role="document" style="max-width: 600px;" >
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document"  >
     <div class="modal-content">
 
       <div class="modal-header" style="padding: 20px;">
         <h3 class="font" > Editar Alarme Grupal</h3> 
         <i class="fas fa-pencil-alt" style="font-size: 19px; color: rgb(255, 200, 0); margin-left: 20px; margin-top: 5px;" ></i> 
-        <button type="button"   class="close" data-dismiss="modal" aria-label="Close" #closebuttonEditGrupal>
+        <button type="button"   class="close" data-dismiss="modal" aria-label="Close" #closebuttonEditGrupal (click)="resetEdition()">
           <i class="fas fa-times"></i>
         </button>
       </div>
@@ -347,96 +350,120 @@
 
       <div class="modal-body fs-9">
        
-        <form [formGroup]="myFormEditGrupalAlarm" class="needs-validation font fs-11"  novalidate  [autocomplete]="false" >
+        <form [formGroup]="myFormEditGrupalAlarm" class="needs-validation font fs-11"  novalidate  [autocomplete]="false" (ngSubmit)="editGrupalAlarm()">
 
 
-              <input type="text" class="form-control" style="display: none;" formControlName="idalarm"  >
+              <input type="text" class="form-control" style="display: none;" formControlName="idgroupalarm"  >
 
-          <div class="input-group mb-3" >
-            <label class="text w-100"> Nome do alarme </label>
-            <div class="input-group mb-3">
-              <input type="text" class="form-control"  formControlName="grupalName"  [ngStyle]="( validFieldEdit('grupalName')) ? {'border':'1px solid red'}:{}"  >
-              <div *ngIf="validFieldEdit('grupalName')" class="invalid" > Dado obrigatório </div>
+            <div class="input-group mb-3" >
+              <label class="text w-100"> Nome do alarme </label>
+              <div class="input-group mb-3">
+                <input type="text" class="form-control"  formControlName="grupalName"  [ngStyle]="( validFieldEditGrupal('grupalName')) ? {'border':'1px solid red'}:{}"  >
+                <div *ngIf="validFieldEditGrupal('grupalName')" class="invalid" > Dado obrigatório </div>
+              </div>
             </div>
-          </div>
 
-          <form [formGroup]="myFormSearch" class="needs-validation "  novalidate  [autocomplete]="false">
+            <form [formGroup]="myFormSearch" class="needs-validation "  novalidate  [autocomplete]="false">
 
-            <div class="input-group  font mb-3  "   >
-            <label class="text w-100 "> Selecione o usuário </label>
-                <input type="text" class="form-control block "  name="itemSearch" formControlName="itemSearch" [ngStyle]="( validField('itemSearch')) ? {'border':'1px solid red'}:{}" [attr.disabled]="(!exclude && grupal || !pessoal && !grupal) ? '' : null">
-                <div class="input-group-append">
-                  <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
-                    <span class="fas fa-search" style="color: white"></span>
+              <div class="input-group  font mb-3  "   >
+              <label class="text w-100 "> Excluir usuário </label>
+                  <input type="text" class="form-control block "  name="itemSearch" formControlName="itemSearch" [ngStyle]="( validFieldEditGrupal('itemSearch')) ? {'border':'1px solid red'}:{}" [attr.disabled]="(suggested.length === 0 || !exclude) ? true : null">
+                  <div class="input-group-append">
+                    <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
+                      <span class="fas fa-search" style="color: white"></span>
+                    </div>
+      
                   </div>
-     
+                  <div *ngIf="userSelection" class="invalid" > Dado obrigatório </div>
+                  <div *ngIf="exclude" class="exclude" > Selecione o usuário a excluir </div>
                 </div>
-                <div *ngIf="userSelection" class="invalid" > Dado obrigatório </div>
-                <div *ngIf="exclude" class="exclude" > Selecione o usuário a excluir </div>
-              </div>
 
-          </form>
+            </form>
 
-          <div class="d-flex justify-content-center" *ngIf="spinner">
-            <div class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
+            <div *ngIf="mostrarSugerencias && showSuggested">
+                <div *ngFor="let item of suggested"   >
+                  
+                  <div class="font boxSelection d-flex justify-content-between align-items-center" >   
 
-          <div *ngIf="mostrarSugerencias && showSuggested">
-              <div *ngFor="let item of suggested"   >
-                
-                <div class="font boxSelection d-flex justify-content-between align-items-center" >   
+                      <div class="d-flex">
+                          <img class="img-fluid br-6"  [src]="item.Ruta_Imagen ?? 'assets/no-image.jpg'" alt="Foto do Perfil do Usuário" width="40px" >
+                          &nbsp; 
+                          <a class="cursor selectUser" (click)="selectUser(item)">{{ item.Nome_Completo }} </a>
+                      </div>
 
-                  <div class="d-flex">
-                      <img class="img-fluid br-6"  [src]="item.Ruta_Imagen ?? 'assets/no-image.jpg'" alt="Foto do Perfil do Usuário" width="40px" >
-                      &nbsp; 
-                      <a class="cursor selectUser" (click)="selectUser(item)">{{ item.Nome_Completo }} </a>
+                      <div class="d-flex">
+                          <i class="fas fa-eye iconEye"  data-toggle="modal" data-target="#modalFichaCompleta"  (click)="viewUser(item)" [ngbTooltip]="'Ver usuário'"></i>
+                          <i class="fas fa-times iconEye"  (click)="unSelectExludedUser(item)" [ngbTooltip]="'Remover usuário excluído'"></i>
+                      </div>
                   </div>
-                   <i class="fas fa-eye iconEye"  data-toggle="modal" data-target="#modalFichaCompleta"  (click)="viewUser(item)"></i>
+                </div>
+            </div>
 
+            <div class="input-group mb-3 mt-4">
+              <label class="text w-100">Selecione grupo</label>
+              <select #groupSelect class="form-control select2 col-12 cursor" (change)="onSelectGroup($event)"  [ngStyle]="( validField('group')) ? {'border':'1px solid red'}:{}">
+                <option style="display:none; font-size: 1em;" disabled selected></option>
+                <option *ngFor="let group of groups" [value]="[group.name, group.idgroup]" class="font">{{ group.name }}</option>
+              </select>
+
+              <div *ngIf="selectedGroups.length === 0" class="invalid" > Dado obrigatório </div>
+
+              <div class="mt-3 col-12 frame-work" *ngIf="nameGroups.length !== 0">
+                <div class="font fs-11 groups " *ngFor="let sel of nameGroups" >{{ sel }} &nbsp; <i class="fas fa-times-circle cursor" (click)="removeGroup(sel)"></i></div>
+              </div>
+
+            </div>
+
+            <div class="input-group mb-3 mt-3" >
+              <div class="input-group date" >
+              <label class="text w-100"> Data do alarme </label>
+                <input type="text"
+                  class="form-control datetimepicker-input"
+                  bsDatepicker
+                  [bsValue]="bsValue"
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
+                  formControlName="alarmGrupalDate" required [ngStyle]="( validFieldEditGrupal('alarmGrupalDate')) ? {'border':'1px solid red'}:{}" >
+                <div class="input-group-append"  >
+                  <div class="input-group-text"><i class="fa fa-calendar" style="color: rgb(0, 123, 255);"></i></div>
                 </div>
               </div>
-          </div>
+              <div *ngIf="validFieldEditGrupal('alarmGrupalDate')" class="invalid" > Dado obrigatório </div>
 
+            </div>
 
-          <div class="input-group mb-3 mt-3" >
-            <div class="input-group date" >
-            <label class="text w-100"> Data do alarme </label>
-              <input type="text"
-                class="form-control datetimepicker-input"
-                bsDatepicker
-                [bsValue]="bsValue"
-                [minDate]="minDate"
-                [maxDate]="maxDate"
-                [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
-                formControlName="alarmPersonalDate" required [ngStyle]="( validFieldEdit('alarmGrupalDate')) ? {'border':'1px solid red'}:{}" >
-              <div class="input-group-append"  >
-                <div class="input-group-text"><i class="fa fa-calendar" style="color: rgb(0, 123, 255);"></i></div>
+            <div class="input-group mb-3 mt-4" >
+                  <label class="text w-100" > Antecedência do Lembrete </label>
+                  <select class="form-control select2 col-12 w-100"  formControlName="notifGrupalFrequency" [ngStyle]="( validFieldEditGrupal('alarmDate')) ? {'border':'1px solid red'}:{}" (change)="onSelectFreq($event)" >
+                    <option *ngFor="let freq of frequency" [value]="[freq.id,freq.name]" class="font">{{ freq.name }}</option>
+                  </select>
+
+              <div *ngIf="frequencySelected.length === 0" class="invalid" > Dado obrigatório </div>
+
+              <div class="mt-3 col-12 frame-work" *ngIf="nameFreq.length !== 0">
+                <div class="font fs-11 groups"  *ngFor="let sel of nameFreq" >{{ sel }} <i class="fas fa-times-circle cursor" (click)="removeFreq(sel)"></i>
+                </div> 
               </div>
             </div>
-            <div *ngIf="validFieldEdit('alarmGrupalDate')" class="invalid" > Dado obrigatório </div>
 
-          </div>
 
-          <div class="input-group mb-3 mt-4" >
-                <label class="text w-100" > Antecedência do Lembrete </label>
-                <select class="form-control select2 col-12 w-100"  formControlName="notifGrupalFrequency" [ngStyle]="( validFieldEdit('alarmDate')) ? {'border':'1px solid red'}:{}" (change)="onSelectFreq($event)" >
-                  <option *ngFor="let freq of frequency" [value]="[freq.id,freq.name]" class="font">{{ freq.name }}</option>
-                </select>
-            <div *ngIf="frequencySelected.length === 0" class="invalid" > Dado obrigatório </div>
+            <div class="input-group mb-3" >
+              <label class="text w-100"> Texto do alarme </label>
+                <textarea class="form-control " formControlName="descriptionGrupal" ></textarea>
+                <div *ngIf="validFieldEditGrupal('descriptionGrupal')" class="invalid" > Dado obrigatório </div>
 
-            <div class="mt-3 col-12" >
-              <div class="font fs-10 groups"  *ngFor="let sel of nameFreq" >{{ sel }} <i class="fas fa-times-circle cursor" (click)="removeFreq(sel)"></i></div> 
             </div>
-          </div>
 
-          <div class="input-group mb-3" >
-            <label class="text w-100"> Texto do alarme </label>
-              <textarea class="form-control " formControlName="descriptionGrupal" ></textarea>
-              <div *ngIf="validFieldEdit('descriptionGrupal')" class="invalid" > Dado obrigatório </div>
+            <div class="custom-control custom-switch d-flex flex-column align-items-start mb-3 mt-4" >
+              <input type="checkbox" class="custom-control-input " id="customSwitch2" #excluir (change)="onSelectEdition($event)" [checked]="isChecked" >
+              <label class="custom-control-label cursor" for="customSwitch2"> Excluir do alarme o usuário  </label>
+            </div>
 
+            <div class=" modal-footer d-flex align-items-center justify-content-center">
+              <button type="submit" class="btn btn-primary btn-block shadow mt-3" >Editar alarme</button>
           </div>
+          
 
         </form>
 
@@ -446,11 +473,6 @@
             <span class="sr-only">Loading...</span>
         </div>
     </div> 
-      <div class=" modal-footer d-flex align-items-center justify-content-center">
-        <button type="submit" class="btn btn-primary btn-block shadow mt-3" (click)="editPGrupalAlarm()">Editar alarme</button>
-    
-        
-    </div>
     
 
   
