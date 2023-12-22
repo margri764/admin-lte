@@ -23,7 +23,7 @@
                         
                         <tr *ngFor="let user of users">
                             <td> 
-                                <img [src]="user.Ruta_Imagen" class="img-fluid br-6" style="border-radius: 7px;" *ngIf="user.Ruta_Imagen !== '' " >
+                                <img [src]="user | imagenPath" class="img-fluid br-6" style="border-radius: 7px;" *ngIf="user.Ruta_Imagen !== '' && user.Ruta_Imagen !== null">
                                 <img src="assets/no-image.jpg" class="img-fluid br-6 " width="50px" *ngIf="user.Ruta_Imagen == '' || !user.Ruta_Imagen">
                              </td>
                             <td >

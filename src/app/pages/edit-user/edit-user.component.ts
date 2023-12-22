@@ -127,6 +127,9 @@ menuDocument: any;
 showBulk : boolean = false;
 arrIds : any []=[];
 show : boolean = false;
+userFichaCompleta : any;
+sendUserCongregatio : boolean = false;
+sendUser : boolean = false;
 
 
 
@@ -288,8 +291,11 @@ show : boolean = false;
           
           this.idUser = id;
           if(user.Ruta_Imagen !== '' && user.Ruta_Imagen !== null ){
-            this.pathImg = user.Ruta_Imagen;
+            const fileName = user.Ruta_Imagen.split('/').pop() ;
+            const serverURL = 'https://arcanjosaorafael.org/profilePicture/';
+            this.pathImg = `${serverURL}${fileName}`;
           }
+
           (user.linkCongregatio === 1) ? this.isLinkedToCongregatio = true : this.isLinkedToCongregatio = false; 
 
           // if (this.isDtInitialized) {
@@ -339,15 +345,9 @@ show : boolean = false;
        } 
 
        let body = null;
-       let Email = null;
-       let Telefone1 = null;
-       let Data_Nascimento = null;
-       let Residencia_atual = null;
-       let Nacionalidade = null;
 
        this.showSuccess = false;
        this.uploadImg();
-
 
        //esto es para la primera vez q lo linkeo, xq la segunda vez ya esta linqueado pero userCongregatio no existe ya q viene del back
        //y es una edicion simple
@@ -366,7 +366,6 @@ show : boolean = false;
         body = {...body, groups: [...this.selectedGroups]}
 
         console.log(body);
-
 
         this.userService.editUserCongregatio(this.user.iduser, body).subscribe(
           ( {success} )=>{
@@ -411,11 +410,9 @@ show : boolean = false;
             if(success){
               this.showSuccess = true;
               this.msg = 'Usúario editado com sucesso'; 
-
             }
           })
        }
-    
   }
 
   getAlarmByUser( id:any){
@@ -915,28 +912,22 @@ const fields = [
   { name: 'lastName', backValue: backLastName },
 ];
 
-// Iterar sobre los campos
-fields.forEach(field => {
-  const formControl = this.myForm.get(field.name);
+    // Iterar sobre los campos
+    fields.forEach(field => {
+      const formControl = this.myForm.get(field.name);
 
-  if (formControl instanceof FormControl) {
-    if (field.backValue !== null && field.backValue !== undefined && field.backValue !== '') {
-      formControl.setValue(field.backValue);
+      if (formControl instanceof FormControl) {
+        if (field.backValue !== null && field.backValue !== undefined && field.backValue !== '') {
+          formControl.setValue(field.backValue);
 
-      this.readonlyFields[field.name] = true;
-    } else {
-      this.readonlyFields[field.name] = false;
-    }
-  }
-});
+          this.readonlyFields[field.name] = true;
+        } else {
+          this.readonlyFields[field.name] = false;
+        }
+      }
+    });
 
-
-
-this.wasLinked = true;
-
-
-
-
+    this.wasLinked = true;
     this.suggested = [];
     this.myFormSearch.get('itemSearch')?.setValue('');
     setTimeout(()=>{
@@ -995,6 +986,7 @@ this.authService.resendPasword(email).subscribe(
   })
 }
 
+// img user
 uploadImg( ){
 
   if (this.selectedImg) {
@@ -1039,6 +1031,8 @@ removePreview(){
   this.showClose = false;
 
 }
+// img user
+
 
 onCheckboxChange(  event:any, doc:any ){
 
@@ -1090,10 +1084,6 @@ mostrarMenu(event: MouseEvent): void {
 closeMenu(): void {
   this.menuDocument = null;
 }
-
-userFichaCompleta : any;
-sendUserCongregatio : boolean = false;
-sendUser : boolean = false;
 
 selectUserFichaCompleta(){
   if(this.user && this.userCongregatio){

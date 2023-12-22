@@ -16,7 +16,7 @@
             <tr >
                 <th>Nome grupo</th>
                 <th style="width: 60%;">Descrição</th>
-                <th>Ação</th>
+                <th style="width: 10%;">Ação</th>
             </tr>
         </thead>
         <tbody *ngIf="groups.length !== 0">
@@ -43,7 +43,7 @@
 
 
  <!-- Modal New Group -->
- <div class="modal fade font" id="modalNewGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="font-size: 0.9em;" >
+ <div class="modal fade font" id="modalNewGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
   <div class="modal-dialog modal-dialog-centered" role="document" >
     <div class="modal-content" >
       <div class="modal-header">
@@ -96,7 +96,7 @@
 </div>
 
  <!-- Modal Edit Group -->
- <div class="modal fade font" id="modalEditGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="font-size: 0.9em;" >
+ <div class="modal fade font" id="modalEditGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
   <div class="modal-dialog modal-dialog-centered fomt fs-12" role="document" >
     <div class="modal-content" >
       <div class="modal-header">
@@ -149,8 +149,8 @@
 </div>
 
  <!-- Modal View Group -->
- <div class="modal fade font" id="modalViewGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered modal-xl" role="document" >
+ <div class="modal fade font" id="modalViewGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title font" id="exampleModalCenterTitle"> {{ selectedGroup.name }} <label class="font fs-9" style="color: rgb(106, 106, 106); font-weight: 100;"> ({{ selectedGroup.length }} membros) </label></h5>
@@ -170,14 +170,13 @@
               </tr>
             </thead>
   
-        
-  
-            <tbody class="font fs-11" *ngIf="usersGroup.length > 0; else noUsers">
+            <tbody class="font fs-11" *ngIf="usersGroup.length > 0">
               <tr *ngFor="let user of usersGroup">
-                <td>
-                  <img [src]="user.Ruta_Imagen" class="img-fluid br-6" width="50px" *ngIf="user.Ruta_Imagen !== '' " >
+                <td> 
+                  <img [src]="user | imagenPath" class="img-fluid br-6" width="50px" style="border-radius: 7px;" *ngIf="user.Ruta_Imagen !== '' && user.Ruta_Imagen !== null">
                   <img src="assets/no-image.jpg" class="img-fluid br-6 " width="50px" *ngIf="user.Ruta_Imagen == '' || !user.Ruta_Imagen">
-                </td>
+               </td>
+        
                 <td class="d-flex align-items-center " >
                   <a class="mt-3 cursor" (click)="selectUser(user)" data-toggle="modal" data-target="#modalFichaCompleta"> {{ user.Nome_Completo }} </a>
                 </td>
@@ -187,17 +186,6 @@
                 </td>
               </tr>
             </tbody>
-            <ng-template #noUsers>
-              <tbody>
-                <tr>
-                  <td colspan="100%" class="text-center" >
-                    <div class="d-flex justify-content-center">
-                      <span class="font fs-11" style="margin-top: 20px;">Sem usuários</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </ng-template>
             
         </table>
       </div>
@@ -212,7 +200,7 @@
 
 
   <!-- ask delete group -->
-  <div class="modal fade" id="modalAskDelGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.85; ">
+  <div class="modal fade" id="modalAskDelGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -234,29 +222,28 @@
     </div>
   </div>
 
-    <!-- ask delete user fromgroup -->
-    <div class="modal fade" id="modalAskDelUserFromGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.85; ">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <i class="fas fa-exclamation-triangle" style="color: red; font-size: 40px;"></i>
-            <button type="button"   class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-             <h6 class="font fs-11">Há certeza de que deseja excluir este usuário do grupo?</h6>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger btn-block shadow" (click)="continueUserDel()" data-dismiss="modal" aria-label="Close"> Continuar</button>
-            <!-- <button type="button" class="btn btn-primary btn-block shadow"  *ngIf="isSending"> Enviando...</button> -->
-  
-          </div>
-  
-        </div>
+<!-- ask delete user fromgroup -->
+<div class="modal fade" id="modalAskDelUserFromGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fas fa-exclamation-triangle" style="color: red; font-size: 40px;"></i>
+        <button type="button"   class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-    </div>
+      <div class="modal-body">
+          <h6 class="font fs-11">Há certeza de que deseja excluir este usuário do grupo?</h6>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-block shadow" (click)="continueUserDel()" data-dismiss="modal" aria-label="Close"> Continuar</button>
+        <!-- <button type="button" class="btn btn-primary btn-block shadow"  *ngIf="isSending"> Enviando...</button> -->
 
+      </div>
+
+    </div>
+  </div>
+</div>
 
   <!-- success delete group -->
  <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
@@ -275,13 +262,13 @@
 </div>
 
   <!-- Modal Ficha completa-->
-  <div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95; ">
+  <div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
 
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header" style="padding: 20px;">
           <h5 class="modal-title font" id="exampleModalCenterTitle"> Ficha completa</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalViewGroup()">
             <span aria-hidden="true">&times;</span>
           </button>
       
@@ -301,8 +288,6 @@
       </div>
     </div>
 </div>
-
-  
 
 
 <div class="loading-overlay" *ngIf="isLoading">

@@ -178,6 +178,8 @@ counter : number = 0;
 
   login(){
 
+    this.errorService.closeIsLoading$.pipe(delay(700)).subscribe( (emitted) => { if(emitted){this.isLoading = false}});
+
     this.resetToasts();
 
     if ( this.myForm.invalid ) {

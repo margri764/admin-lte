@@ -27,7 +27,7 @@ import { BackgroundComponent } from './background/background.component';
 import { ViewGroupComponent } from './modals/view-group/view-group/view-group.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { BrowserModule } from '@angular/platform-browser';
+import { ImagenPathPipe } from '../shared/pipes/imagen-path.pipe';
 
 
 @NgModule({
@@ -47,7 +47,8 @@ import { BrowserModule } from '@angular/platform-browser';
     CongregatioComponent,
     ViewCongregatiComponent,
     BackgroundComponent,
-    ViewGroupComponent
+    ViewGroupComponent,
+    ImagenPathPipe
   ],
   exports: [
     DashboardComponent,
@@ -66,7 +67,7 @@ import { BrowserModule } from '@angular/platform-browser';
     BsDatepickerModule.forRoot(),
     NgxDropzoneModule,
     PdfViewerModule,
-    NgbModule
+    NgbModule,
 
   ]
 })

@@ -93,6 +93,7 @@ export class ViewCongregatiComponent implements OnInit, OnChanges {
       total = user['Ruta Imagen'];
     }
 
+    // si no hay img envio una por defecto
     if(total === null || total === undefined){
 
       const img = document.createElement("img");
@@ -114,14 +115,16 @@ export class ViewCongregatiComponent implements OnInit, OnChanges {
     const indice = match ? parseInt(match[1], 10) : null;
   
     const restoDelPath = total.replace(/\[\d+\]\.jpg$/, '');
-   let path = "https://congregatio.info/";
+   
+    let path = "https://congregatio.info/";
 
     if(total.startsWith('https://congregatio.info/')){
       path = '';
     }
   
-    // Verificar si hay un índice antes de entrar en el bucle
+    // Verificar si hay un índice antes de entrar en el bucle, Hay muchas imgs
     if (indice !== null) {
+
       for (let i = indice; i >= 1; i--) {
         const img = document.createElement("img");
   
@@ -141,19 +144,29 @@ export class ViewCongregatiComponent implements OnInit, OnChanges {
 
     } else {
       // Si no hay un índice, significa que solo hay una imagen
+
       const img = document.createElement("img");
-  
+        
       img.className = "img-fluid";
 
-
-      img.src = `${path}${restoDelPath}`;
-  
+      
       img.alt = `Foto do Perfil do Usuário`;
   
       // Aplicar el estilo de borde blanco
       img.style.border = "2px solid white";
-  
+      
       this.gallery.nativeElement.appendChild(img);
+      
+      // esta es una img q se guardo en servidor
+      if(total.startsWith('/var/www/propulsao')){
+        const fileName = total.split('/').pop();
+        const serverURL = 'https://arcanjosaorafael.org/profilePicture/';
+        img.src = `${serverURL}${fileName}`;
+        console.log(img.src);
+      }else{
+        img.src = `${path}${restoDelPath}`;
+      }
+  
     }
   }
   

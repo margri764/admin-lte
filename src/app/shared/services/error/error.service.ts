@@ -126,7 +126,7 @@ export class ErrorService {
    return of(null);
  }
 
-
+                                                    
   if (error.status === 500 && error.error.error === 'Usuário não encontrado' ) {
      this.closeIsLoading$.emit(true);
    console.log(error.error.error);
@@ -136,7 +136,7 @@ export class ErrorService {
 
   if (error.status === 429 && error.error.message.includes("Você excedeu o limite de tentativas de login") ) {
       this.status429Error$.emit( {emmited:true, msg:error.error.message } )
-     this.closeIsLoading$.emit(true);
+      this.closeIsLoading$.emit(true);
       return of(null);
   }
     

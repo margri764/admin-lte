@@ -17,6 +17,8 @@ import { StoreModule } from '@ngrx/store';
 import { appReducers } from 'src/app/shared/redux/app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+// pipes
+// import { ImagenPathPipe } from './shared/pipes/imagen-path.pipe';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -30,6 +32,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
   declarations: [
     AppComponent,
     NoPageFoundComponent,
+    // ImagenPathPipe,
+
 
   ],
   imports: [

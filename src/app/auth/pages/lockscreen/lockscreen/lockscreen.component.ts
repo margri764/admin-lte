@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { distinctUntilChanged, filter } from 'rxjs';
+import { delay, distinctUntilChanged, filter } from 'rxjs';
 import { AppState } from 'src/app/shared/redux/app.reducer';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { getDataSS, saveDataLS } from 'src/app/shared/storage';
 
 @Component({
@@ -23,6 +24,7 @@ name : string = "";
               private fb : FormBuilder,
               private authService : AuthService,
               private router : Router,
+              private errorService : ErrorService,
               private store : Store <AppState>
   ) {
     
@@ -35,7 +37,8 @@ name : string = "";
 
   ngOnInit(): void {
 
-    
+    this.errorService.closeIsLoading$.pipe(delay(1200)).subscribe( (emitted) => { if(emitted){this.isLoading = false}}) ;
+
 
 
     const user = getDataSS('session');

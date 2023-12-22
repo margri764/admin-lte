@@ -95,17 +95,19 @@ getUsersGroup( group:any ){
         this.usersGroup = users;
         this.selectedGroup = {name:group.name, length: users.length};
         this.groupID = group.idgroup;
-
-
-        if (this.isDtInitialized) {
+        console.log(this.usersGroup);
+       
+        if (this.isDtInitialized2) {
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
             this.dtTrigger2.next(null);
           });
         } else {
-          this.isDtInitialized = true
+          this.isDtInitialized2 = true
           this.dtTrigger2.next(null);
         }
+        setTimeout(()=>{ this.isLoading = false }, 700)
+      
       }
     })
 }
@@ -131,7 +133,6 @@ onSave(){
 
 editGroup( group:any ){
   console.log(group);
-
   
     this.myFormEdit.patchValue({
       editName: group.name,
@@ -182,21 +183,26 @@ validFieldEdit( field: string ) {
 
 getInitialGroups(){
 
-
   this.alarmGroupService.getAllGroups().subscribe(
     ( {success, groups} )=>{
       console.log(groups);
       if(success){
         this.groups = groups;
-        this.dtTrigger.next(null);
+        if (this.isDtInitialized) {
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next(null);
+          });
+        } else {
+          this.isDtInitialized = true
+          this.dtTrigger.next(null);
+        }
         setTimeout(()=>{ this.isLoading = false }, 700)
       }
     })
 }
 
 onRemove( group:any ){
-
-
   this.alarmGroupService.authDelGroup$.subscribe(
     (auth)=>{
       if(auth){
@@ -206,12 +212,6 @@ onRemove( group:any ){
           ( {success} )=>{
             setTimeout(()=>{ this.isLoading = false },700)
             if(success){
-
-              if (this.dtTrigger) {
-                this.dtTrigger.complete();
-              }
-              this.dtTrigger = new Subject();
-              
               this.getInitialGroups();
               this.msg = "Grupo eliminado com sucesso."
               this.showSuccess = true;
@@ -223,8 +223,7 @@ onRemove( group:any ){
 }
 
 removeUserFromGroup( group:any ){
-
-
+  console.log('d');
   this.alarmGroupService.authDelUserGroup$.pipe(take(1)).subscribe(
     (auth)=>{
       if(auth){
@@ -233,11 +232,7 @@ removeUserFromGroup( group:any ){
           ( {success} )=>{
             setTimeout(()=>{ this.isLoading = false },700)
             if(success){
-
                 this.usersGroup = this.usersGroup .filter(a => a.idusersgroups !== group.idusersgroups);
-            
-
-              
             }
           })
       }
@@ -258,30 +253,19 @@ closeToast(){
 }
 
 selectUser( user:any ){
-  this.show = true;
- this.user = user;
+    this.user = null;  
+    this.show = true;
+    this.user = user;
 }
 
-
+closeModalViewGroup(){
+  this.user = null;  
+  this.show = false;
+}
 
 ngOnDestroy(): void {
-  // if (this.dtTrigger) {
-  //   this.dtTrigger.unsubscribe();
-  //   this.dtTrigger.complete();
-  // }
-
-  // if (this.dtTrigger2) {
-  //   this.dtTrigger2.unsubscribe();
-  //   this.dtTrigger2.complete();
-  // }
-
-  // if (this.dtElement && this.dtElement.dtInstance) {
-  //   this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-  //     dtInstance.destroy();
-  //   });
-  // }
-
-
+  this.dtTrigger.unsubscribe();
+  this.dtTrigger2.unsubscribe();
 }
 
 
