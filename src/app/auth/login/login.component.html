@@ -295,14 +295,14 @@
     <span class="fs-12"> Em breve entraremos em contato </span>
   </div>
 
-     <!-- 500 status Nao encontrado -->
-     <div id="custom-toast" class="alert alert-danger alert-dismissible" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="show500"  >
-      <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5 ><i class="icon fas fas fa-user-lock"></i> Espere!</h5>
-      {{msg}}
-  </div>
+<!-- 500 status Nao encontrado -->
+<div id="custom-toast" class="alert alert-danger alert-dismissible" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="show500"  >
+<button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
+<h5 ><i class="icon fas fas fa-user-lock"></i> Espere!</h5>
+{{msg}}
+</div>
 
-   
+
 
 
   <div class="loading-overlay" *ngIf="isLoading">

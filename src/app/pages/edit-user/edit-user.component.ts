@@ -89,9 +89,10 @@ lastSetValue: { [key: string]: any } = {};
 readonlyFields: { [key: string]: boolean } = {};
 wasLinked : boolean = false;
 userRole : boolean = false;
+adminRole : boolean = false;
+webMRole : boolean = false;
 role : string = '';
 stateLink : boolean = false;
-adminRole : boolean = false;
 
 dtOptions: DataTables.Settings = {};
 dtTrigger: Subject<any> = new Subject();
@@ -219,8 +220,6 @@ sendUser : boolean = false;
 
   }
 
-
-
   getUsersGroups( id:any ){
     this.alarmGroupService.getGroupByUserId(id).subscribe( 
       ( {success, groups} )=>{
@@ -297,19 +296,6 @@ sendUser : boolean = false;
           }
 
           (user.linkCongregatio === 1) ? this.isLinkedToCongregatio = true : this.isLinkedToCongregatio = false; 
-
-          // if (this.isDtInitialized) {
-          //   this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          //     dtInstance.destroy();
-          //     this.dtTrigger2.next(null);
-          //   });
-          // } else {
-          //   this.isDtInitialized = true
-          //   this.dtTrigger2.next(null);
-          // }
-  
-          
-
         }
       })
   }
@@ -333,8 +319,6 @@ sendUser : boolean = false;
         }
       })
   }
-
-
 
   onSave(){
 
@@ -707,7 +691,15 @@ sendUser : boolean = false;
       this.role = this.user.role;
       if(this.user.role === 'user'){
         this.userRole = true;
+        this.adminRole = false;
+        this.webMRole = false;
       }else if(this.user.role === 'admin'){
+        this.adminRole = true;
+        this.userRole = false;
+        this.webMRole = false;
+      }else if(this.user.role === 'webmaster'){
+        this.webMRole = true;
+        this.userRole = false;
         this.adminRole = false;
       }
   }
@@ -1065,6 +1057,7 @@ bulkDeleteDocuments(){
           this.showBulk = false;
           this.msg = 'Documentos excluídos com sucesso';
           this.showSuccess = true;
+          this.arrIds = [];
           this.getDocByUserId(this.user.iduser)
         }
         
@@ -1075,6 +1068,7 @@ bulkDeleteDocuments(){
 }
 
 mostrarMenu(event: MouseEvent): void {
+
   event.preventDefault();
   if (event.button === 2 && this.arrIds.length !== 0) { 
     this.showBulk = true;

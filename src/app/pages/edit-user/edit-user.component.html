@@ -419,12 +419,13 @@
             </div>
 
             <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles">
+
               <div class="row mt-5">
                 <div class="col-sm-6">
                   <!-- Primer radio (arriba) -->
                   <div class="form-group clearfix">
                     <div class="icheck-success d-inline">
-                      <input type="radio" name="r3"  id="radioSuccess1" (change)="handleRoleChange('admin')" [checked]="userRole">
+                      <input type="radio" name="r3"  id="radioSuccess1" (change)="handleRoleChange('admin')" [checked]="adminRole">
                       <label for="radioSuccess1"> Administrador </label>
                     </div>
                   </div>
@@ -442,7 +443,19 @@
                   </div>
                 </div>
               </div>
-            </div>
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <!-- Segundo radio (abajo) -->
+                  <div class="form-group clearfix">
+                    <div class="icheck-success d-inline">
+                      <input type="radio" name="r3" id="radioSuccess3" (change)="handleRoleChange('webmaster')" [checked]="webMRole">
+                      <label for="radioSuccess3"> Web master </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
 
             <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm">
 

@@ -35,97 +35,98 @@ export class BackgroundComponent implements OnInit {
   
 
   getInitBackground(){
-    this.isLoading = true;
-    this.imageUploadService.getAllBackground().subscribe(
-      ( {success, backgrounds} )=>{
-        if(success){
-          this.arrBackground = backgrounds.map( (doc:any) => {
-            const fileName = doc.filePath.split('/').pop();
-            const serverURL = 'https://arcanjosaorafael.org/backgrounds/';
-            return {
-              ...doc,
-              filePath: `${serverURL}${fileName}`
-            };
-          });
+  this.isLoading = true;
+  this.imageUploadService.getAllBackground().subscribe(
+    ( {success, backgrounds} )=>{
+      if(success){
+        this.arrBackground = backgrounds.map( (doc:any) => {
+          const fileName = doc.filePath.split('/').pop();
+          const serverURL = 'https://arcanjosaorafael.org/backgrounds/';
+          return {
+            ...doc,
+            filePath: `${serverURL}${fileName}`
+          };
+        });
 
-          console.log( this.arrBackground);
-          setTimeout(()=>{ this.isLoading= false },700)
-          
-        }
-      })
+        console.log( this.arrBackground);
+        setTimeout(()=>{ this.isLoading= false },700)
+        
+      }
+    })
   }
 
-continue(){
+  continue(){
   this.imageUploadService.authDelBackground$.emit(true);
-}
+  }
 
-closeToast(){
-    this.showSuccess = false;
-    this.msg = '';
+  closeToast(){
+  this.showSuccess = false;
+  this.msg = '';
 
-}
+  }
 
   removePicture( picture:any) {
 
-    this.imageUploadService.authDelBackground$.pipe(take(1)).subscribe((auth)=>{
-      if(auth){
-        this.isLoading = true;
-        this.imageUploadService.deleteBackgroundById(picture.idbackground).subscribe(
-          ( {success} )=>{
-            if(success){
-              setTimeout(()=>{this.isLoading = false },1200)
-              this.msg = "AFundo eliminado com sucesso."
-              this.showSuccess = true;
-              this.getInitBackground();
-            }
-          })
+  this.imageUploadService.authDelBackground$.pipe(take(1)).subscribe((auth)=>{
+    if(auth){
+      this.isLoading = true;
+      this.imageUploadService.deleteBackgroundById(picture.idbackground).subscribe(
+        ( {success} )=>{
+          if(success){
+            setTimeout(()=>{this.isLoading = false },1200)
+            this.msg = "AFundo eliminado com sucesso."
+            this.showSuccess = true;
+            this.getInitBackground();
+          }
+        })
 
-      }})
+    }})
 
   }
 
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-    this.upload();
+  this.selectedFile = event.target.files[0];
+  this.upload();
   }
 
   upload() {
-    this.isLoading = true;
-    if (this.selectedFile) {
-      this.imageUploadService.uploadImage(this.selectedFile).subscribe( 
-        ( {success} )=> {
-            if(success){
-              setTimeout(()=>{this.isLoading = false });
-              alert('Upload bem-sucedido');
-              this.selectedFile = null;
-              this.getInitBackground();
-            } }
-        )
-          
-    }
+  this.isLoading = true;
+  this.showSuccess = false;
+  if (this.selectedFile) {
+    this.imageUploadService.uploadImage(this.selectedFile).subscribe( 
+      ( {success} )=> {
+          if(success){
+             this.isLoading = false ;
+            this.showSuccess = true;
+            this.msg = 'Upload bem-sucedido';
+            this.selectedFile = null;
+            this.getInitBackground();
+          } }
+      )
+        
+  }
   }
 
-  
   backgroundOption(event: any, id:any): void{
 
-    this.isLoading = true;
+  this.isLoading = true;
 
-    let backgroundSelected = (event.target as HTMLInputElement).checked;
+  let backgroundSelected = (event.target as HTMLInputElement).checked;
 
-    let action = null;
+  let action = null;
 
-    (backgroundSelected ) ? action = "1" : action = "0";
+  (backgroundSelected ) ? action = "1" : action = "0";
 
-     this.imageUploadService.onOffBackground( id, action ).subscribe(
-      ( {success} )=>{
-        if(success){
-          setTimeout(()=>{ this.isLoading = false },1000)
-          this.getInitBackground();
-          
-        }
+    this.imageUploadService.onOffBackground( id, action ).subscribe(
+    ( {success} )=>{
+      if(success){
+        setTimeout(()=>{ this.isLoading = false },1000)
+        this.getInitBackground();
+        
       }
-     );
-    
+    }
+    );
+
   }
 
 

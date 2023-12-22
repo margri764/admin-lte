@@ -5,7 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'imagenPath'
 })
 export class ImagenPathPipe implements PipeTransform {
+
   transform(user: any): string {
+
+    console.log(user);
     if (user && user.Ruta_Imagen && user.Ruta_Imagen !== '') {
       if (user.Ruta_Imagen.startsWith('https://congregatio.info/')) {
         return user.Ruta_Imagen;

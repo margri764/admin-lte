@@ -101,7 +101,6 @@ export class CongregatioComponent implements OnInit {
   this.debouncer.next( this.itemSearch );  
    };
 
-
    sugerencias(value : string){
 
     if (this.dtTrigger) {
@@ -150,9 +149,13 @@ export class CongregatioComponent implements OnInit {
   }
 
   selectUserCongregatio( user:any ){
-    // this.user = user;
     this.show = true;
    this.userCongregatio = user;
+  }
+
+  closeModalFichaCompleta(){
+    this.show = false;
+    this.userCongregatio = null;
   }
 
 

@@ -85,7 +85,10 @@ body .bs-datepicker-container .bs-datepicker-head {
 .customPrimary{
   color: #007BFF;
 }
-
+ td{
+  vertical-align: top;
+ }
+ 
 .loading-overlay {
   position: fixed;
   top: 0;
