@@ -17,6 +17,16 @@
 
 }
 
+.selected{
+  color: rgb(0, 128, 255);
+}
+
+.selected:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
 .customCards3{
   background: rgb(3, 3, 242);
   background: linear-gradient(90deg, rgb(3, 3, 242) 35%, rgb(0, 149, 255)100%);

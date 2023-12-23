@@ -195,7 +195,7 @@
 
                               <div class="text-center uploadImg">
                                 <i class="fas fa-times" *ngIf="showClose" (click)="removePreview()"></i>
-                                  <img class="img-fluid br-6" [src]="pathImg" alt="Foto do Perfil do Usuário" (click)="fileUploader.click()">
+                                  <img class="img-fluid br-6" [src]="pathImg " alt="Foto do Perfil do Usuário" (click)="fileUploader.click()">
                               </div>
 
                               <div style="display: none;">
@@ -295,8 +295,6 @@
             
               <div class="card col-12 table-responsive" style="padding: 12px; padding-top: 20px; background-color: white;">
 
-             
-                
             <table  datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger2" class="table table-hover">
                 <thead class="">
                     <tr>
@@ -314,14 +312,9 @@
                       <td> {{ log.ip}} </td>
                     </tr>
                   </tbody>
-
-                  
-                  
               </table>
             
             </div>
-            
-
             </div>
 
             <div class="tab-pane fade" id="access" role="tabpanel" aria-labelledby="access" style="padding: 20px;">
@@ -482,8 +475,9 @@
                                 <td> {{ pes.description }} </td>
                                 <td class="align-top"> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
                                 <td class="d-flex align-items-center justify-content-start" style="align-items: start;">
-                                  <!-- (click)="editPessoalAlarm(pes)" -->
-                                  <!-- <i class="fas fa-pencil-alt" style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;" [ngbTooltip]="'Editar alarme'" ></i> -->
+                                  <i class="far fa-play-circle" style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(27, 188, 24); margin-right: 5px;"  [ngbTooltip]="'Ativar alarme'" *ngIf="pes.status === 'paused'" (click)="activePausePersonalAlarm(pes, 'active')" ></i>
+  
+                                  <i class="far fa-pause-circle " style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(0, 123, 255); margin-right: 5px;" [ngbTooltip]="'Pausar alarme'" *ngIf="pes.status !== 'paused'" (click)="activePausePersonalAlarm(pes, 'paused')" ></i> 
                                   <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelAlarm" (click)="onRemoveAlarm(pes)" [ngbTooltip]="'Excluir alarme'"></i>
                                 </td>
                             </tr>

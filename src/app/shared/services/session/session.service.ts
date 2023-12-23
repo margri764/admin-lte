@@ -46,6 +46,7 @@ export class SessionService {
 
   getSessionTimeRemaining(): number {
     const now = new Date();
+    // const sessionDuration = 90 * 10 * 1000; 
     const sessionDuration = 90 * 10 * 1000; 
     const elapsedTime = now.getTime() - this.sessionStartTime.getTime();
     const timeRemaining = sessionDuration - elapsedTime;

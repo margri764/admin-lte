@@ -43,9 +43,8 @@ name : string = "";
 
     const user = getDataSS('session');
     if(user.email){
-
       this.name = user.name;
-      this.profilePicture = user.Ruta_Imagen;
+      this.getImage(user.Ruta_Imagen);
 
       this.myForm = this.fb.group({
         email:  [ user.email ],
@@ -78,6 +77,16 @@ name : string = "";
               
         }
         });
+  }
+
+  getImage( path:string ){
+    if(path.startsWith('/var/www/propulsao')){
+      const fileName = path.split('/').pop();
+      const serverURL = 'https://arcanjosaorafael.org/profilePicture/';
+      this.profilePicture = `${serverURL}${fileName}`;
+    }else{
+      this.profilePicture= path;
+    }
   }
 
 

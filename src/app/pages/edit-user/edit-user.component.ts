@@ -289,10 +289,20 @@ sendUser : boolean = false;
           }
           
           this.idUser = id;
+
           if(user.Ruta_Imagen !== '' && user.Ruta_Imagen !== null ){
-            const fileName = user.Ruta_Imagen.split('/').pop() ;
-            const serverURL = 'https://arcanjosaorafael.org/profilePicture/';
-            this.pathImg = `${serverURL}${fileName}`;
+            console.log(user.Ruta_Imagen);
+            // son las img q vienen de congregatio
+            if(user.Ruta_Imagen.startsWith('https://congregatio')){
+              this.pathImg = user.Ruta_Imagen;
+              console.log(this.pathImg);
+            }else{
+              const fileName = user.Ruta_Imagen.split('/').pop() ;
+              console.log(fileName);
+              const serverURL = 'https://arcanjosaorafael.org/profilePicture/';
+              this.pathImg = `${serverURL}${fileName}`;
+              console.log(this.pathImg);
+            }
           }
 
           (user.linkCongregatio === 1) ? this.isLinkedToCongregatio = true : this.isLinkedToCongregatio = false; 
@@ -1098,6 +1108,17 @@ closeFichaCompleta(){
 
   this.userFichaCompleta = false;
   this.sendUserCongregatio = false;
+}
+
+activePausePersonalAlarm( alarm:any, action:string ){
+this.isLoading = true;
+  this.alarmGroupService.activePausePersonalAlarm( alarm.idalarm, action).subscribe( 
+    ( {success})=>{
+          if(success){
+            setTimeout(()=>{ this.isLoading = false  },1200)
+            this.getAlarmByUser( this.user.iduser)
+          }
+    } )
 }
 }
 

@@ -85,7 +85,7 @@ export class AuthService {
                           this.cookieService.set('token',token);
                           this.user = user;
                           this.store.dispatch(authActions.setUser({user}));
-                          const userToLS = { name: user.Nome_Completo, role:user.role, email: user.Email, Ruta_Imagen: user.Ruta_Imagen};
+                          const userToLS = { name: user.Nome_Completo, role:user.role, email: user.Email, Ruta_Imagen: user.Ruta_Imagen, id:user.iduser};
                           this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
                       }           
                     
@@ -106,10 +106,9 @@ export class AuthService {
                           this.cookieService.set('token',token);
                           this.user = user;
                           this.store.dispatch(authActions.setUser({user}));
-                          const userToLS = { name: user.Nome_Completo, role:user.role, email: user.Email, Ruta_Imagen: user.Ruta_Imagen};
+                          const userToLS = { name: user.Nome_Completo, role:user.role, email: user.Email, Ruta_Imagen: user.Ruta_Imagen, id:user.iduser};
                           this.localStorageService.saveStateToLocalStorage(userToLS, 'user');
                       }           
-                    
                 }  
       ),            
       map( res => {console.log("from doubleAuth Service: ",res);return res} )

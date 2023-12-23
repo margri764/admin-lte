@@ -11,7 +11,6 @@ export interface Auth {
 
 export const initialState: Auth = {
      user: null,
-   
 }
 
 const _authReducer = createReducer(initialState,

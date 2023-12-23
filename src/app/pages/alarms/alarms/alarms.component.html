@@ -19,16 +19,21 @@
 
                 <thead >
                     <tr >
-                        <th style="width: 10%;">Nome</th>
+                        <th style="width: 10%;">Img</th>
+                        <th style="width: 15%;">Nome</th>
                         <th style="width: 10%;" >Nome alarme</th>
-                        <th style="width: 55%;">Texto do alarme</th>
-                        <th style="width: 10%;">Data</th>
+                        <th style="width: 40%;">Texto do alarme</th>
+                        <th style="width: 8%;">Data</th>
                         <th style="text-align: center; width: 15%;">Ação</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="personalAlarms.length !== 0">
                     <tr *ngFor="let pes of personalAlarms">
-                        <td ><a [routerLink]="['/dashboard/editar-usuario/',pes.iduser]"> {{pes.Nome_Completo }} </a></td>
+                        <td> 
+                          <img [src]="pes | imagenPath" class="img-fluid br-6" width="80px" style="border-radius: 7px;" *ngIf="pes.Ruta_Imagen !== '' && pes.Ruta_Imagen">
+                          <img src="assets/no-image.jpg" class="img-fluid br-6 " width="80px" *ngIf="pes.Ruta_Imagen == '' || !pes.Ruta_Imagen">
+                        </td>
+                        <td ><a  class="selected" data-toggle="modal" data-target="#modalFichaCompleta"  (click)="viewUser(pes)"> {{pes.Nome_Completo }} </a></td>
                         <td > {{ pes.name }} </td>
                         <td > {{ pes.description }} </td>
                         <td > {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
@@ -47,21 +52,20 @@
 </div>
 
 <div class="row mt-5" >
-  <div class="col-12">
     
 
       <div class="card col-12 table-responsive" style="padding: 12px; padding-top: 20px; background-color: white;">
 
 
-        <div class="customTHead w-100 shadow font">Alarmes grupales</div>
+        <div class="customTHead  shadow font">Alarmes grupales</div>
 
         <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"  class="row-border hover font fs-10"  >
 
               <thead >
                   <tr >
-                      <th style="width: 15%;">Grupos</th>
-                      <th style="width: 10%;">Nome alarme</th>
-                      <th style="width: 50%;">Texto do alarme</th>
+                      <th style="width: 18%;">Grupos</th>
+                      <th style="width: 18%;">Nome alarme</th>
+                      <th style="width: 40%;">Texto do alarme</th>
                       <th style="width: 5%;">Data</th>
                       <th style="text-align: center; width: 15%;">Ação</th>
                   </tr>
@@ -93,14 +97,13 @@
               </tbody>
         </table>
       </div>
-  </div>
 </div>
 
 
 
  <!-- Modal Alarm -->
- <div class="modal fade font" id="modalNova" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
-    <div class="modal-dialog modal-dialog-centered modal-md " role="document" style="max-width: 600px;" >
+ <div class="modal fade font" id="modalNova" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false"  >
+    <div class="modal-dialog modal-dialog-centered modal-lg " role="document"  >
       <div class="modal-content">
 
         <div class="modal-header" >
@@ -156,8 +159,6 @@
 
                     <div class="d-flex">
                         
-                         <!-- <img class="img-fluid br-6"  [src]="item.Ruta_Imagen ?? 'assets/no-image.jpg'" alt="Foto do Perfil do Usuário" width="40px" > -->
-
                          <img [src]="item | imagenPath" class="img-fluid br-6" width="50px" style="border-radius: 7px;" *ngIf="item.Ruta_Imagen !== '' && item.Ruta_Imagen !== null">
                          <img src="assets/no-image.jpg" class="img-fluid br-6 " width="50px" *ngIf="item.Ruta_Imagen == '' || !item.Ruta_Imagen">
                          
@@ -341,7 +342,7 @@
 
 
  <!-- Edit GrupalAlarm -->
- <div class="modal fade font" id="modalEditGrupalAlarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+ <div class="modal fade font" id="modalEditGrupalAlarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false"  >
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document"  >
     <div class="modal-content">
 
@@ -489,7 +490,7 @@
 
 
   <!-- Modal ask delete alarm -->
-  <div class="modal fade" id="modalAskDelAlarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.85; ">
+  <div class="modal fade" id="modalAskDelAlarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">

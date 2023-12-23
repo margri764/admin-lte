@@ -83,9 +83,7 @@ export class CongregatioComponent implements OnInit {
     });
   }
 
-
    // search
-   
    close(){
     this.mostrarSugerencias = false;
     this.itemSearch = '';

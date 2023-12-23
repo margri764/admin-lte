@@ -220,6 +220,7 @@ export class ErrorService {
           this.close$.next(false);
           localStorage.removeItem("logged");
           localStorage.removeItem("user");
+          sessionStorage.removeItem('session');
           this.store.dispatch(authActions.unSetUser());
           this.cookieService.delete('token');
           this.router.navigateByUrl('login'); 
@@ -234,6 +235,7 @@ export class ErrorService {
     sessionStorage.removeItem("logged");
     localStorage.removeItem("user");
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem('session');
     this.cookieService.delete('token');
     this.store.dispatch(authActions.unSetUser());
     this.router.navigateByUrl('login'); 

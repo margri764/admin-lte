@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { delay } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
+import { ValidateService } from 'src/app/shared/services/validate/validate.service';
 
 @Component({
   selector: 'app-resend-password',
@@ -32,8 +33,9 @@ export class ResendPasswordComponent implements OnInit {
   constructor(
               private fb : FormBuilder,
               private authService : AuthService,
-              private router : Router,
               private errorService : ErrorService,
+              private validatorService : ValidateService,
+              private router : Router,
   ) {
      
    }
@@ -46,13 +48,11 @@ export class ResendPasswordComponent implements OnInit {
 
 
     this.myForm = this.fb.group({
-      email:     [ '', [Validators.required] ],
-  
+      email:     [ '', [Validators.required, Validators.pattern(this.validatorService.emailPattern)] ],
     });
 
     this.myFormResend = this.fb.group({
-      resendEmail:     [ '', [Validators.required] ],
-  
+      resendEmail:     [ '', [Validators.required, Validators.pattern(this.validatorService.emailPattern)] ],
     });
 
 
