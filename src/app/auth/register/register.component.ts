@@ -9,6 +9,8 @@ import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { ValidateService } from 'src/app/shared/services/validate/validate.service';
+import { ImageUploadService } from 'src/app/shared/services/ImageUpload/image-upload.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -25,13 +27,17 @@ export class RegisterComponent implements OnInit {
   minDate = new Date();
   succesSignup : boolean = false;
   isLoading : boolean = false;
+  arrBackground : any []=[];
+  backgroundImage : string = '';
 
   constructor(
               private fb : FormBuilder,
               private authService : AuthService,
               private errorService : ErrorService,
               private localeService: BsLocaleService,
-              private validatorService : ValidateService
+              private validatorService : ValidateService,
+              private imageUploadService : ImageUploadService,
+              private router : Router
   ) {
 
       this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
@@ -39,10 +45,15 @@ export class RegisterComponent implements OnInit {
       this.bsRangeValue = [this.bsValue, this.maxDate];
       defineLocale('pt-br', ptBrLocale);
       this.localeService.use('pt-br');
-        
+    
+ 
+  
+
    }
 
   ngOnInit(): void {
+
+    this.getInitBackground();
 
     this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
     
@@ -57,16 +68,7 @@ export class RegisterComponent implements OnInit {
       Pais_da_sede:  [ '', [Validators.required]],
     });
 
-    // this.myForm = this.fb.group({
-    //   name:     [ 'marcelo', [Validators.required] ],
-    //   lastName:  [ 'griotti', [Validators.required]],
-    //   email:  [ 'margri764@gmail.com', [Validators.required]],
-    //   birthday:  [ '2023-11-11', [Validators.required]],
-    //   phone:  [ 'dfdf', [Validators.required]],
-    //   headquarter:  [ 'aa', [Validators.required]],
-    //   headquarterCity:  [ 'bb', [Validators.required]],
-    //   headquarterCountry:  [ 'cc', [Validators.required]],
-    // });
+   
     
     
 
@@ -104,17 +106,44 @@ export class RegisterComponent implements OnInit {
       ( {success} )=>{
           if(success){
             setTimeout(()=>{ this.isLoading = false; },700)
-              
               this.succesSignup = true;
+              this.myForm.reset();
+              setTimeout(()=>{ this.router.navigateByUrl('/login') },1900)
           }
     })
 
   }
 
+  getInitBackground(){
+    this.imageUploadService.getAllBackground().subscribe(
+      ( {success, backgrounds} )=>{
+        if(success){
+          this.arrBackground = backgrounds.map( (doc:any) => {
+            const fileName = doc.filePath.split('/').pop();
+      
+            const serverURL = 'https://arcanjosaorafael.org/backgrounds/';
+            return {
+              ...doc,
+              filePath: `${serverURL}${fileName}`
+            };
+          });
+          this.changeBackground()
+          
+        }
+      })
+    }
+
+    changeBackground(): void {
+      var fondoAleatorio =  this.arrBackground[Math.floor(Math.random() * this.arrBackground.length)];
+      this.backgroundImage = fondoAleatorio.filePath;
+      this.backgroundImage = this.backgroundImage.replace(/\(/g, '%28').replace(/\)/g, '%29');
+    }
+  
+  
+
   validField( field: string ) {
     const control = this.myForm.get(field);
     return control && control.errors && control.touched;
-    // return this.myForm.controls[field].errors && this.myForm.controls[field].touched;
 }
 
 

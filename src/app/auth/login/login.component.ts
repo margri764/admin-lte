@@ -51,7 +51,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   showCron : boolean = true;
   show500 : boolean = false;
   arrBackground : any []=[]
-  backgroundImage = '';
+  backgroundImage : string= '';
+sendMeACopy : boolean = false;
+
   
   constructor(
               private fb : FormBuilder,
@@ -110,6 +112,7 @@ counter : number = 0;
       headquarter: [ '', [Validators.required] ],
       userEmail: [ '', [Validators.required, Validators.pattern(this.validatorService.emailPattern)] ],
       subject: [ '', [Validators.required] ],
+      sendMeACopy: ['']
     });
 
 
@@ -131,17 +134,18 @@ counter : number = 0;
   changeBackground(): void {
     var fondoAleatorio =  this.arrBackground[Math.floor(Math.random() * this.arrBackground.length)];
     this.backgroundImage = fondoAleatorio.filePath;
+    this.backgroundImage = this.backgroundImage.replace(/\(/g, '%28').replace(/\)/g, '%29');
     this.cdr.detectChanges();
   }
 
 
   getInitBackground(){
-    this.isLoading = true;
     this.imageUploadService.getAllBackground().subscribe(
       ( {success, backgrounds} )=>{
         if(success){
           this.arrBackground = backgrounds.map( (doc:any) => {
             const fileName = doc.filePath.split('/').pop();
+      
             const serverURL = 'https://arcanjosaorafael.org/backgrounds/';
             return {
               ...doc,
@@ -149,7 +153,6 @@ counter : number = 0;
             };
           });
           this.changeBackground()
-          setTimeout(()=>{ this.isLoading= false },700)
           
         }
       })
@@ -354,6 +357,11 @@ counter : number = 0;
 
   }
 
+  // desea enviar una copia a mi email?
+  sendMeAnEmail( event : any ){
+    this.sendMeACopy = (event.target as HTMLInputElement).checked;
+  }
+
 //entre em contato con nosotros
   contactUs(){
 
@@ -361,8 +369,14 @@ counter : number = 0;
       this.myForm2.markAllAsTouched();
       return;
     }
+
+    const body = {
+      ...this.myForm2.value,
+      sendMeACopy : this.sendMeACopy
+    }
+
     this.isSending= true;
-    this.authService.contactUs(this.myForm2.value).subscribe( 
+    this.authService.contactUs(body).subscribe( 
       ({success})=>{
         if(success){
           this.isSending= false;
@@ -370,6 +384,8 @@ counter : number = 0;
           this.position = false;
           setTimeout(()=>{
             this.successContactUs = true;
+            this.myForm2.reset();
+            this.sendMeACopy = false;
           },1800)
          
           setTimeout(() => {

@@ -197,7 +197,7 @@ export class ErrorService {
 
  
     if (error.status === 400) {
-        this.openGenericMsgAlert(error.error.message);
+      this.status400Error$.emit({emmited:true, msg: error.error.message });
         this.closeIsLoading$.emit(true);
         return of(null);
     }

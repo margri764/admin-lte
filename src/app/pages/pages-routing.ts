@@ -16,6 +16,10 @@ import { GroupsComponent } from './groups/groups.component';
 import { CongregatioComponent } from './congregatio/congregatio/congregatio.component';
 import { ViewCongregatiComponent } from './view-congregatio/view-congregati/view-congregati.component';
 import { BackgroundComponent } from './background/background.component';
+import { WebMastersComponent } from './web-masters/web-masters/web-masters.component';
+import { AdminComponent } from './admin/admin/admin.component';
+import { ActiveUsersComponent } from './active-users/active-users/active-users.component';
+import { DeactiveUsersComponent } from './deactive-users/deactive-users/deactive-users.component';
 
 
 const routes: Routes = [
@@ -38,6 +42,10 @@ const routes: Routes = [
               { path: 'grupos',  component: GroupsComponent , data:{ title:"Grupos"}},
               { path: 'congregatio',  component: CongregatioComponent , data:{ title:"Congregatio"}},
               { path: 'fundos',  component: BackgroundComponent , data:{ title:"Images de fundo"}},
+              { path: 'webmasters',  component: WebMastersComponent , data:{ title:"Webmasters"}},
+              { path: 'administradores',  component: AdminComponent , data:{ title:"Administradores"}},
+              { path: 'usuarios-ativos',  component: ActiveUsersComponent , data:{ title:"Usuarios ativos"}},
+              { path: 'usuarios-desativados',  component: DeactiveUsersComponent, data:{ title:"Usuarios desativados"}},
             ]
   }
 

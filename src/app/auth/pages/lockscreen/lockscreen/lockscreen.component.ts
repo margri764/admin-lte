@@ -32,13 +32,14 @@ name : string = "";
       email:  [ '', [Validators.required]],
       password:  [ '', [Validators.required]],
     });
+    
+    this.isLoading = false;
 
   }
 
   ngOnInit(): void {
 
     this.errorService.closeIsLoading$.pipe(delay(1200)).subscribe( (emitted) => { if(emitted){this.isLoading = false}}) ;
-
 
 
     const user = getDataSS('session');

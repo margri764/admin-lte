@@ -7,6 +7,7 @@ import { AppState } from 'src/app/shared/redux/app.reducer';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
 import { LocalstorageService } from 'src/app/shared/services/localstorage/localstorage.service';
+import { UserService } from 'src/app/shared/services/user/user.service';
 import { getDataLS } from 'src/app/shared/storage';
 
 @Component({
@@ -20,15 +21,38 @@ export class DashboardComponent implements OnInit {
   isLoading : boolean = false;
   reqRegister : any []=[];
   reqLength: number = 0;
+  verifiedUserCount : number = 0;
+  unverifiedUserCount : number = 0;
+  webmasterUserCount : number = 0;
+  adminUserCount : number = 0;
 
   constructor(
                 public router : Router,
                 private errorService : ErrorService,
                 private authService : AuthService,
                 private store : Store <AppState>,
-                private localStorageService : LocalstorageService,
+                private userService :UserService,
                 private cookieService : CookieService,
-  ) { }
+                private localStorageService : LocalstorageService,
+  ) { 
+
+      // ojo con el verificar-email!! xq sino cuando entro me redirecciona al login
+
+        const token = this.cookieService.get('token');
+        console.log(token);
+        // const userLS = getDataLS('user');
+        // const logged = getDataLS("logged"); 
+        // const loggedSS = getDataSS("logged"); 
+
+        if(!token){
+           this.router.navigateByUrl('/login');
+           this.errorService.logout();
+        }
+
+        // if(logged === undefined && loggedSS === undefined ){
+        // this.router.navigateByUrl('/login');
+        // }
+  }
 
   ngOnInit(): void {
 
@@ -47,7 +71,8 @@ export class DashboardComponent implements OnInit {
     ( {user} )=>{
       this.isLoading = false;
       this.setUserLogs(user!.email);
-      this.getRequestedPermissions()
+      this.getRequestedPermissions();
+      this.initialUsers();
     })
     
   
@@ -72,7 +97,22 @@ export class DashboardComponent implements OnInit {
             }
           })
         }
-    }
+ }
+
+initialUsers(){
+  this.userService.getAllUsersQuantity().subscribe(
+    ( {success, verifiedUserCount, unverifiedUserCount, webmasterUsersCount, adminUsersCount } )=>{
+        if(success){
+          this.verifiedUserCount = verifiedUserCount;
+          this.unverifiedUserCount = unverifiedUserCount;
+          this.webmasterUserCount = webmasterUsersCount,
+          this.adminUserCount = adminUsersCount
+        }
+
+    })
+
+}
+  
 
 
 }

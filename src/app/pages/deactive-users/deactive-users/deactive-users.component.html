@@ -1,0 +1,64 @@
+<div class="card col-12 table-responsive" style="padding: 12px; padding-top: 20px; background-color: white;">
+
+
+    
+    <div class="customTHead w-100 shadow">
+      <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover font fs-10" #table >
+
+        <thead>
+            <tr>
+                <th> Img</th>
+                <th> Nome</th>
+                <th> Endereço de email</th>
+                <th>  </th>
+            </tr>
+        </thead>
+        <tbody *ngIf="users.length !== 0">
+            
+            <tr *ngFor="let user of users">
+                <td> 
+                    <img [src]="user | imagenPath" class="img-fluid br-6" style="border-radius: 7px;" *ngIf="user.Ruta_Imagen !== '' && user.Ruta_Imagen !== null" width="50px">
+                    <img src="assets/no-image.jpg" class="img-fluid br-6 " width="50px" *ngIf="user.Ruta_Imagen == '' || !user.Ruta_Imagen" >
+                 </td>
+                <td >
+                    <div [routerLink]="['/dashboard/editar-usuario/', user.iduser]" >  
+                        <p *ngIf="user.Nome_Completo !== '' " class="selected"> {{ user.Nome_Completo}} </p> 
+                    </div>
+                </td>
+                <td>{{ user.Email }} </td>
+
+                <td>
+                  <!-- <div class="custom-control custom-switch d-flex align-items-center justify-content-center" style="margin-right: 10px;" >
+                    <input type="checkbox" class="custom-control-input "  id="customSwitch{{ pic.idbackground }}" (change)="backgroundOption($event, pic.idbackground)" [checked]="pic.active">
+                    <label class="custom-control-label cursor" for="customSwitch{{ pic.idbackground }}"></label>
+                  </div> -->
+                  <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 30px;" >
+                    <input type="checkbox" class="custom-control-input " id="customSwitch{{user.iduser}}"  (change)="activeDeacTive($event, user.Email)"  >
+                    <label class="custom-control-label cursor" for="customSwitch{{ user.iduser }}" [ngbTooltip]="'Ativar usuário'"> Ativar usúario  </label>
+                  </div>
+        
+                </td>
+             
+            </tr>
+        
+        </tbody>
+      
+      </table>
+    </div>
+
+
+  <!-- success  -->
+ <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
+  <h5><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
+  <span class="fs-11 w-100"> {{msg}}</span>
+</div>
+  
+
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-grow " role="status" style="width: 50px; height: 50px;"  >
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div> 
+  
+  

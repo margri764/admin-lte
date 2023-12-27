@@ -1,0 +1,39 @@
+.selected:hover{
+    color: rgb(0, 128, 255);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+
+  .rotate:hover .fas.fa-plus{
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    transition-duration: 0.8s;
+  }
+
+  #custom-toast {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    width: 380px;
+  }
+
+  
+  @media (max-width: 576px) {
+    
+    #custom-toast {
+      position: fixed;
+      bottom: 0px;
+      right: 0px;
+      padding: 15px;
+      border-radius: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  
+  }

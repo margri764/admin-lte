@@ -1,15 +1,15 @@
-<div class="login-page" style="background-image: url('../../../assets/background-1.jpg');">
-  <div class="register-box"  style="">
+<div class="login-page font" [style.backgroundImage]="'url(' + backgroundImage + ')'" >
+<div class="register-box"  style="">
 
     <!-- /.login-logo -->
     <div class="card card-outline card-primary" style="background-color: rgb(234, 243, 250, 0.9);">
       <div class="card-header text-center">
-        <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+        <a  class="h1"><b>Arcanjo</b> &nbsp;SaoRafael</a>
       </div>
       <div class="card-body">
         <p class="login-box-msg">- Registrar-se -</p>
   
-        <form [formGroup]="myForm" class="needs-validation"  novalidate  >
+        <form [formGroup]="myForm" class="needs-validation"  novalidate  (ngSubmit)="register()">
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
             <input type="text" class="form-control" placeholder="Nome" formControlName="name" required [ngStyle]="( validField('name')) ? {'border':'1px solid red'}:{}"  >
@@ -96,16 +96,14 @@
           <button type="submit" style="display: none;"></button>
  
 
+          <button type="submit" class="btn btn-primary btn-block shadow"  > Aceitar</button>
     
         </form>
 
-    
   
          <div style="display: flex; align-items: end; justify-content: end; margin-top: 30px;" >
 
-            
-            <span class="mb-0" > <a routerLink="../register" class="text-center" (click)="register()" > <i class="fa fa-user"></i> Registrar-se</a> </span>
-            &nbsp; &nbsp;
+
             <span class="mb-0"> <a routerLink="/login" class="text-center">  <i class="fas fa-sign-in-alt" style="margin-right: 2px;"></i>  Já tenho registro </a> </span>
 
          </div>

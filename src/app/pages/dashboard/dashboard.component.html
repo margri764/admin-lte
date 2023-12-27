@@ -1,58 +1,63 @@
-<div class="row">
-  <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-    <div class="small-box bg-info">
+<div class="row ">
+
+
+
+  <div class="col-lg-3 col-md-6 col-sm-6 col-12 ">
+    <div class="small-box bg-gradient-success shadow">
       <div class="inner">
-        <h3>150</h3>
-        <p>Novos pedidos</p>
-      </div>
-      <div class="icon">
-        <i class="fas fa-shopping-cart"></i>
-      </div>
-      <a href="#" class="small-box-footer">
-        Más información <i class="fas fa-arrow-circle-right"></i>
-      </a>
-    </div>
-  </div>
-  <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-    <div class="small-box bg-gradient-success">
-      <div class="inner">
-        <h3>44</h3>
-        <p>Usuários registrados</p>
+        <h3> {{ verifiedUserCount }} </h3>
+        <p>Usuários ativos</p>
       </div>
       <div class="icon">
         <i class="fas fa-user-plus"></i>
       </div>
-      <a href="#" class="small-box-footer">
-        Más información<i class="fas fa-arrow-circle-right"></i>
+      <a routerLink="usuarios-ativos" class="small-box-footer">
+        Más información &nbsp; <i class="fas fa-arrow-circle-right" ></i>
       </a>
     </div>
   </div>
+
   <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-    <div class="small-box bg-danger">
+    <div class="small-box bg-danger shadow">
       <div class="inner">
-        <h3>150</h3>
-        <p>Usuários ativos</p>
+        <h3> {{ unverifiedUserCount }} </h3>
+        <p> Usuários desativados </p>
       </div>
       <div class="icon">
-        <i class="nav-icon fas fa-tachometer-alt"></i>
+        <i class="nav-icon fas fa-user-lock"></i>
       </div>
-      <a href="#" class="small-box-footer">
-        Más información <i class="fas fa-arrow-circle-right"></i>
+      <a routerLink="usuarios-desativados" class="small-box-footer">
+        Más información &nbsp;<i class="fas fa-arrow-circle-right"></i>
       </a>
     </div>
   </div>
+
   <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-    <div class="small-box bg-warning">
+    <div class="small-box bg-warning shadow" >
       <div class="inner">
-        <h3>44</h3>
-        <p>Usuários desabilitados
-        </p>
+        <h3> {{ webmasterUserCount }} </h3>
+        <p> Webmasters  </p>
       </div>
       <div class="icon">
-        <i class="right fas fa-angle-left"></i>
+        <i class="right fas fa-users-cog"></i>
       </div>
-      <a href="#" class="small-box-footer">
-        Más información <i class="fas fa-arrow-circle-right"></i>
+      <a routerLink="webmasters" class="small-box-footer">
+        Más información &nbsp; <i class="fas fa-arrow-circle-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+    <div class="small-box bg-info shadow">
+      <div class="inner">
+        <h3> {{adminUserCount}} </h3>
+        <p> Administradores </p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-user-cog"></i>
+      </div>
+      <a  routerLink="administradores" class="small-box-footer">
+        Más información  &nbsp;<i class="fas fa-arrow-circle-right"></i>
       </a>
     </div>
   </div>

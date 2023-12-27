@@ -72,6 +72,69 @@ export class UserService {
     )
   }
 
+  getAllActiveUsers( ){
+
+    return this.http.get<any>(`${this.baseUrl}api/user/getAllActiveUsers`) 
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getAllActiveUsers service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+  getAllDeactiveUsers( ){
+
+    return this.http.get<any>(`${this.baseUrl}api/user/getAllDeactiveUsers`) 
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getAllDeactiveUsers service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+  getWebmasters( ){
+
+    return this.http.get<any>(`${this.baseUrl}api/user/getWebmasters`) 
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getWebmasters service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+  getAdmins( ){
+
+    return this.http.get<any>(`${this.baseUrl}api/user/getAdmins`) 
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getAdmins service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
+
+
+
+  getAllUsersQuantity( ){
+
+    return this.http.get<any>(`${this.baseUrl}api/user/getAllUsersQuantity`) 
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from getAllUsersQuantity service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
   getDocByUserId( id:any ){
 
     return this.http.get<any>(`${this.baseUrl}api/document/getDocByUserId/${id}`) 

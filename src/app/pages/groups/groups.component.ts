@@ -125,6 +125,7 @@ onSave(){
         this.msg = 'Grupo criado corretamente'
         this.showSuccessCreateGroup = true;
         this.getInitialGroups();
+        this.myForm.reset();
 
       }
     })
@@ -268,6 +269,9 @@ ngOnDestroy(): void {
   this.dtTrigger2.unsubscribe();
 }
 
+closeModal(){
+  this.myForm.reset();
+}
 
 
 

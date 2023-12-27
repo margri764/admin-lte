@@ -1,6 +1,5 @@
 <div class="login-page font" [style.backgroundImage]="'url(' + backgroundImage + ')'" >
 
-
   <div class="login-box" *ngIf="showLogin">
 
     <div class="card card-outline card-primary" style="background-color: rgb(234, 243, 250, 0.9);">
@@ -69,13 +68,13 @@
         <form [formGroup]="myForm2" class="needs-validation font fs-10 w-100"  novalidate  [autocomplete]="false" >
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
-            <p class="custom-text w-100"> Nome </p>
+            <p class="custom-text w-100"> Nome <b style="color: red;">*</b></p>
             <input type="text" class="form-control"  required [ngStyle]="( validField2('fullName')) ? {'border':'1px solid red'}:{}" formControlName="fullName" >
             <div *ngIf="validField2('fullName')" class="invalid" > Dado obrigatório </div>
           </div>
 
           <div class="input-group mb-3 mt-1" >
-            <p class="custom-text w-100"> Ordem </p>
+            <p class="custom-text w-100"> Ordem <b style="color: red;">*</b></p>
             <select class="form-control select2 col-12 w-100" required  formControlName="headquarter" >
               <option selected="selected"> </option>
               <option>Ordem primeira</option>
@@ -86,20 +85,25 @@
           </div>
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
-            <p class="custom-text w-100"> Digite seu email </p>
+            <p class="custom-text w-100"> Digite seu email <b style="color: red;">*</b> </p>
             <input type="email" class="form-control"  required [ngStyle]="( validField2('userEmail')) ? {'border':'1px solid red'}:{}" formControlName="userEmail">
             <div *ngIf="validField2('userEmail')" class="invalid" > Dado obrigatório / Não tem formato de e-mail</div>
           </div>
 
           <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
-            <p class="custom-text w-100"> Assunto </p>
+            <p class="custom-text w-100"> Assunto <b style="color: red;">*</b></p>
               <textarea class="form-control" formControlName="subject" style="height: 60px;"></textarea>
             <div *ngIf="validField2('subject')" class="invalid" > Dado obrigatório </div>
 
           </div>
 
+          <div class="custom-control custom-switch d-flex  align-items-center justify-content-start" >
+            <input type="checkbox" class="custom-control-input " id="customSwitch1"  (change)="sendMeAnEmail($event)" [checked]="sendMeACopy" >
+            <label class="custom-control-label cursor font" for="customSwitch1" style="color: black; font-weight: 400;" > Envie-me uma cópia para o meu email </label>
+          </div>
 
-          <div class="w-100">
+
+          <div class="w-100 mt-3 ">
             <button type="submit" class="btn btn-primary btn-block shadow " style="background-color: #007bff !important;" (click)="contactUs()" *ngIf="!isSending"> Enviar</button>
             <button type="button" class="btn btn-primary btn-block shadow" style="background-color: #007bff !important;" *ngIf="isSending"> Enviando...</button>
           </div>
@@ -115,66 +119,7 @@
 
 
 
-  <!-- Modal contact us -->
-  <div class="modal fade" id="modalContactUs" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="opacity: 0.95;">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalCenterTitle"> Entre em contato conosco </h5>
-          <button type="button" #closebutton  class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          
-          <form [formGroup]="myForm2" class="needs-validation"  novalidate  [autocomplete]="false" (ngSubmit)="contactUs()">
 
-            <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
-              <label class="text w-100"> Nome </label>
-              <input type="text" class="form-control"  required [ngStyle]="( validField('fullName')) ? {'border':'1px solid red'}:{}" formControlName="fullName">
-              <div *ngIf="validField('fullName')" class="invalid" > Dado obrigatório </div>
-            </div>
-
-            <div class="input-group mb-3 mt-1" >
-              <label class="text w-100" > Ordem </label>
-              <select class="form-control select2 col-12 w-100" formControlName="headquarter" >
-                <option selected="selected"></option>
-                <option>Ordem primeira</option>
-                <option>Ordem segunda</option>
-                <option>Outro</option>
-                
-              </select>
-            </div>
-
-            <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
-              <label class="text w-100"> Digite seu email</label>
-              <input type="email" class="form-control"  required [ngStyle]="( validField('userEmail')) ? {'border':'1px solid red'}:{}" formControlName="userEmail">
-              <div *ngIf="validField('userEmail')" class="invalid" > Dado obrigatório / Não tem formato de e-mail </div>
-            </div>
-
-            <div class="input-group mb-3" [ngClass]="{'was-validated': submitted}">
-              <label class="text w-100"> Assunto </label>
-                <textarea class="form-control " formControlName="subject"></textarea>
-              <div *ngIf="validField('subject')" class="invalid" > Dado obrigatório </div>
-
-            </div>
-
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary btn-block shadow"  *ngIf="!isSending"> Enviar</button>
-              <button type="button" class="btn btn-primary btn-block shadow"  *ngIf="isSending"> Enviando...</button>
-            </div>
-  
-          </form>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary btn-block shadow" (click)="contactUs()" *ngIf="!isSending"> Enviar</button>
-          <button type="button" class="btn btn-primary btn-block shadow"  *ngIf="isSending"> Enviando...</button>
-        </div>
-
-      </div>
-    </div>
-  </div>
 
   <!-- Modal Code -->
   <button type="button" style="display: none;" data-toggle="modal" data-target="#modalCode" #openModal>Abrir Modal</button>
@@ -300,8 +245,6 @@
 <h5 ><i class="icon fas fas fa-user-lock"></i> Espere!</h5>
 {{msg}}
 </div>
-
-
 
 
   <div class="loading-overlay" *ngIf="isLoading">

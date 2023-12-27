@@ -37,7 +37,7 @@
                         <td > {{ pes.name }} </td>
                         <td > {{ pes.description }} </td>
                         <td > {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
-                        <td >
+                        <td style="text-align: center;">
                           <i class="fas fa-pencil-alt" style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;"  (click)="launchPersonalAlarm(pes)"  data-toggle="modal" data-target="#modalEditAlarm"     [ngbTooltip]="'Editar alarme'"  ></i>
   
                           <i class="far fa-play-circle" style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(27, 188, 24); margin-right: 5px;"  [ngbTooltip]="'Ativar alarme'" *ngIf="pes.status === 'paused'" (click)="activePausePersonalAlarm(pes, 'active')" ></i>
@@ -232,7 +232,7 @@
               <label class="custom-control-label cursor" for="customSwitch1"> Excluir do alarme o usuário  </label>
             </div>
   
-            <div class=" modal-footer d-flex align-items-center justify-content-center">
+            <div class="modal-footer d-flex align-items-center justify-content-center mb-3">
               <button type="submit" class="btn btn-primary btn-block shadow mt-3 fs-11 font" [attr.disabled]="(!pessoal && !grupal) ? '' : null">Criar alarme</button>
            </div>
           

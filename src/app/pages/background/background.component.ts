@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { delay, take } from 'rxjs';
 import { ImageUploadService } from 'src/app/shared/services/ImageUpload/image-upload.service';
 import { ErrorService } from 'src/app/shared/services/error/error.service';
@@ -19,7 +20,7 @@ export class BackgroundComponent implements OnInit {
 
   constructor(
               private imageUploadService : ImageUploadService,
-              private errorService : ErrorService
+              private errorService : ErrorService,
   ) { 
     
   (screen.width <= 800) ? this.phone = true : this.phone = false;
@@ -32,6 +33,8 @@ export class BackgroundComponent implements OnInit {
     this.errorService.closeIsLoading$.pipe(delay(1500)).subscribe(emitted => emitted && (this.isLoading = false));
 
   }
+
+  
   
 
   getInitBackground(){

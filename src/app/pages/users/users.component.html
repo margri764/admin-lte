@@ -28,7 +28,7 @@
                              </td>
                             <td >
                                 <div [routerLink]="['/dashboard/editar-usuario/', user.iduser]" >  
-                                    <label *ngIf="user.Nome_Completo !== '' " class="selected"> {{ user.Nome_Completo}} </label> 
+                                    <p *ngIf="user.Nome_Completo !== '' " class="selected"> {{ user.Nome_Completo}} </p> 
                                 </div>
                             </td>
                             <td>{{ user.Email }} </td>

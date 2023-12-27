@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SessionService } from '../services/session/session.service';
 import { AppState } from '../redux/app.reducer';
 import { Store } from '@ngrx/store';
-import { distinctUntilChanged, filter } from 'rxjs';
+import { Subject, distinctUntilChanged, filter, takeUntil } from 'rxjs';
 import { getDataLS, getDataSS, saveDataSS } from '../storage';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { ErrorService } from '../services/error/error.service';
 
 @Component({
@@ -12,11 +12,12 @@ import { ErrorService } from '../services/error/error.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   sessionTimeRemaining!: number;
   user:any;
-  profilePicture : string = 'assets/no-image.jpg'
+  profilePicture : string = 'assets/no-image.jpg';
+  private destroy$ = new Subject<void>();
 
   constructor(
               private sessionService : SessionService,
@@ -36,12 +37,16 @@ export class NavbarComponent implements OnInit {
         this.getImage(user.Ruta_Imagen);
       }
    }
-  
+
+
   
    ngOnInit(): void {
 
-    this.sessionService.getClock().subscribe((timeRemaining: number) => {
-      this.sessionTimeRemaining = timeRemaining;
+    this.sessionService.getClock()
+      .pipe(takeUntil(this.destroy$)).subscribe((timeRemaining: number) => {
+    
+        this.sessionTimeRemaining = timeRemaining;
+
      
       
       const user = getDataLS("user");
@@ -59,6 +64,22 @@ export class NavbarComponent implements OnInit {
 
     });
 
+    this.router.events
+      .pipe(
+        takeUntil(this.destroy$),  // Unsubscribe when the component is destroyed
+        filter(event => event instanceof NavigationEnd)
+      )
+      .subscribe((event: any) => {
+        if (event.url === '/sessao-expirada') {
+          this.destroy$.next();  // Emit signal to unsubscribe from the clock observable
+        }
+      });
+
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();  
+    this.destroy$.complete();  
   }
 
   getImage( path:string ){

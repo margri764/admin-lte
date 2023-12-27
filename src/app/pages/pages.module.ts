@@ -28,6 +28,11 @@ import { ViewGroupComponent } from './modals/view-group/view-group/view-group.co
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ImagenPathPipe } from '../shared/pipes/imagen-path.pipe';
+import { ActiveUsersComponent } from './active-users/active-users/active-users.component';
+import { DeactiveUsersComponent } from './deactive-users/deactive-users/deactive-users.component';
+import { WebMastersComponent } from './web-masters/web-masters/web-masters.component';
+import { AdminComponent } from './admin/admin/admin.component';
+import { UploadDocumentsComponent } from './upload-documents/upload-documents/upload-documents.component';
 
 
 @NgModule({
@@ -48,7 +53,12 @@ import { ImagenPathPipe } from '../shared/pipes/imagen-path.pipe';
     ViewCongregatiComponent,
     BackgroundComponent,
     ViewGroupComponent,
-    ImagenPathPipe
+    ImagenPathPipe,
+    ActiveUsersComponent,
+    DeactiveUsersComponent,
+    WebMastersComponent,
+    AdminComponent,
+    UploadDocumentsComponent
   ],
   exports: [
     DashboardComponent,
