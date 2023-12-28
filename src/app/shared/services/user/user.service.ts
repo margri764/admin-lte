@@ -6,7 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.models';
 import { environment } from 'src/environments/environment';
-import { map, tap } from 'rxjs';
+import { Subject, map, tap } from 'rxjs';
 import * as authActions from 'src/app/shared/redux/auth.actions'
 import { LocalstorageService } from '../localstorage/localstorage.service';
 
@@ -18,6 +18,8 @@ export class UserService {
   authDelDocument$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authDelUser$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authAddRole$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  closeDocumentModal$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  
 
 
 
@@ -32,6 +34,7 @@ export class UserService {
                 private localStorageService : LocalstorageService,
                 private router : Router
   ) { }
+
 
 
   getUserById( id:any ){
@@ -176,6 +179,27 @@ export class UserService {
       map( res => res )
     )
   }
+
+  bulkUploadDocuments( id:any , files:any){
+
+    console.log(files);
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
+    console.log(formData);
+
+    return this.http.post<any>(`${this.baseUrl}api/document/bulkUploadDocuments/${id}`, formData) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from bulkUploadDocuments service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
 
   deleteDocById( id:any ){
 

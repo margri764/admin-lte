@@ -1,1 +1,98 @@
-<p>upload-documents works!</p>
+
+
+  <div class="row mt-3 col-12">
+
+    <div class="col-3" >
+      <ngx-dropzone (change)="onSelect($event)" >
+        <ngx-dropzone-label>Arraste e solte os arquivos aqui ou clique para selecionar.</ngx-dropzone-label>
+      </ngx-dropzone>
+  
+    </div>
+
+
+    <div class="col-9 table-responsive"  >
+
+      <table class="table table-hover">
+        <thead class="">
+            <tr>
+              <th scope="col" > Nome</th>
+              <th scope="col" > Tamanho</th>
+              <th scope="col" style="width: 200px;" > Progresso</th>
+              <th scope="col" style="width: 100px; text-align: center;" > Ações </th>
+            </tr>
+          </thead>
+          <tbody *ngIf="files.length !== 0">
+            <tr *ngFor="let file of files; let i = index">
+                <td style ="vertical-align: middle;"> {{ file.name }}  </td>
+                <td style ="vertical-align: middle;"> {{ file.size | fileSize}} </td>
+                <td style ="vertical-align: middle;"> 
+
+                  <div class="progress" *ngIf="progressBars[i] !== 100">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" [style.width.%]="progressBars[i] || bulkProgresss"   ></div>
+                  </div>
+                  <div class="progress" *ngIf="progressBars[i] === 100">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </td>
+                <td class="d-flex justify-content-around align-items-center"> 
+
+                  <div class="border-icon shadow-md" >
+                    <i class="fas fa-upload" style="cursor: pointer; text-align: center; font-size: 18px; color: green; " (click)="uploadDocument(file, i)" [ngbTooltip]="'Subir arquivo'"></i>
+                  </div>
+    
+                  <div class="border-icon shadow-md" >
+                    <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 18px; color: red; " data-toggle="modal" data-target="#modalAskDelDocument" (click)="onRemove(file)" [ngbTooltip]="'Remover arquivo'"></i>
+                  </div>
+
+                
+                    
+                </td>
+            </tr>
+          </tbody>
+      </table>
+
+      <div class="d-flex justify-content-end" style="margin-bottom: auto;" *ngIf="files.length > 1">
+          <button type="button" class="btn btn-primary shadow font"  (click)="bulkUploadDocument()"> <i class="fas fa-upload" style="cursor: pointer; text-align: center; font-size: 16px;"  [ngbTooltip]="'Subir tudo'"></i>&nbsp;  Subir tudo</button>
+
+          <button type="button" class="btn btn-danger shadow font ml-10" [ngbTooltip]="'Remover tudo'"  (click)="bulkUploadDocument()"> <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 16px; "></i>  &nbsp; Remover tudo</button>
+
+      </div>
+    </div>
+
+  
+  </div>
+
+   <!-- success upload / edition /active  -->
+ <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
+  <h5><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
+  <span class="fs-11 w-100"> {{msg}}</span>
+</div>
+
+
+  <!-- Modal Preview  -->
+  <!-- <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg justify-content-center" role="document"> 
+      <div class="modal-content">
+        <div class="modal-header">
+              <h5 class="modal-title" > <a>{{fileName}}</a> </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeViewModal()" #closeView>
+                <span aria-hidden="true">&times;</span>
+              </button>
+        </div>
+        <div class="modal-body" >
+          <div *ngIf="!loadingPdf">
+              <div class="embed-responsive embed-responsive-16by9">
+                <pdf-viewer [src]="selectedPdfSrc" [render-text]="true" [original-size]="false" class="embed-responsive-item"></pdf-viewer>
+              </div>
+            </div>
+        </div>
+            <a [href]="selectedPdfBack" download="{{fileNameBack}}">
+              <i class="fas fa-download"></i> Baixar
+            </a>
+      </div>
+    </div>
+  </div> -->
+
+
+

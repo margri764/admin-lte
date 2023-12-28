@@ -36,6 +36,7 @@ export class EditUserComponent implements OnInit, AfterViewInit  {
 // start search
 @Output() onDebounce: EventEmitter<string> = new EventEmitter();
 @Output() onEnter   : EventEmitter<string> = new EventEmitter();
+
 debouncer: Subject<string> = new Subject();
 @ViewChild('link') link!: ElementRef;
 @ViewChild('closebutton') closebutton! : ElementRef;
@@ -44,25 +45,39 @@ debouncer: Subject<string> = new Subject();
 myForm! : FormGroup;
 myFormSearch! : FormGroup;
 countryForm! : FormGroup;
-files: File [] = [];
+
+
+// documents
 backFiles: any[] = [];
 pdfSrc :any;
-selectedPdfSrc: any = null;
-pdfSrcList: any[] = [];
+// files: File [] = [];
+// selectedPdfSrc: any = null;
+// pdfSrcList: any[] = [];
+// selectedFile: CustomFile | null = null;
+// fileName: string = '';
+// fileNameBack : string = '';
+// selectedPdfBack : any;
 pdfSrcBackList: any[] = [];
+arrIds : any []=[];
 loadingPdf: boolean = false;
-selectedFile: CustomFile | null = null;
-success: any;
-fileName: string = '';
-user! : User;
+menuDocument: any;
 arrDocument : any []=[];
+showBulk : boolean = false;
+
+
+
+// documents
+
+
+
+success: any;
+user! : User;
 showSuccess : boolean = false;
 msg:string = '';
 isLoading : boolean = false;
 askDelDocument : boolean = false;
 ordem :any[] = ["Primeira","Segunda" ]
 default: string = '';
-selectedPdfBack : any;
 
 // start search
 itemSearch : string = '';
@@ -84,7 +99,6 @@ phone : boolean = false;
 showLabelLinked : boolean = false;
 showSuccessDelDocument : boolean = false;
 showSuccessDelUser : boolean = false;
-fileNameBack : string = '';
 lastSetValue: { [key: string]: any } = {};
 readonlyFields: { [key: string]: boolean } = {};
 wasLinked : boolean = false;
@@ -124,13 +138,11 @@ selectedImg : File | null = null;
 showClose : boolean = false;
 
 menuVisible = false;
-menuDocument: any;
-showBulk : boolean = false;
-arrIds : any []=[];
 show : boolean = false;
 userFichaCompleta : any;
 sendUserCongregatio : boolean = false;
 sendUser : boolean = false;
+showUploadModal : boolean = false;
 
 
 
@@ -144,7 +156,7 @@ sendUser : boolean = false;
                 private alarmGroupService : AlarmGroupService,
                 private localeService: BsLocaleService,
                 private router : Router,
-                private imageUploadService : ImageUploadService
+                private imageUploadService : ImageUploadService,
                 ) 
                 
 { 
@@ -180,6 +192,8 @@ sendUser : boolean = false;
       })
 
     this.errorService.closeIsLoading$.pipe(delay(100)).subscribe(emitted => emitted && (this.isLoading = false));
+
+    this.userService.closeDocumentModal$.subscribe( (emitted)=>{ if(emitted){ this.closebutton.nativeElement.click()} })
 
 
     this.myFormSearch.get('itemSearch')?.valueChanges.subscribe(newValue => {
@@ -456,220 +470,8 @@ sendUser : boolean = false;
   continueDelAlarm(){
     this.alarmGroupService.authDelAlarm$.emit(true);
   }
-  
-  onSelect(event: any): void {
 
-    const addedFiles: File[] = event.addedFiles;
-
-    for (const file of addedFiles) {
-      this.readAndShowPDF(file);
-      this.files.push(file);
-    }
-    console.log(this.files);
-
-  }
-
-  onRemove(file: File): void {
-
-    this.userService.authDelDocument$.pipe(take(1)).subscribe( (emmited)=>{ 
-      if(emmited){
-          const index = this.files.indexOf(file);
-          if (index !== -1) {
-            this.files.splice(index, 1);
-            this.pdfSrcList.splice(index, 1);
-            console.log(this.pdfSrcList);
-          }
-
-        }
-      })
-  }
-
-  readAndShowPDF(file: any): void {
-
-    console.log(file);
-
-    const reader = new FileReader();
-    this.loadingPdf = true;
-  
-    reader.onload = (e) => {
-      const base64Data = e.target?.result as string;
-      const downloadLink = base64Data;
-      
-      this.pdfSrcList.push({ preview: base64Data, downloadLink });
-      this.loadingPdf = false;
-    };
-  
-    reader.readAsDataURL(file);
-
-    console.log(reader);
-  }
-
-  readAndShowPDFBack(file: any): void {
-
-    console.log(file);
-
-    const reader = new FileReader();
-    this.loadingPdf = true;
-  
-    reader.onload = (e) => {
-      const base64Data = e.target?.result as string;
-      const downloadLink = base64Data;
-      
-      this.pdfSrcList.push({ preview: base64Data, downloadLink });
-      this.loadingPdf = false;
-    };
-  
-    reader.readAsDataURL(file);
-
-    console.log(reader);
-  }
-
-  fileContentToBuffer(fileContent: any): Uint8Array {
-    if (fileContent && fileContent.data && Array.isArray(fileContent.data)) {
-      return new Uint8Array(fileContent.data);
-    }
-    return new Uint8Array();
-  }
-
-  //con esta funcion traigo los documentos q el usuario tiene en BD
-  readAndShowPDFFromBack(fileContents: any[]): void {
-
-    this.backFiles = fileContents;
-    console.log('');
-  
-    fileContents.forEach((fileContent) => {
-      
-      const buffer = this.fileBackContentToBuffer(fileContent);
-      const blob = new Blob([buffer], { type: 'application/pdf' });
-  
-      const reader = new FileReader();
-      // this.loadingPdf = true;
-  
-      reader.onload = (e) => {
-        const base64Data = e.target?.result as string;
-        const downloadLink = base64Data;
-  
-        this.pdfSrcBackList.push({ preview: base64Data, downloadLink });
-        this.loadingPdf = false;
-      };
-  
-      reader.readAsDataURL(blob);
-    });
-  }
-  
-  fileBackContentToBuffer(fileContent: any): Uint8Array {
-    if ( Array.isArray(fileContent.hash.data)) {
-      console.log('ddd');
-      return new Uint8Array(fileContent.hash.data);
-    }
-  
-    return new Uint8Array();
-  }
-
-  onViewClick(name: string, index: number): void {
-    if (this.pdfSrcList[index]) {
-      console.log(name, index);
-      
-      const reader = new FileReader();
-      
-      reader.onloadend = () => {
-        // Obtén los datos Base64
-        const base64Data = reader.result as string;
-        
-        // Asigna los datos Base64 al src del pdf-viewer
-        this.selectedPdfSrc = base64Data;
-        
-        this.selectedFile = this.files[index];
-        this.fileName = name;
-      };
-      
-      // Lee el contenido del archivo como datos Base64
-      reader.readAsDataURL(this.files[index]);
-    }
-  }
-      
-  onView( doc:any ){
-
-    const fileName = doc.filePath.split('/').pop() ;
-
-    console.log(fileName);
-      const serverURL = 'https://arcanjosaorafael.org/documents/'; 
-    
-      this.selectedPdfBack = `${serverURL}${fileName}`;
-      console.log( this.selectedPdfBack);
-      this.fileNameBack = doc.originalName;
-
-  }
-
-  thumbailsPdf(doc:any ){
-
-    const fileName = doc.filePath.split('/').pop() ;
-
-    const serverURL = 'https://arcanjosaorafael.org/documents/'; 
-    
-    console.log( `${serverURL}${fileName}`);
-      return  `${serverURL}${fileName}`;
-  }
-
-  getDocByUserId( id:any ){
-    this.isLoading = true;
-    this.userService.getDocByUserId(id).subscribe(
-    ( {document} )=>{
-      this.isLoading = false;
-      this.arrDocument = document.map( (doc:any) => {
-        const fileName = doc.filePath.split('/').pop();
-        const serverURL = 'https://arcanjosaorafael.org/documents/';
-        return {
-          ...doc,
-          filePath: `${serverURL}${fileName}`
-        };
-      });
-
-
-    });
-
-
-  }
-
-  downloadPdf(files: any) {
-    if (files && files.filePath) {
-      // Obtén el nombre del archivo desde la ruta
-      const fileName = files.filePath.split('/').pop() || files.name;
-  
-      // Configura la ruta del servidor en producción
-      const serverURL = 'https://arcanjosaorafael.org/documents/'; // Reemplaza con la URL de tu servidor
-  
-      // Crea un enlace temporal
-      const link = document.createElement('a');
-  
-      // Configura el enlace con la ruta completa del archivo en producción
-      link.href = `${serverURL}${fileName}`;
-  
-      // Configura la propiedad de descarga con el nombre del archivo original
-      link.download = fileName;
-  
-      // Abre el enlace en una nueva pestaña
-      link.target = '_blank';
-  
-      // Simula un clic en el enlace para iniciar la descarga
-      link.click();
-    }
-  }
-  
-  uploadDocument( file:any ){
-
-    this.userService.uploadDocument(this.user.iduser, file).subscribe(
-      ( {success} )=>{
-        if(success){
-          this.getDocByUserId( this.user.iduser );
-          this.showSuccess = true;
-          this.msg = "Operação de envio bem-sucedida!"
-          this.files = [];
-        }
-      })
-  }
-
-  validField(field: string) {
+ validField(field: string) {
     const control = this.myForm.get(field);
     return control && control.errors && control.touched;
   }
@@ -728,10 +530,6 @@ sendUser : boolean = false;
     this.role = value;
   }
 
-  continue(){
-      this.userService.authDelDocument$.emit( true );
-  }
-
   continueDelUser(){
     this.userService.authDelUser$.emit( true );
   }
@@ -757,37 +555,16 @@ sendUser : boolean = false;
     
   }
 
-  deleteDocById( doc:any){
-
-    
-    this.userService.authDelDocument$.pipe(take(1)).subscribe( (emmited)=>{ 
-      if(emmited){
-        this.isLoading = true;
-        this.showSuccessDelDocument = false;
-        this.userService.deleteDocById( doc.iddocument ).subscribe(
-          ( {success} )=>{
-              if(success){
-                this.msg = "Documento removido com sucesso";
-                this.getDocByUserId( this.user.iduser );
-                this.isLoading = false;
-                this.showSuccessDelDocument = true;
-              }
-          })
-      } 
-    })
-    
-  }
 
   closeToast(){
     this.showSuccess = false;
     this.showLabelLinked = false;
     this.showSuccessDelDocument = false;
-    this.showBulk = false;
+    // this.showBulk = false;
     this.msg = '';
   }
 
   // search
-  
 close(){
   this.mostrarSugerencias = false;
   this.itemSearch = '';
@@ -834,6 +611,144 @@ Search( item: any ){
   },500)
 }
 // search
+
+
+// documents
+
+//con estas dos funcion traigo los documentos q el usuario tiene en BD
+readAndShowPDFFromBack(fileContents: any[]): void {
+
+  this.backFiles = fileContents;
+  console.log('');
+
+  fileContents.forEach((fileContent) => {
+    
+    const buffer = this.fileBackContentToBuffer(fileContent);
+    const blob = new Blob([buffer], { type: 'application/pdf' });
+
+    const reader = new FileReader();
+    // this.loadingPdf = true;
+
+    reader.onload = (e) => {
+      const base64Data = e.target?.result as string;
+      const downloadLink = base64Data;
+
+      this.pdfSrcBackList.push({ preview: base64Data, downloadLink });
+      this.loadingPdf = false;
+    };
+
+    reader.readAsDataURL(blob);
+  });
+}
+
+fileBackContentToBuffer(fileContent: any): Uint8Array {
+  if ( Array.isArray(fileContent.hash.data)) {
+    console.log('ddd');
+    return new Uint8Array(fileContent.hash.data);
+  }
+
+  return new Uint8Array();
+}
+
+onCheckboxChange(  event:any, doc:any ){
+
+  const isChecked = event.target.checked;
+  const id = doc.iddocument;
+
+  if(isChecked){
+    this.arrIds.push(id)
+  }else{
+    this.arrIds = this.arrIds.filter((item)=>item !== id)
+  }
+
+  if(this.arrIds.length === 0){
+    this.closeMenu()
+  }
+
+}
+
+closeMenu(): void {
+  this.menuDocument = null;
+}
+
+downloadPdf(files: any) {
+  if (files && files.filePath) {
+    // Obtén el nombre del archivo desde la ruta
+    const fileName = files.filePath.split('/').pop() || files.name;
+
+    // Configura la ruta del servidor en producción
+    const serverURL = 'https://arcanjosaorafael.org/documents/'; // Reemplaza con la URL de tu servidor
+
+    // Crea un enlace temporal
+    const link = document.createElement('a');
+
+    // Configura el enlace con la ruta completa del archivo en producción
+    link.href = `${serverURL}${fileName}`;
+
+    // Configura la propiedad de descarga con el nombre del archivo original
+    link.download = fileName;
+
+    // Abre el enlace en una nueva pestaña
+    link.target = '_blank';
+
+    // Simula un clic en el enlace para iniciar la descarga
+    link.click();
+  }
+}
+
+deleteDocById( doc:any){
+
+  
+  this.userService.authDelDocument$.pipe(take(1)).subscribe( (emmited)=>{ 
+    if(emmited){
+      this.isLoading = true;
+      // this.showSuccessDelDocument = false;
+      this.userService.deleteDocById( doc.iddocument ).subscribe(
+        ( {success} )=>{
+            if(success){
+              this.msg = "Documento removido com sucesso";
+              // this.getDocByUserId( this.user.iduser );
+              this.isLoading = false;
+              // this.showSuccessDelDocument = true;
+            }
+        })
+    } 
+  })
+  
+}
+
+mostrarMenu(event: MouseEvent): void {
+
+  event.preventDefault();
+  if (event.button === 2 && this.arrIds.length !== 0) { 
+    this.showBulk = true;
+  }
+}
+
+getDocByUserId( id:any ){
+  this.isLoading = true;
+  this.userService.getDocByUserId(id).subscribe(
+  ( {document} )=>{
+    this.isLoading = false;
+    this.arrDocument = document.map( (doc:any) => {
+      const fileName = doc.filePath.split('/').pop();
+      const serverURL = 'https://arcanjosaorafael.org/documents/';
+      return {
+        ...doc,
+        filePath: `${serverURL}${fileName}`
+      };
+    });
+
+
+  });
+
+
+}
+
+
+
+// documents
+
 
 activeDeacTive(event: any): void{
 
@@ -1036,59 +951,6 @@ removePreview(){
 // img user
 
 
-onCheckboxChange(  event:any, doc:any ){
-
-  const isChecked = event.target.checked;
-  const id = doc.iddocument;
-
-  if(isChecked){
-    this.arrIds.push(id)
-  }else{
-    this.arrIds = this.arrIds.filter((item)=>item !== id)
-  }
-
-  if(this.arrIds.length === 0){
-    this.closeMenu()
-  }
-
-}
-
-bulkDeleteDocuments(){
-
-  if(this.arrIds.length !== 0){
-
-    this.isLoading = true;
-
-    const body = { ids: this.arrIds}
-
-    this.imageUploadService.bulkDeleteDocuments(body).subscribe( 
-      ( {success})=>{
-        if(success){
-          this.showBulk = false;
-          this.msg = 'Documentos excluídos com sucesso';
-          this.showSuccess = true;
-          this.arrIds = [];
-          this.getDocByUserId(this.user.iduser)
-        }
-        
-      });
-    }else{
-      return;
-    }    
-}
-
-mostrarMenu(event: MouseEvent): void {
-
-  event.preventDefault();
-  if (event.button === 2 && this.arrIds.length !== 0) { 
-    this.showBulk = true;
-  }
-}
-
-closeMenu(): void {
-  this.menuDocument = null;
-}
-
 selectUserFichaCompleta(){
   if(this.user && this.userCongregatio){
     this.userFichaCompleta = this.userCongregatio;
@@ -1120,6 +982,12 @@ this.isLoading = true;
           }
     } )
 }
+
+showModalUploadPdf(){
+  this.showUploadModal = !this.showUploadModal;
+  console.log(this.showUploadModal);
+}
+
 }
 
   

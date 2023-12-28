@@ -33,6 +33,7 @@ import { DeactiveUsersComponent } from './deactive-users/deactive-users/deactive
 import { WebMastersComponent } from './web-masters/web-masters/web-masters.component';
 import { AdminComponent } from './admin/admin/admin.component';
 import { UploadDocumentsComponent } from './upload-documents/upload-documents/upload-documents.component';
+import { FileSizePipe } from '../shared/pipes/file-size.pipe';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { UploadDocumentsComponent } from './upload-documents/upload-documents/up
     BackgroundComponent,
     ViewGroupComponent,
     ImagenPathPipe,
+    FileSizePipe,
     ActiveUsersComponent,
     DeactiveUsersComponent,
     WebMastersComponent,
