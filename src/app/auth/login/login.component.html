@@ -188,7 +188,7 @@
 </div>
 
   <!-- no verified email -->
-  <div id="custom-toast" class="alert alert-warning alert-dismissible animate__animated animate__fadeIn font" *ngIf="noVerified">
+  <div id="custom-toast" class="alert alert-warning alert-dismissible  shadow font" *ngIf="noVerified">
     <button type="button" class="close"#closeNoVerifiedEmail  data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5 ><i class="icon fas fa-exclamation-triangle"></i> Email não verificado!</h5>
     <span class="fs-11"> Já enviamos um email de confirmação. Precisa que enviemos novamente?</span>
@@ -217,7 +217,7 @@
   </div>
   
   <!-- success verify email -->
-  <div id="custom-toast" class="alert alert-success alert-dismissible animate__animated animate__fadeIn font " *ngIf="successResendVerify">
+  <div id="custom-toast" class="alert alert-success alert-dismissible  shadow font " *ngIf="successResendVerify">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5 ><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
     <span class="fs-11 w-100"> Email enviado com sucesso!!.</span>
@@ -226,21 +226,21 @@
   </div>
 
   <!-- no role - no ative -->
-  <div id="custom-toast" class="alert alert-warning alert-dismissible animate__animated animate__fadeIn font" *ngIf="noRole" style="width: 380px; font-size: 0.9em;">
+  <div id="custom-toast" class="alert alert-warning alert-dismissible  shadow font" *ngIf="noRole" style="width: 380px; font-size: 0.9em;">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (click)="closeToast()">&times;</button>
     <h5 ><i class="icon fas fa-exclamation-triangle"></i> Sua conta não foi ativada</h5>
     <span class="fs-12"> Nossos administradores estão em processo de ativar sua conta. </span>
   </div>
 
   <!-- success contact-us -->
-  <div id="custom-toast" class="alert alert-success alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="successContactUs" style="width: 380px; font-size: 0.9em;">
+  <div id="custom-toast" class="alert alert-success alert-dismissible shadow font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="successContactUs" style="width: 380px; font-size: 0.9em;">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5 ><i class="icon fas fa-exclamation-triangle"></i> Sucesso!</h5>
     <span class="fs-12"> Em breve entraremos em contato </span>
   </div>
 
 <!-- 500 status Nao encontrado -->
-<div id="custom-toast" class="alert alert-danger alert-dismissible" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="show500"  >
+<div id="custom-toast" class="alert alert-danger alert-dismissible shadow" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="show500"  >
 <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
 <h5 ><i class="icon fas fas fa-user-lock"></i> Espere!</h5>
 {{msg}}

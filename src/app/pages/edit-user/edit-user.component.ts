@@ -40,6 +40,7 @@ export class EditUserComponent implements OnInit, AfterViewInit  {
 debouncer: Subject<string> = new Subject();
 @ViewChild('link') link!: ElementRef;
 @ViewChild('closebutton') closebutton! : ElementRef;
+@ViewChild('closeModalFichaCompl') closeModalFichaCompl! : ElementRef;
 @ViewChild('groupSelect') groupSelect! : ElementRef;
 
 myForm! : FormGroup;
@@ -193,7 +194,9 @@ showUploadModal : boolean = false;
 
     this.errorService.closeIsLoading$.pipe(delay(100)).subscribe(emitted => emitted && (this.isLoading = false));
 
-    this.userService.closeDocumentModal$.subscribe( (emitted)=>{ if(emitted){ this.closebutton.nativeElement.click()} })
+    this.userService.closeDocumentModal$.subscribe( (emitted)=>{ if(emitted){ this.closebutton.nativeElement.click()} });
+
+    this.userService.reloadDocuments$.subscribe( (emitted)=>{ if(emitted){ this.getDocByUserId(this.user.iduser)} });
 
 
     this.myFormSearch.get('itemSearch')?.valueChanges.subscribe(newValue => {
@@ -581,19 +584,23 @@ this.debouncer.next( this.itemSearch );
 };
 
 sugerencias(value : string){
+
+  if(value.length < 3 ){
+    return;
+  }
 this.spinner = true;
 this.itemSearch = value;
 this.mostrarSugerencias = true;  
 this.loadindCongregatio = true;
-this.congregatioService.searchUserCongregatio(value)
-.subscribe ( ( {users} )=>{
-  if(users.length === 0){
-      this.spinner = false;
-      this.myForm.get('itemSearch')?.setValue('');
-  }else{
-    this.loadindCongregatio = false;
-    this.suggested = users;
-  }
+this.congregatioService.searchUserCongregatio(value).subscribe ( 
+  ( {users} )=>{
+    if(users.length === 0){
+        this.spinner = false;
+        this.myForm.get('itemSearch')?.setValue('');
+    }else{
+      this.loadindCongregatio = false;
+      this.suggested = users;
+    }
   }
 )
 }
@@ -745,9 +752,37 @@ getDocByUserId( id:any ){
 
 }
 
+bulkDeleteDocuments(){
 
+  if(this.arrIds.length !== 0){
+
+    this.isLoading = true;
+
+    const body = { ids: this.arrIds}
+
+    this.imageUploadService.bulkDeleteDocuments(body).subscribe( 
+      ( {success})=>{
+        if(success){
+          this.showBulk = false;
+          this.msg = 'Documentos excluídos com sucesso';
+          this.showSuccess = true;
+          this.arrIds = [];
+          this.getDocByUserId(this.user.iduser)
+        }
+        
+      });
+    }else{
+      return;
+    }    
+}
 
 // documents
+
+onKeyUp(event: KeyboardEvent): void {
+  if (event.key === 'Escape' || event.key === 'Esc') {
+    this.closeFichaCompleta();
+  }
+}
 
 
 activeDeacTive(event: any): void{
@@ -970,6 +1005,8 @@ closeFichaCompleta(){
 
   this.userFichaCompleta = false;
   this.sendUserCongregatio = false;
+  this.closeModalFichaCompl.nativeElement.click();
+
 }
 
 activePausePersonalAlarm( alarm:any, action:string ){

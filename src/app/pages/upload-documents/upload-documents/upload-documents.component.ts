@@ -118,11 +118,11 @@ uploadDocument( file:any, index:number){
   this.userService.uploadDocument(this.user.iduser, file).subscribe(
     ( {success} )=>{
       if(success){
-        // this.getDocByUserId( this.user.iduser );
         // this.showSuccess = true;
-        this.msg = "Operação de envio bem-sucedida!"
-        // this.files = [];
-        this.progressBars[index] = 100;
+        this.msg = "Operação de envio bem-sucedida!";
+        setTimeout(()=>{ this.progressBars[index] = 100 },2500 )
+        this.userService.reloadDocuments$.emit(true);
+
       }
     })
 }
@@ -138,6 +138,7 @@ bulkUploadDocument( ){
         this.msg = "Operação de envio bem-sucedida!";
         setTimeout(()=>{
          this.userService.closeDocumentModal$.emit(true);
+         this.userService.reloadDocuments$.emit(true);
         },2500)
       }
     })
@@ -229,29 +230,6 @@ fileContentToBuffer(fileContent: any): Uint8Array {
 
 
 
-bulkDeleteDocuments(){
-
-  if(this.arrIds.length !== 0){
-
-    this.isLoading = true;
-
-    const body = { ids: this.arrIds}
-
-    this.imageUploadService.bulkDeleteDocuments(body).subscribe( 
-      ( {success})=>{
-        if(success){
-          this.showBulk = false;
-          this.msg = 'Documentos excluídos com sucesso';
-          // this.showSuccess = true;
-          this.arrIds = [];
-          // this.getDocByUserId(this.user.iduser)
-        }
-        
-      });
-    }else{
-      return;
-    }    
-}
 
 
 startProgress(fileId: any) {
@@ -264,7 +242,7 @@ startProgress(fileId: any) {
       this.progressBars[fileId] = 100;
       clearInterval(intervalId);
     }
-  }, 500);
+  }, 100);
 }
 
 

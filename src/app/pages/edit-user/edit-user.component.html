@@ -193,96 +193,42 @@
                     <div class="card card-primary card-outline col-12 p-0"> 
                             <div class="card-body box-profile p-2 ">
 
-                              <div class="text-center uploadImg">
+                              <div class="text-center" [ngClass]="{'uploadImg': !isLinkedToCongregatio}">
                                 <i class="fas fa-times" *ngIf="showClose" (click)="removePreview()"></i>
                                   <img class="img-fluid br-6" [src]="pathImg " alt="Foto do Perfil do Usuário" (click)="fileUploader.click()">
                               </div>
 
-                              <div style="display: none;">
-                                <input type="file" (change)="onFileSelected($event)" accept=".jpg, .jpeg, .png" #fileUploader />
+                              <div style="display: none;" >
+                                <input type="file" (change)="onFileSelected($event)" accept=".jpg, .jpeg, .png" #fileUploader [attr.disabled]="isLinkedToCongregatio ? true : null" />
                               </div>
                           
 
-                            <h5 class="font fs-11 mt-3 text-center" *ngIf="!wasLinked "> {{ user && user.Nome_Completo }} </h5>
+                            <h5 class="font fs-11 mt-3 text-center" *ngIf="!wasLinked"> {{ user && user.Nome_Completo }} </h5>
                             <h5 class="font fs-11 mt-3 text-center" *ngIf="wasLinked "> {{ userCongregatio && userCongregatio['Nome Completo'] }} </h5>
-                            
-                            <!-- mi back  -->
-                            <ng-container *ngIf="!wasLinked">
 
-                              <div class="card mt-3 p-0" *ngIf=" user?.Habito_com_capuz === 'Sim' ">
+                            <div class="card mt-5 p-0"  *ngIf="!wasLinked ">
                                 
-                                    <div class="capuz">
-                                        Hábito com capuz
-                                    </div>
-
-                                    <div class="block" style="padding: 5px; line-height: 23px; background-color: rgb(236, 236, 236);" >
-
-                                        <span style="width: 100%; display: inline-block;" > <b> {{ user.Data_Habito_Com_Capuz ? (user.Data_Habito_Com_Capuz | date:'dd/MM/YYYY') : '--------' }} </b> </span>
-                                        <span class="fs-11 " style="width: 100%; display: inline-block;"> Ecarregado </span>
-
-                                        <span class="fs-11" *ngIf="!wasLinked"> <b>{{ user.Encarregado_Com_Capuz || '-----------'}} </b></span>
-                                  
-                                    </div>
+                              <div class="capuz">
+                                <span class="font fs-11"> Residencia Actual </span>
                               </div>
 
-                              <!-- sin capuz -->
-                              <div class="card mt-3 p-0" *ngIf="user?.Habito_sem_capuz === 'Sim' ">
+                              <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
+                                  <span style="width: 100%; display: inline-block;" >  {{ user.Residencia_atual || 'sin datos' }}  </span>
+                              </div>
+                            </div>
 
-                                  <div class="capuz">
-                                      Hábito sem capuz
-                                  </div>
-                                <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
-
-                                  <span style="width: 100%; display: inline-block;" > <b> {{ user.Data_Habito_Sem_Capuz ? (user.Data_Habito_Sem_Capuz | date:'dd/MM/YYYY') : '--------' }} </b> </span>
-
-                                  <span class="fs-11 " style="width: 100%; display: inline-block;"> Ecarregado </span>
-
-                                  <span class="fs-11"> <b>{{ user.Encarregado_Sem_Capuz || '-----------'}} </b></span>
-                                </div>
+                            <div class="card mt-5 p-0"  *ngIf="wasLinked ">
+                                
+                              <div class="capuz">
+                                <span class="font fs-11"> Residencia Actual </span>
                               </div>
 
-                            </ng-container>
-
-                            <!-- back congregatio -->
-                            <ng-container *ngIf="wasLinked">
-
-                              <div class="card mt-3 p-0" *ngIf="userCongregatio['Hábito com capuz (s/n)'] === 'Sim' ">
-                                    <!-- capuz congregatio  -->
-                                    <div class="capuz">
-                                      Hábito com capuz
-                                    </div>
-    
-                                    <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
-      
-                                        <span style="width: 100%; display: inline-block;" > <b> {{ userCongregatio['Data Hábito Com Capuz'] ? (userCongregatio['Data Hábito Com Capuz'] | date:'dd/MM/YYYY') : '--------' }} </b> </span>
-      
-                                        <span class="fs-11 " style="width: 100%; display: inline-block;"> Ecarregado </span>
-      
-                                        <span class="fs-11"> <b>{{ userCongregatio['Encarregado Com Capuz']
-                                          || '-----------'}} </b></span>
-      
-                                    </div>
+                              <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
+                                  <span style="width: 100%; display: inline-block;" >  {{ userCongregatio && userCongregatio['Residência atual'] || 'sin datos' }}   </span>
                               </div>
-    
-                                  <!-- sin capuz congregatio-->
+                            </div>
                             
-                              <div class="card mt-3 p-0" *ngIf="userCongregatio['Hábito sem capuz (s/n)'] === 'Sim' ">
-                              
-                                      <div class="capuz">
-                                          Hábito sem capuz
-                                      </div>
-                                    <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);">
-    
-                                      <span style="width: 100%; display: inline-block;" > <b> {{ userCongregatio['Data Hábito Sem Capuz'] ? (userCongregatio['Data Hábito Sem Capuz'] | date:'dd/MM/YYYY') : '--------' }} </b> </span>
-    
-                                      <span class="fs-11 " style="width: 100%; display: inline-block;"> Ecarregado </span>
-    
-                                      <span class="fs-11"> <b>{{ userCongregatio['Encarregado Sem Capuz'] || '-----------'}} </b></span>
-                                    </div>
-                              </div>
-
-                            </ng-container>  
-                          
+                            
                             </div>
                     </div> 
                     
@@ -337,7 +283,12 @@
 
             <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents">
 
-              <button data-toggle="modal" data-target="#uploadDocument" (click)="showModalUploadPdf()"> Subir documentos</button>
+              <div class="d-flex justify-content-end" style="margin-bottom: auto;" >
+                <button type="button" class="btn btn-primary shadow font" data-toggle="modal" data-target="#uploadDocument" (click)="showModalUploadPdf()"> <i class="fas fa-upload" style="cursor: pointer; text-align: center; font-size: 16px;"  [ngbTooltip]="'Subir tudo'"></i>&nbsp;  Subir tudo</button>
+      
+            
+            </div>
+
               
               
               <div class="row mt-5" (contextmenu)="mostrarMenu($event)" >
@@ -480,7 +431,7 @@
               <div class="row mt-5">
                 <div class="col-12">
                 
-                  <div class="boxSelection font" style="padding: 15px;" >
+                  <div class="boxSelection2 font" style="padding: 15px;" >
                         {{ user && user.Historico_Sedes }}
                        <span *ngIf="user?.Historico_Sedes === '' || user?.Historico_Sedes === undefined  || user?.Historico_Sedes === null" class="font fs-11"> Sem histórico de sede para mostrar </span> 
                   </div>
@@ -626,13 +577,13 @@
   </div>
 
   <!-- Modal Ficha completa-->
-<div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false" (keyup)="onKeyUp($event)">
 
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header" style="padding: 20px;">
         <h5 class="modal-title font" id="exampleModalCenterTitle"> Ficha completa</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeFichaCompleta()">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeFichaCompleta()" #closeModalFichaCompl>
           <span aria-hidden="true">&times;</span>
         </button>
     
@@ -655,14 +606,14 @@
 </div>
 
   <!-- no link selection  -->
-  <div id="custom-toast" class="alert alert-danger alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showLabelLinked"  >
+  <div id="custom-toast" class="alert alert-danger alert-dismissible font shadow" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showLabelLinked"  >
     <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5 ><i class="icon fas fas fa-user-lock"></i> Erro</h5>
     <p class="cursor mt-1 fs-11" >Você selecionou um usuário de um banco de dados externo. É necessário escolher a opção 'Link com Congregatio'.</p>
   </div>
 
  <!-- success upload / edition /active  -->
- <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
+ <div id="custom-toast" class="alert alert-success alert-dismissible font shadow " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
   <h5><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
   <span class="fs-11 w-100"> {{msg}}</span>
@@ -693,12 +644,12 @@
   </div>
 
   <!-- bulk delete docs  -->
-  <!-- <div id="custom-toast" class="alert alert-danger alert-dismissible font" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showBulk"  >
+  <div id="custom-toast" class="alert alert-danger alert-dismissible font shadow" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showBulk"  >
     <button type="button" class="close" (click)="closeToast()" data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5 ><i class="icon fas fa-exclamation-triangle"></i> Cuidado</h5>
     <p class="cursor mt-1 fs-11" >Esta ação excluirá os documentos selecionados. Deseja continuar?</p>
     <button type="button" class="btn btn-danger btn-block shadow" (click)="bulkDeleteDocuments()" data-dismiss="modal" aria-label="Close"> Continuar</button>
-  </div> -->
+  </div>
 
 
 

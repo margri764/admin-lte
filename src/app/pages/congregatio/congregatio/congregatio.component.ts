@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject, debounceTime, delay } from 'rxjs';
 import { CongregatioService } from 'src/app/shared/services/congregatio/congregatio.service';
@@ -17,6 +17,8 @@ export class CongregatioComponent implements OnInit {
   @Output() onDebounce: EventEmitter<string> = new EventEmitter();
   @Output() onEnter   : EventEmitter<string> = new EventEmitter();
   debouncer: Subject<string> = new Subject();
+  @ViewChild('closebutton') closebutton! : ElementRef;
+
   myFormSearch!: FormGroup;
   success:any;
 
@@ -66,17 +68,18 @@ export class CongregatioComponent implements OnInit {
 
     this.myFormSearch.get('itemSearch')?.valueChanges.subscribe(newValue => {
       this.itemSearch = newValue;
+      console.log(this.itemSearch);
 
       if(this.itemSearch !== ''){
          this.teclaPresionada();
       }else{
-        this.suggested = [];
+        this.congregatio = [];
         this.spinner= false;
       }
     });
 
     this.debouncer
-    .pipe(debounceTime(1500))
+    .pipe(debounceTime(700))
     .subscribe( valor => {
 
       this.sugerencias(valor);
@@ -99,12 +102,15 @@ export class CongregatioComponent implements OnInit {
   this.debouncer.next( this.itemSearch );  
    };
 
+
+   
+
    sugerencias(value : string){
 
-    if (this.dtTrigger) {
-      this.dtTrigger.complete();
+
+    if(value.length < 3){
+      return;
     }
-    this.dtTrigger = new Subject();
 
     this.spinner = true;
     this.itemSearch = value;
@@ -118,25 +124,30 @@ export class CongregatioComponent implements OnInit {
       }else{
         this.isLoading = false;
         this.congregatio = users;
-        // this.dtTrigger.next(null);
       }
       }
     )
    }
   
    Search( item: any ){
-  setTimeout(()=>{
-    this.mostrarSugerencias = true;
-    this.spinner = false;
-    this.fade = false;
-    this.clientFound = item;
-    this.isClientFound = true;
-    this.myFormSearch.get('itemSearch')?.setValue('');
-    this.suggested = [];
-    // this.noMatches = false;
-  },500)
+      setTimeout(()=>{
+        this.mostrarSugerencias = true;
+        this.spinner = false;
+        this.fade = false;
+        this.clientFound = item;
+        this.isClientFound = true;
+        this.myFormSearch.get('itemSearch')?.setValue('');
+        this.suggested = [];
+        // this.noMatches = false;
+      },500)
    }
   // search
+
+  onKeyUp(event: KeyboardEvent): void {
+    if (event.key === 'Escape' || event.key === 'Esc') {
+      this.closeModalFichaCompleta();
+    }
+  }
 
   getObjectProperties(): { key: string, value: any }[] {
       
@@ -154,6 +165,7 @@ export class CongregatioComponent implements OnInit {
   closeModalFichaCompleta(){
     this.show = false;
     this.userCongregatio = null;
+    this.closebutton.nativeElement.click();
   }
 
 

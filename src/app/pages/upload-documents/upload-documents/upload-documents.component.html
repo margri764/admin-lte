@@ -2,7 +2,7 @@
 
   <div class="row mt-3 col-12">
 
-    <div class="col-3" >
+    <div class="col-3" style="padding: 10px;" >
       <ngx-dropzone (change)="onSelect($event)" >
         <ngx-dropzone-label>Arraste e solte os arquivos aqui ou clique para selecionar.</ngx-dropzone-label>
       </ngx-dropzone>
@@ -63,7 +63,7 @@
   </div>
 
    <!-- success upload / edition /active  -->
- <div id="custom-toast" class="alert alert-success alert-dismissible font " [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
+ <div id="custom-toast" class="alert alert-success alert-dismissible font shadow" [ngClass]="!phone ? 'animate__animated animate__backInRight' :'animate__animated fadeIn' " *ngIf="showSuccess">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (close)="closeToast()">&times;</button>
   <h5><i class="iicon fas fa-check"> &nbsp;</i> Sucesso!</h5>
   <span class="fs-11 w-100"> {{msg}}</span>

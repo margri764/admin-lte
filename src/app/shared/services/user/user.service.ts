@@ -19,6 +19,7 @@ export class UserService {
   authDelUser$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   authAddRole$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   closeDocumentModal$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  reloadDocuments$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   
 
 
