@@ -657,6 +657,11 @@ fileBackContentToBuffer(fileContent: any): Uint8Array {
   return new Uint8Array();
 }
 
+continue(){
+  this.userService.authDelDocument$.emit( true );
+}
+
+
 onCheckboxChange(  event:any, doc:any ){
 
   const isChecked = event.target.checked;
@@ -709,14 +714,14 @@ deleteDocById( doc:any){
   this.userService.authDelDocument$.pipe(take(1)).subscribe( (emmited)=>{ 
     if(emmited){
       this.isLoading = true;
-      // this.showSuccessDelDocument = false;
+      this.showSuccessDelDocument = false;
       this.userService.deleteDocById( doc.iddocument ).subscribe(
         ( {success} )=>{
             if(success){
               this.msg = "Documento removido com sucesso";
-              // this.getDocByUserId( this.user.iduser );
+              this.getDocByUserId( this.user.iduser );
               this.isLoading = false;
-              // this.showSuccessDelDocument = true;
+              this.showSuccessDelDocument = true;
             }
         })
     } 
@@ -783,7 +788,6 @@ onKeyUp(event: KeyboardEvent): void {
     this.closeFichaCompleta();
   }
 }
-
 
 activeDeacTive(event: any): void{
 
@@ -897,7 +901,6 @@ $(this.link.nativeElement).bootstrapSwitch();
 
 // Suscribirte al evento switchChange del Bootstrap Switch
 $(this.link.nativeElement).on('switchChange.bootstrapSwitch', (event: any, state: any) => {
-  console.log('Checkbox changed. Checked:', state);
   this.stateLink = state;
   if(this.wasLinked && state){
       this.showLabelLinked = false;
@@ -1022,7 +1025,7 @@ this.isLoading = true;
 
 showModalUploadPdf(){
   this.showUploadModal = !this.showUploadModal;
-  console.log(this.showUploadModal);
+  this.userService.resetDocumentUpload$.emit(true)
 }
 
 }

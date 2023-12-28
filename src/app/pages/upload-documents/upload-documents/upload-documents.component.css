@@ -13,6 +13,12 @@ ngx-dropzone{
     margin: 0px 2px 0px 2px;
 }
 
+.uploaded-icon {
+  filter: grayscale(100%);
+  opacity: 0.7;
+}
+
+
 #custom-toast {
     position: fixed;
     bottom: 10px;
