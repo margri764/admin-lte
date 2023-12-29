@@ -123,58 +123,58 @@ uploadDocument( file:any, index:number){
         setTimeout(()=>{
            this.progressBars[index] = 100;
            this.isFileUploaded[index] = true; 
+           this.showSuccess = true;
+           this.msg = "Operação de envio bem-sucedida!";
           }, 2000 );
-
-        this.userService.reloadDocuments$.emit(true);
 
         // guardo una copia de lo q ya se envio para evitar duplicados
         this.sentDocumentsArray.push(file);
-        setTimeout(()=>{ this.reset(); this.userService.closeDocumentModal$.emit(true) }, 3000)
-        
-    
+        setTimeout(()=>{ 
+          this.reset(); 
+          this.userService.closeDocumentModal$.emit(true);
+          this.userService.reloadDocuments$.emit(true);
+         }, 4000)
       }
     })
 }
 
-
-
 bulkUploadDocument() {
-
   const unsentFiles = this.files.filter((file) => !this.sentDocumentsArray.includes(file));
 
-  // Itera sobre los archivos originales
-  this.files.forEach((file, index) => {
-    // Verifica si el archivo está en unsentFiles
-    if (unsentFiles.includes(file)) {
-      this.startProgress(index);
+    this.files.forEach((file, index) => {
+      if (unsentFiles.includes(file)) {
+        this.startProgress(index);
+        this.showSuccess = false;
+        
+          this.userService.uploadDocument(this.user.iduser, file).subscribe(({ success }) => {
+            if (success) {
+              this.subirTodo = true;
 
-      this.showSuccess = false;
-      this.userService.uploadDocument(this.user.iduser, file).subscribe(
-        ({ success }) => {
-          if (success) {
-            this.subirTodo = true;
-            setTimeout(() => {
-              this.bulkProgress = 100;
-              this.progressBars[index] = 100;
-              this.isFileUploaded[index] = true;
-              this.showSuccess = true;
-              this.msg = "Operação de envio bem-sucedida!";
-              this.userService.reloadDocuments$.emit(true);
+              setTimeout(() => {
+                this.bulkProgress = 100;
+                this.progressBars[index] = 100;
+                this.isFileUploaded[index] = true;
+                this.showSuccess = true;
+                this.msg = "Operação de envio bem-sucedida!";
 
-              // Agrega el archivo a la lista de enviados solo si no está presente
-              if (!this.sentDocumentsArray.includes(file)) {
-                this.sentDocumentsArray.push(file);
-              }
-            }, 2000);
-          }
-        }
-      );
+                if (!this.sentDocumentsArray.includes(file)) {
+                  this.sentDocumentsArray.push(file);
+                }
+
+              }, 2000);
+              setTimeout(()=>{ 
+                this.reset(); 
+                this.userService.closeDocumentModal$.emit(true);
+                this.userService.reloadDocuments$.emit(true);
+               }, 5000)
+            }
+          });
+
+      }
     }
-    setTimeout(()=>{ this.reset(); this.userService.closeDocumentModal$.emit(true)}, 3000)
-    
-  }
- );
+    );
 }
+
 
 reset(){
     this.isFileUploaded = [];
@@ -283,6 +283,9 @@ fileContentToBuffer(fileContent: any): Uint8Array {
   return new Uint8Array();
 }
 
+allBarsFinished: boolean = false;
+
+
 startProgress(index: number = -1) {
   if (index !== -1) {
     this.progressBars[index] = 0;
@@ -300,36 +303,35 @@ startProgress(index: number = -1) {
     } else {
       this.bulkProgress += incrementPerStep;
     }
-
     if (this.progressBars[index] >= 99) {
       this.progressBars[index] = 99;
       clearInterval(intervalId);
+      this.checkAllBarsFinished();  // Verifica si todas las barras han terminado
     } else if (this.bulkProgress >= 99) {
       this.bulkProgress = 99;
       clearInterval(intervalId);
+      this.checkAllBarsFinished();  // Verifica si todas las barras han terminado
     }
+    
   }, intervalDuration);
 }
 
+checkAllBarsFinished() {
+  // Obtén los valores del objeto progressBars
+  const values = Object.values(this.progressBars);
 
-// startProgress(fileId: any) {
-//   this.progressBars[fileId] = 0;
+  // Verifica si todos los valores son iguales a 99
+  this.allBarsFinished = values.every(progress => progress === 99);
 
-//   const totalSteps = 40; // Número total de pasos (100% / 5% cada paso)
-//   const intervalDuration = 50; // Duración de cada paso en milisegundos
-//   const incrementPerStep = 100 / totalSteps;
-
-//   const intervalId = setInterval(() => {
-//     this.progressBars[fileId] += incrementPerStep;
-
-//     if (this.progressBars[fileId] >= 100) {
-//       this.progressBars[fileId] = 100;
-//       clearInterval(intervalId);
-//     }
-//   }, intervalDuration);
-// }
+  // Si todas las barras han terminado, realiza la acción que desees
+  if (this.allBarsFinished) {
+    // alert('Todas las barras han terminado');
+    // Realiza la acción que desees cuando todas las barras han finalizado
+    // Puedes reiniciar variables, realizar otras acciones, etc.
+    // ...
+  }
+}
 
 
-// end documents
 
 }

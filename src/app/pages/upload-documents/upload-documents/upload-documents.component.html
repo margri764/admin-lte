@@ -30,12 +30,12 @@
 
                     <!-- *ngIf="progressBars[i] !== 100 && bulkProgress !== 100 " -->
                     
-                    <div class="progress" *ngIf="progressBars[i.toString()] !== 100">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" [style.width.%]="progressBars[i] || bulkProgress"   ></div>
+                    <div class="progress" >
+                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" [style.width.%]="progressBars[i] || bulkProgress"   ></div>
                     </div>
-                    <div class="progress" *ngIf="progressBars[i.toString()] === 100 || bulkProgress === 100">
-                      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
+                    <!-- <div class="progress" *ngIf="progressBars[i.toString()] === 100 || bulkProgress === 100">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" [style.width.%]="progressBars[i] || bulkProgress"></div>
+                    </div> -->
                   </td>
                   <td class="d-flex justify-content-around align-items-center"> 
 

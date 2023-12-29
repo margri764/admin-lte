@@ -1129,9 +1129,16 @@ this.isLoading = true;
 }
 
 showModalUploadPdf(){
-  this.showUploadModal = !this.showUploadModal;
-  this.userService.resetDocumentUpload$.emit(true)
+  this.showUploadModal = true;
+  this.userService.resetDocumentUpload$.emit(true);
 }
+
+hideModalUploadPdf(){
+  this.showUploadModal = false;
+  this.userService.resetDocumentUpload$.emit(true);
+}
+
+
 
 }
 
