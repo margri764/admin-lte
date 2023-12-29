@@ -373,7 +373,7 @@
 
               <div class="input-group  font mb-3  "   >
               <label class="text w-100 "> Excluir usuário </label>
-                  <input type="text" class="form-control block "  name="itemSearch" formControlName="itemSearch" [ngStyle]="( validFieldEditGrupal('itemSearch')) ? {'border':'1px solid red'}:{}" [attr.disabled]="(suggested.length === 0 || !exclude) ? true : null">
+                  <input type="text" class="form-control block "  name="itemSearch" formControlName="itemSearch" [ngStyle]="( validFieldEditGrupal('itemSearch')) ? {'border':'1px solid red'}:{}" [attr.disabled]="( !exclude) ? true : null">
                   <div class="input-group-append">
                     <div class="input-group-text" style="background-color: rgb(0, 128, 255);" >
                       <span class="fas fa-search" style="color: white"></span>

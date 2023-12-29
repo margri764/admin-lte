@@ -291,10 +291,10 @@ showUploadModal : boolean = false;
 
   getUserById( id:any ){
 
-    this.isLoading = false;
     this.userService.getUserById( id ).subscribe(
       ( {success, user} )=>{
         if(success){
+
           this.user = user;
           this.initialForm();
           this.getUsersGroups(id);
@@ -859,8 +859,8 @@ onKeyUp(event: KeyboardEvent): void {
 activeDeacTive(event: any): void{
 
   this.isChecked = (event.target as HTMLInputElement).checked;
-  this.isLoading = true;
   this.showSuccess = false;
+  this.isLoading = true;
   
   const email = this.myForm.get('Email')?.value;
   let active : any;
@@ -871,7 +871,11 @@ activeDeacTive(event: any): void{
     if(success){
       this.showSuccess = true,
       (active === "1") ? this.msg = 'Usúario ativado com sucesso' : this.msg = 'Usúario desativado com sucesso'; 
-      setTimeout( ()=>{ this.getUserById( this.user.iduser ); this.isLoading = false;  }, 1000);
+
+      //hago esto para q no vuelva a cargar todo
+      this.userService.getUserById( this.user.iduser ).subscribe();
+      setTimeout(()=>{ this.isLoading = false },700)
+  
     }
   
     }) 

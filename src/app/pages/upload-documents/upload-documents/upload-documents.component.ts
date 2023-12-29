@@ -169,7 +169,7 @@ bulkUploadDocument() {
         }
       );
     }
-    setTimeout(()=>{ this.reset(); },4000)
+    setTimeout(()=>{ this.reset(); },5000)
     
   }
  );

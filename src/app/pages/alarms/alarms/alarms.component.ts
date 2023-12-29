@@ -368,6 +368,7 @@ onSave(){
           setTimeout(()=>{   
             this.closebutton.nativeElement.click();
             this.resetForm();
+            this.resetEdition();
             this.showSuccess = true;
             this.msg = "Alarme criado com sucesso";
             this.initGrupalAlarms();
@@ -506,17 +507,18 @@ editPersonalAlarm( ){
 }
 
 resetEdition(){
-  this.pessoal = false;
-  this.grupal = false;
-  this.frequencySelected = [];
-  this.nameFreq = [];
-  this.myFormEditPersAlarm.reset();
-  this.myFormEditGrupalAlarm.reset();
-  this.suggested = [];
-  this.isChecked = false;
-  this.mostrarSugerencias = false;
-  this.selectedGroups = [];
-  this.nameGroups = [];
+    this.pessoal = false;
+    this.grupal = false;
+    this.frequencySelected = [];
+    this.nameFreq = [];
+    this.myFormEditPersAlarm.reset();
+    this.myFormEditGrupalAlarm.reset();
+    this.suggested = [];
+    this.isChecked = false;
+    this.mostrarSugerencias = false;
+    this.selectedGroups = [];
+    this.nameGroups = [];
+    this.exclude = false;
 
 }
 
@@ -524,7 +526,12 @@ unSelectExludedUser( user:any ){
   
   console.log(user.iduser);
 
-  this.suggested = this.suggested.filter( (item)=>item.iduser !== user.iduser)
+  //esto obliga a seleccionar el slider
+  if(!this.exclude){return}
+
+  this.suggested = this.suggested.filter( (item)=>item.iduser !== user.iduser);
+  this.myFormSearch.get('itemSearch')?.setValue('');
+  this.user = null;
 }
 
 launchGrupalAlarm(alarm: any) {
@@ -663,11 +670,22 @@ closeToast(){
 onSelect(event: any): void {
     this.isChecked = (event.target as HTMLInputElement).checked;
     this.exclude = !this.exclude;
+
+    //si no selecciono nada q se restee el input
+    if(!this.isChecked){
+        this.suggested = [];
+        this.myFormSearch.get('itemSearch')?.setValue('');
+    }
 }
 
 onSelectEdition(event: any): void {
     this.isChecked = (event.target as HTMLInputElement).checked;
     this.exclude = !this.exclude;
+
+    if(!this.isChecked){
+      this.suggested = [];
+      this.myFormSearch.get('itemSearch')?.setValue('');
+  }
 }
 
 validField( field: string ) {

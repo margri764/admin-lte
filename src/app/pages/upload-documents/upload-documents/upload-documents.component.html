@@ -29,6 +29,7 @@
                   <td style ="vertical-align: middle;"> 
 
                     <!-- *ngIf="progressBars[i] !== 100 && bulkProgress !== 100 " -->
+                    
                     <div class="progress" *ngIf="progressBars[i.toString()] !== 100">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" [style.width.%]="progressBars[i] || bulkProgress"   ></div>
                     </div>
