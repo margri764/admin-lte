@@ -78,7 +78,7 @@
                       <td> {{ pes.name }} </td>
                       <td> {{ pes.description }} </td>
                       <td> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
-                      <td>
+                      <td style="text-align: center;">
            
                         <i class="fas fa-pencil-alt" style="cursor: pointer; text-align: center; font-size: 19px;  color: rgb(255, 200, 0); margin-right: 5px;" [ngbTooltip]="'Editar alarme'" (click)="launchGrupalAlarm(pes)" data-toggle="modal" data-target="#modalEditGrupalAlarm" ></i>
 
@@ -521,13 +521,13 @@
 </div>
 
   <!-- Modal Ficha completa-->
-  <div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false" (keyup)="onKeyUp($event)">
 
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header" style="padding: 20px;">
           <h5 class="modal-title font" id="exampleModalCenterTitle"> Ficha completa</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()" #closeModalFicha>
             <span aria-hidden="true">&times;</span>
           </button>
         </div>

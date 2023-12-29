@@ -125,9 +125,6 @@ export class UserService {
     )
   }
 
-
-
-
   getAllUsersQuantity( ){
 
     return this.http.get<any>(`${this.baseUrl}api/user/getAllUsersQuantity`) 
@@ -202,7 +199,6 @@ export class UserService {
     )
   }
 
-
   deleteDocById( id:any ){
 
     return this.http.patch<any>(`${this.baseUrl}api/document/deleteDocById/${id}`, null) 
@@ -254,6 +250,20 @@ export class UserService {
       map( res => res )
     )
   }
+
+  setRole( body:any,id:any  ){
+
+    return this.http.patch<any>(`${this.baseUrl}api/user/setRole/${id}`, body) 
+    
+    .pipe(
+      tap( ( res) =>{
+                    console.log("from setRole service: ",res);
+                }  
+      ),            
+      map( res => res )
+    )
+  }
+
 
 
   searchUser( query:any ){

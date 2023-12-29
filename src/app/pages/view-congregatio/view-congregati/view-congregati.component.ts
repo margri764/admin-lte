@@ -55,8 +55,14 @@ export class ViewCongregatiComponent implements OnInit, OnChanges {
       this.userService.getUserById(this.userFromGroup.iduser).subscribe(
       ( {success, user})=>{
         if(success){
-         const {iduser, validateEmail, name, lastName, role, codeauth, state, active, simpleCode, linkCongregatio, ...userModified } = user;
-         this.user = userModified;
+
+          if(user.linkCongregatio === 1){
+            const {iduser, validateEmail, name, lastName, role, codeauth, state, active, simpleCode, linkCongregatio, Nome_da_sede, Pais_da_sede, Cidade_da_sede,  ...userModified } = user;
+            this.user = userModified;
+          }else{
+            const {iduser, validateEmail, name, lastName, role, codeauth, state, active, simpleCode, linkCongregatio, ...userModified } = user;
+            this.user = userModified;
+          }
           this.getImages(user);
           this.isLoading = false;
           console.log(user);

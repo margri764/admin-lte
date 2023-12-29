@@ -27,6 +27,7 @@ export class AlarmsComponent implements OnInit, OnDestroy, AfterViewInit{
   @ViewChild('closebutton') closebutton! : ElementRef;
   @ViewChild('closebuttonEdit') closebuttonEdit! : ElementRef;
   @ViewChild('closebuttonEditGrupal') closebuttonEditGrupal! : ElementRef;
+  @ViewChild('closeModalFicha') closeModalFicha! : ElementRef;
   @Input() userViewModal: any;
 
   // start search
@@ -866,6 +867,7 @@ viewUser( user:any ){
 closeModal(){
   this.userViewModal = {};
   this.show = false;
+  this.closeModalFicha.nativeElement.click();
 }
 
 
@@ -873,4 +875,11 @@ ngOnDestroy(): void {
   this.dtTrigger.unsubscribe();
   this.dtTrigger2.unsubscribe();
 }
+
+onKeyUp(event: KeyboardEvent): void {
+  if (event.key === 'Escape' || event.key === 'Esc') {
+    this.closeModal();
+  }
+}
+
 }

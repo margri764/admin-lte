@@ -503,20 +503,23 @@ showUploadModal : boolean = false;
     });
 
       this.actualizarEstadoSwitch();
-      this.role = this.user.role;
-      if(this.user.role === 'user'){
-        this.userRole = true;
-        this.adminRole = false;
-        this.webMRole = false;
-      }else if(this.user.role === 'admin'){
-        this.adminRole = true;
-        this.userRole = false;
-        this.webMRole = false;
-      }else if(this.user.role === 'webmaster'){
-        this.webMRole = true;
-        this.userRole = false;
-        this.adminRole = false;
-      }
+
+        this.role = this.user.role;
+        if(this.user.role === 'user'){
+          this.userRole = true;
+          this.adminRole = false;
+          this.webMRole = false;
+        }else if(this.user.role === 'admin'){
+          this.adminRole = true;
+          this.userRole = false;
+          this.webMRole = false;
+        }else if(this.user.role === 'webmaster'){
+          this.webMRole = true;
+          this.userRole = false;
+          this.adminRole = false;
+        }
+
+     
   }
 
   getObjectProperties(): { key: string, value: any }[] {
@@ -531,6 +534,16 @@ showUploadModal : boolean = false;
 
   handleRoleChange( value:string ){
     this.role = value;
+
+    const body = {role : this.role}
+    this.showSuccess = false;
+    this.userService.setRole( body, this.user.iduser ).subscribe(
+      ( {success} )=>{
+        if(success){
+          this.msg = 'Função atribuída com sucesso';
+          this.showSuccess = true;
+        }
+      })
   }
 
   continueDelUser(){
@@ -780,7 +793,6 @@ bulkDeleteDocuments(){
       return;
     }    
 }
-
 // documents
 
 onKeyUp(event: KeyboardEvent): void {
@@ -883,9 +895,23 @@ const fields = [
       }
     });
 
+    // Pais_da_sede:  [ '', [Validators.required]],
+    // Cidade_da_sede:  [ '', [Validators.required]],
+    // Nome_da_sede:  [ '', [Validators.required]],
+
     this.wasLinked = true;
     this.suggested = [];
     this.myFormSearch.get('itemSearch')?.setValue('');
+
+    // estos campos no estan en back por eso reseteo y bloqueo
+    this.myForm.get('Pais_da_sede')?.setValue('');
+    this.myForm.get('Cidade_da_sede')?.setValue('');
+    this.myForm.get('Nome_da_sede')?.setValue('');
+
+    this.readonlyFields['Pais_da_sede'] = true;
+    this.readonlyFields['Cidade_da_sede'] = true;
+    this.readonlyFields['Nome_da_sede'] = true;
+    
     setTimeout(()=>{
       // asi cierro el modal
       this.closebutton.nativeElement.click();
