@@ -103,7 +103,7 @@
 
  <!-- Modal Alarm -->
  <div class="modal fade font" id="modalNova" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false"  >
-    <div class="modal-dialog modal-dialog-centered modal-lg " role="document"  >
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg " role="document"  >
       <div class="modal-content">
 
         <div class="modal-header" >
@@ -252,7 +252,7 @@
 
  <!-- Edit Personal Alarm -->
  <div class="modal fade font" id="modalEditAlarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered modal-lg " role="document">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg " role="document">
     <div class="modal-content">
 
       <div class="modal-header" style="padding: 20px;">
@@ -343,7 +343,7 @@
 
  <!-- Edit GrupalAlarm -->
  <div class="modal fade font" id="modalEditGrupalAlarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false"  >
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document"  >
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document"  >
     <div class="modal-content">
 
       <div class="modal-header" style="padding: 20px;">
@@ -358,7 +358,6 @@
       <div class="modal-body fs-9">
        
         <form [formGroup]="myFormEditGrupalAlarm" class="needs-validation font fs-11"  novalidate  [autocomplete]="false" (ngSubmit)="editGrupalAlarm()">
-
 
               <input type="text" class="form-control" style="display: none;" formControlName="idgroupalarm"  >
 
@@ -393,7 +392,7 @@
                   <div class="font boxSelection d-flex justify-content-between align-items-center" >   
 
                       <div class="d-flex">
-                          <img class="img-fluid br-6"  [src]="item.Ruta_Imagen ?? 'assets/no-image.jpg'" alt="Foto do Perfil do Usuário" width="40px" >
+                          <img class="img-fluid br-6"  [src]="(item.Ruta_Imagen | imagenPath) ?? 'assets/no-image.jpg'" alt="Foto do Perfil do Usuário" width="40px" >
                           &nbsp; 
                           <a class="cursor selectUser" (click)="selectUser(item)">{{ item.Nome_Completo }} </a>
                       </div>
@@ -523,7 +522,7 @@
   <!-- Modal Ficha completa-->
   <div class="modal fade" id="modalFichaCompleta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false" (keyup)="onKeyUp($event)">
 
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header" style="padding: 20px;">
           <h5 class="modal-title font" id="exampleModalCenterTitle"> Ficha completa</h5>

@@ -93,18 +93,7 @@ closeViewModal(){
   this.closeView.nativeElement.click();
 }
     
-onView( doc:any ){
 
-  const fileName = doc.filePath.split('/').pop() ;
-
-  console.log(fileName);
-    const serverURL = 'https://arcanjosaorafael.org/documents/'; 
-  
-    this.selectedPdfBack = `${serverURL}${fileName}`;
-    console.log( this.selectedPdfBack);
-    this.fileNameBack = doc.originalName;
-
-}
 
 thumbailsPdf(doc:any ){
 

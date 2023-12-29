@@ -55,9 +55,9 @@ pdfSrc :any;
 // selectedPdfSrc: any = null;
 // pdfSrcList: any[] = [];
 // selectedFile: CustomFile | null = null;
-// fileName: string = '';
-// fileNameBack : string = '';
-// selectedPdfBack : any;
+fileName: string = '';
+fileNameBack : string = '';
+selectedPdfBack : any;
 pdfSrcBackList: any[] = [];
 arrIds : any []=[];
 loadingPdf: boolean = false;
@@ -675,6 +675,41 @@ continue(){
 }
 
 
+// onViewClick(name: string, index: number): void {
+//   if (this.pdfSrcList[index]) {
+//     console.log(name, index);
+    
+//     const reader = new FileReader();
+    
+//     reader.onloadend = () => {
+//       // Obtén los datos Base64
+//       const base64Data = reader.result as string;
+      
+//       // Asigna los datos Base64 al src del pdf-viewer
+//       this.selectedPdfSrc = base64Data;
+      
+//       this.selectedFile = this.files[index];
+//       this.fileName = name;
+//     };
+    
+//     // Lee el contenido del archivo como datos Base64
+//     reader.readAsDataURL(this.files[index]);
+//   }
+// }
+
+onView( doc:any ){
+
+  const fileName = doc.filePath.split('/').pop() ;
+
+  console.log(fileName);
+    const serverURL = 'https://arcanjosaorafael.org/documents/'; 
+  
+    this.selectedPdfBack = `${serverURL}${fileName}`;
+    console.log( this.selectedPdfBack);
+    this.fileNameBack = doc.originalName;
+
+}
+
 onCheckboxChange(  event:any, doc:any ){
 
   const isChecked = event.target.checked;
@@ -895,15 +930,12 @@ const fields = [
       }
     });
 
-    // Pais_da_sede:  [ '', [Validators.required]],
-    // Cidade_da_sede:  [ '', [Validators.required]],
-    // Nome_da_sede:  [ '', [Validators.required]],
 
     this.wasLinked = true;
     this.suggested = [];
     this.myFormSearch.get('itemSearch')?.setValue('');
 
-    // estos campos no estan en back por eso reseteo y bloqueo
+    // estos campos no estan en congregatio por eso reseteo y bloqueo
     this.myForm.get('Pais_da_sede')?.setValue('');
     this.myForm.get('Cidade_da_sede')?.setValue('');
     this.myForm.get('Nome_da_sede')?.setValue('');
