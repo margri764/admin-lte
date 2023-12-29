@@ -107,11 +107,14 @@ export class CongregatioComponent implements OnInit {
 
    sugerencias(value : string){
 
-
-    if(value.length < 3){
+    if(value ){
+      if(value.length < 3){
+        return;
+      }
+    }else{
       return;
     }
-
+    
     this.spinner = true;
     this.itemSearch = value;
     this.mostrarSugerencias = true;  

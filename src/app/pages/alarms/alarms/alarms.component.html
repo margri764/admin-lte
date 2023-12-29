@@ -392,7 +392,7 @@
                   <div class="font boxSelection d-flex justify-content-between align-items-center" >   
 
                       <div class="d-flex">
-                          <img class="img-fluid br-6"  [src]="(item.Ruta_Imagen | imagenPath) ?? 'assets/no-image.jpg'" alt="Foto do Perfil do Usuário" width="40px" >
+                          <img class="img-fluid br-6"  [src]="(item | imagenPath) ?? 'assets/no-image.jpg'" alt="Foto do Perfil do Usuário" width="40px" >
                           &nbsp; 
                           <a class="cursor selectUser" (click)="selectUser(item)">{{ item.Nome_Completo }} </a>
                       </div>

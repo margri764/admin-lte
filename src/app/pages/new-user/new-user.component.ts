@@ -311,6 +311,15 @@ this.debouncer.next( this.itemSearch );
 };
 
 sugerencias(value : string){
+
+  if(value ){
+    if(value.length < 3){
+      return;
+    }
+  }else{
+    return;
+  }
+  
     this.spinner = true;
     this.itemSearch = value;
     this.mostrarSugerencias = true;  

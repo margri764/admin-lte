@@ -484,6 +484,21 @@ showUploadModal : boolean = false;
     let link = null;
     
     (this.user.linkCongregatio === 1) ? [ link = true, this.disableOrdem = true ]: link = false;
+
+    let Nome_da_sede;
+    let Cidade_da_sede;
+    let Pais_da_sede;
+
+    if(!link){
+        Pais_da_sede = this.user?.Pais_da_sede;
+        Cidade_da_sede = this.user?.Cidade_da_sede;
+        Nome_da_sede = this.user?.Nome_da_sede;
+    }else{
+        Pais_da_sede = '';
+        Cidade_da_sede = '';
+        Nome_da_sede = '';
+    }
+
     
     this.myForm.patchValue({
       ordem: this.user?.Ordem,
@@ -495,9 +510,9 @@ showUploadModal : boolean = false;
       Email:   this.user?.Email,
       Nacionalidade: this.user?.Nacionalidade,
       Residencia_atual: this.user?.Residencia_atual,
-      Pais_da_sede: this.user?.Pais_da_sede,
-      Cidade_da_sede: this.user?.Cidade_da_sede,
-      Nome_da_sede: this.user?.Nome_da_sede,
+      Pais_da_sede: Pais_da_sede,
+      Cidade_da_sede: Cidade_da_sede,
+      Nome_da_sede: Nome_da_sede,
       linkCongregatio: link,
       active: this.user.active
     });
@@ -598,9 +613,14 @@ this.debouncer.next( this.itemSearch );
 
 sugerencias(value : string){
 
-  if(value.length < 3 ){
+  if(value ){
+    if(value.length < 3){
+      return;
+    }
+  }else{
     return;
   }
+  
 this.spinner = true;
 this.itemSearch = value;
 this.mostrarSugerencias = true;  

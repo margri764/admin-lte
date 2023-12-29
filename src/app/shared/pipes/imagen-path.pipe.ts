@@ -11,6 +11,7 @@ export class ImagenPathPipe implements PipeTransform {
     console.log(user);
     if (user && user.Ruta_Imagen && user.Ruta_Imagen !== '') {
       if (user.Ruta_Imagen.startsWith('https://congregatio.info/')) {
+        console.log(user.Ruta_Imagen);
         return user.Ruta_Imagen;
       } else {
         const fileName = user.Ruta_Imagen.split('/').pop();
