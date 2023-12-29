@@ -34,6 +34,8 @@ import { WebMastersComponent } from './web-masters/web-masters/web-masters.compo
 import { AdminComponent } from './admin/admin/admin.component';
 import { UploadDocumentsComponent } from './upload-documents/upload-documents/upload-documents.component';
 import { FileSizePipe } from '../shared/pipes/file-size.pipe';
+import { FileTypePipe } from '../shared/pipes/file-img.pipe';
+import { ImagenDocPathPipe } from '../shared/pipes/imagen-doc-path.pipe';
 
 
 @NgModule({
@@ -60,7 +62,9 @@ import { FileSizePipe } from '../shared/pipes/file-size.pipe';
     DeactiveUsersComponent,
     WebMastersComponent,
     AdminComponent,
-    UploadDocumentsComponent
+    UploadDocumentsComponent,
+    FileTypePipe,
+    ImagenDocPathPipe
   ],
   exports: [
     DashboardComponent,

@@ -64,8 +64,8 @@ loadingPdf: boolean = false;
 menuDocument: any;
 arrDocument : any []=[];
 showBulk : boolean = false;
-
-
+imageDocPath : string = '';
+showImgInModal : boolean = false;
 
 // documents
 
@@ -730,6 +730,28 @@ onView( doc:any ){
 
 }
 
+
+
+// muestra el preview de los doc tipo img
+onViewImage( doc:any ){
+
+  this.showImgInModal = true;
+
+  const fileName = doc.filePath.split('/').pop() ;
+
+    const serverURL = 'https://arcanjosaorafael.org/documents/'; 
+  
+    // this.imageDocPath = `${serverURL}${fileName}`;
+    this.imageDocPath = doc.filePath;
+    this.fileNameBack = doc.originalName;
+
+}
+
+closeModalPreview(){
+  this.showImgInModal = false;
+}
+
+
 onCheckboxChange(  event:any, doc:any ){
 
   const isChecked = event.target.checked;
@@ -810,6 +832,7 @@ getDocByUserId( id:any ){
   this.userService.getDocByUserId(id).subscribe(
   ( {document} )=>{
     this.isLoading = false;
+    // this.arrDocument = document
     this.arrDocument = document.map( (doc:any) => {
       const fileName = doc.filePath.split('/').pop();
       const serverURL = 'https://arcanjosaorafael.org/documents/';

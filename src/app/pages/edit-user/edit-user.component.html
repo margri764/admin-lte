@@ -293,20 +293,27 @@
               
               <div class="row mt-5" (contextmenu)="mostrarMenu($event)" >
 
-                <div class="col-12 col-md-6 col-lg-4 cursor " *ngFor="let doc of arrDocument, index as i " style="margin-bottom: 100px;" >
+                <div class="col-12 col-md-6 col-lg-4  " *ngFor="let doc of arrDocument, index as i " style="margin-bottom: 100px;" >
 
                     <div class="card mb-3 pdfSelection" style="padding: 10px;" >
 
+                      <div *ngIf="(doc.type | fileType) === 'image' ">
+                        <img  [src]="doc | imagenDocPath" alt="Imagen" class="img-fluid" data-toggle="modal" data-target="#viewModalBack">
+                        &nbsp; <span>es una img</span>
+                      </div>
+                      <!-- Alternativa para el caso en que el tipo de documento no sea una imagen -->
                         <pdf-viewer
                           [src]="doc.filePath"
                           [original-size]="true"
                           [show-all]="false"
                           [zoom]="0.3"
                           class="custom-size-viewer"
-                          data-toggle="modal" data-target="#viewModal"
-                        ></pdf-viewer>
+                         *ngIf="(doc.type | fileType) === 'pdf' ">
+                        </pdf-viewer>
                         
-                        <a class="w-100 mt-3"  (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack">{{ doc.originalName }}</a>
+                        <a class="w-100 mt-3 cursor"  (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack" *ngIf="(doc.type | fileType) === 'pdf' ">{{ doc.originalName }}</a>
+
+                        <a class="w-100 mt-3 cursor"  (click)="onViewImage(doc)" data-toggle="modal" data-target="#viewModalBack" *ngIf="(doc.type | fileType) === 'image' ">{{ doc.originalName }}</a>
 
                         <div class="text-white d-flex justify-content-between align-items-center p-2" style="background-color: rgb(10, 120, 255);">
                       
@@ -450,30 +457,45 @@
 
 </div>
 
+
+
  
   <!-- Modal Preview Back -->
-  <div class="modal fade" id="viewModalBack" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
+  <div class="modal fade" id="viewModalBack" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl justify-content-center" role="document"> 
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="viewModalLabel"> <a>{{fileNameBack}}</a> </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalPreview()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body" >
 
           <div *ngIf="!loadingPdf">
-            <div class="embed-responsive embed-responsive-16by9">
+
+            <div class="embed-responsive embed-responsive-16by9" *ngIf="!showImgInModal">
               <pdf-viewer [src]="selectedPdfBack" [render-text]="true" [original-size]="false" class="embed-responsive-item"></pdf-viewer>
             </div>
+
+            <div *ngIf="showImgInModal">
+              <img  [src]="imageDocPath" alt="Imagen" class="img-fluid" data-toggle="modal" data-target="#viewModalBack">
+              &nbsp; <span>es una img</span>
+            </div>
+
+            
           </div>
 
         </div>
         <div class="modal-footer">
 
 
-          <a [href]="selectedPdfBack" download="{{fileNameBack}}">
+          <a [href]="selectedPdfBack" download="{{fileNameBack}}" *ngIf="!showImgInModal">
+            <i class="fas fa-download"></i> Baixar
+          </a>
+
+          <!-- es una doc tipo img -->
+          <a [href]="imageDocPath" download="{{fileNameBack}}" *ngIf="showImgInModal">
             <i class="fas fa-download"></i> Baixar
           </a>
         </div>
