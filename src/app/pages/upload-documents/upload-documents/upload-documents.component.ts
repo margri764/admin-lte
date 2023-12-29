@@ -129,6 +129,7 @@ uploadDocument( file:any, index:number){
 
         // guardo una copia de lo q ya se envio para evitar duplicados
         this.sentDocumentsArray.push(file);
+        setTimeout(()=>{ this.reset(); this.userService.closeDocumentModal$.emit(true) }, 3000)
         
     
       }
@@ -138,8 +139,8 @@ uploadDocument( file:any, index:number){
 
 
 bulkUploadDocument() {
-  const unsentFiles = this.files.filter((file) => !this.sentDocumentsArray.includes(file));
 
+  const unsentFiles = this.files.filter((file) => !this.sentDocumentsArray.includes(file));
 
   // Itera sobre los archivos originales
   this.files.forEach((file, index) => {
@@ -169,7 +170,7 @@ bulkUploadDocument() {
         }
       );
     }
-    setTimeout(()=>{ this.reset(); },5000)
+    setTimeout(()=>{ this.reset(); this.userService.closeDocumentModal$.emit(true)}, 3000)
     
   }
  );
