@@ -4,7 +4,6 @@
   <div class="col-12">
 
       <div class="card card-primary card-outline card-outline-tabs fs-9">
-        
         <div class="card-header p-0 border-bottom-0">
           <div class="ml-auto">
             <ul class="nav nav-tabs fs-11 p-1" id="custom-tabs-four-tab" role="tablist">
@@ -21,14 +20,14 @@
                   <a class="nav-link"  data-toggle="pill" href="#documents" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Documentos</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#roles" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Roles</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="custom-tabs-four-profile-alarm" data-toggle="pill" href="#alarm" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Alarmes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="custom-tabs-four-profile-alarm" data-toggle="pill" href="#history" role="tab" aria-controls="custom-tabs-four-history" aria-selected="false">Histórico da sede</a>
-             </li>
+                  <a class="nav-link"  data-toggle="pill" href="#roles" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Roles</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="pill" href="#alarm" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Alarmes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link"  data-toggle="pill" href="#history" role="tab" aria-controls="custom-tabs-four-history" aria-selected="false">Histórico da sede</a>
+               </li>
 
           </ul>
           </div>
@@ -283,179 +282,6 @@
               
               </div>
 
-              <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents" >
-
-                <div class="d-flex justify-content-start" style="margin-bottom: auto;" >
-                  <button type="button" class="btn btn-primary shadow font" data-toggle="modal" data-target="#uploadDocument" (click)="showModalUploadPdf()"> <i class="fas fa-upload" style="cursor: pointer; text-align: center; font-size: 16px;"  [ngbTooltip]="'Subir tudo'"></i>&nbsp;  Subir documentos</button>
-        
-              
-              </div>
-
-                <div class="row mt-5" >
-                
-                    <app-context-menu
-                          [showContextMenu]="showContextMenu"
-                          [contextMenuPosition]="contextMenuPosition"
-                    ></app-context-menu>
-                      
-
-                  <div class="col-12 col-md-6 col-lg-4  " *ngFor="let doc of arrDocument, index as i " style="margin-bottom: 100px;" >
-
-                      <div class="card mb-3 pdfSelection" style="padding: 10px;" >
-
-                        <div *ngIf="(doc.type | fileType) === 'image' " (click)="onViewImage(doc)" data-toggle="modal" data-target="#viewModalBack" class="cursor">
-                          <img  [src]="doc | imagenDocPath" alt="Imagen" class="img-fluid" data-toggle="modal" data-target="#viewModalBack">
-                          &nbsp; 
-                        </div>
-                        <!-- Alternativa para el caso en que el tipo de documento no sea una imagen -->
-                          <pdf-viewer
-                            [src]="doc.filePath"
-                            [original-size]="true"
-                            [show-all]="false"
-                            [zoom]="0.3"
-                            class="custom-size-viewer cursor"
-                            *ngIf="(doc.type | fileType) === 'pdf' "
-                            (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack"
-                          >
-                          </pdf-viewer>
-                          
-                          <a class="w-100 mt-3 cursor"  (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack" *ngIf="(doc.type | fileType) === 'pdf' ">{{ doc.originalName }}</a>
-
-                          <a class="w-100 mt-3 cursor"  (click)="onViewImage(doc)" data-toggle="modal" data-target="#viewModalBack" *ngIf="(doc.type | fileType) === 'image' ">{{ doc.originalName }}</a>
-
-                          <div class="text-white d-flex justify-content-between align-items-center p-2" style="background-color: rgb(10, 120, 255);">
-                        
-                          <div class="d-flex justify-content-around">
-                            <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 16px; margin-left: 10px;"
-                              data-toggle="modal" data-target="#modalAskDelDocument" (click)="deleteDocById(doc)"
-                              [ngbTooltip]="'Excluir documento'"></i>
-                        
-                            <i class="fas fa-cloud-download-alt" style="cursor: pointer; text-align: center; font-size: 16px; margin-left: 20px;"
-                              (click)="downloadPdf(doc)" [ngbTooltip]="'Baixar documento'"></i>
-                          </div>
-                        
-                      
-                            <div class="form-check">
-                              <input class="form-check-input cursor" type="checkbox" value="" id="{{'defaultCheck' + doc.iddocument}}" [checked]="arrIds.includes(doc.iddocument)" (change)="onCheckboxChange($event, doc)">
-                              <label class="form-check-label font fs-10" [for]="'defaultCheck' + doc.iddocument">
-                                Seleccionar
-                              </label>
-                            </div>
-                        
-                          
-                      </div>
-                  </div>
-
-                </div>
-
-                <div class="modal fade" id="uploadDocument" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-                  <div class="modal-dialog modal-xl " role="document" > 
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideModalUploadPdf()" #closebutton >
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      
-                        <app-upload-documents [user]="user" *ngIf="showUploadModal" ></app-upload-documents>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-              <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles">
-
-                <div class="row mt-5">
-                  <div class="col-sm-6">
-                    <!-- Primer radio (arriba) -->
-                    <div class="form-group clearfix">
-                      <div class="icheck-success d-inline">
-                        <input type="radio" name="r3"  id="radioSuccess1" (change)="handleRoleChange('admin')" [checked]="adminRole">
-                        <label for="radioSuccess1"> Administrador </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="row">
-                  <div class="col-sm-6">
-                    <!-- Segundo radio (abajo) -->
-                    <div class="form-group clearfix">
-                      <div class="icheck-success d-inline">
-                        <input type="radio" name="r3" id="radioSuccess2" (change)="handleRoleChange('user')" [checked]="userRole">
-                        <label for="radioSuccess2"> Usúario </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-sm-6">
-                    <!-- Segundo radio (abajo) -->
-                    <div class="form-group clearfix">
-                      <div class="icheck-success d-inline">
-                        <input type="radio" name="r3" id="radioSuccess3" (change)="handleRoleChange('webmaster')" [checked]="webMRole">
-                        <label for="radioSuccess3"> Web master </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                </div>
-
-              <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm">
-
-
-                <div class="row mt-4">
-        
-                  <div class="card col-12 table-responsive" style="padding: 12px; padding-top: 20px; background-color: white; ">
-          
-                    <div class="customTHead shadow font"> Alarmes pessoales</div>
-          
-                    <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover font fs-10" #table >
-          
-                          <thead >
-                              <tr class="fs-11" >
-                                  <th >Nome alarme</th>
-                                  <th>Descrição</th>
-                                  <th>Data</th>
-                                  <th>Ação</th>
-                              </tr>
-                          </thead>
-                          <tbody *ngIf="personalAlarms.length !== 0">
-                              <tr *ngFor="let pes of personalAlarms">
-                                  <td class="align-top"> {{ pes.name }} </td>
-                                  <td> {{ pes.description }} </td>
-                                  <td class="align-top"> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
-                                  <td class="d-flex align-items-center justify-content-start" style="align-items: start;">
-                                    <i class="far fa-play-circle" style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(27, 188, 24); margin-right: 5px;"  [ngbTooltip]="'Ativar alarme'" *ngIf="pes.status === 'paused'" (click)="activePausePersonalAlarm(pes, 'active')" ></i>
-    
-                                    <i class="far fa-pause-circle " style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(0, 123, 255); margin-right: 5px;" [ngbTooltip]="'Pausar alarme'" *ngIf="pes.status !== 'paused'" (click)="activePausePersonalAlarm(pes, 'paused')" ></i> 
-                                    <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelAlarm" (click)="onRemoveAlarm(pes)" [ngbTooltip]="'Excluir alarme'"></i>
-                                  </td>
-                              </tr>
-                          </tbody>
-                      </table>
-              </div>
-          </div>
-
-              </div>
-
-              <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history">
-                <div class="row mt-5">
-                  <div class="col-12">
-                  
-                    <div class="boxSelection2 font" style="padding: 15px;" >
-                          {{ user && user.Historico_Sedes }}
-                        <span *ngIf="user?.Historico_Sedes === '' || user?.Historico_Sedes === undefined  || user?.Historico_Sedes === null" class="font fs-11"> Sem histórico de sede para mostrar </span> 
-                    </div>
-
-                </div>
-                </div>
-              </div>
-              </div>
-
               <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles">
 
               <div class="row mt-5">
@@ -546,17 +372,103 @@
                 </div>
               </div>
 
+              <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents" >
+
+                <div class="d-flex justify-content-start" style="margin-bottom: auto;" >
+                  <button type="button" class="btn btn-primary shadow font" data-toggle="modal" data-target="#uploadDocument" (click)="showModalUploadPdf()"> <i class="fas fa-upload" style="cursor: pointer; text-align: center; font-size: 16px;"  [ngbTooltip]="'Subir tudo'"></i>&nbsp;  Subir documentos</button>
+              
+              </div>
+
+                <div class="row mt-5" >
+                
+                    <app-context-menu
+                          [showContextMenu]="showContextMenu"
+                          [contextMenuPosition]="contextMenuPosition"
+                          *ngIf="arrDocument.length > 0"
+                    ></app-context-menu>
+                      
+
+                  <div class="col-12 col-md-6 col-lg-4  " *ngFor="let doc of arrDocument, index as i " style="margin-bottom: 100px;" >
+
+                      <div class="card mb-3 pdfSelection" style="padding: 10px;" >
+
+                        <div *ngIf="(doc.type | fileType) === 'image' " (click)="onViewImage(doc)" data-toggle="modal" data-target="#viewModalBack" class="cursor">
+                          <img  [src]="doc | imagenDocPath" alt="Imagen" class="img-fluid" data-toggle="modal" data-target="#viewModalBack">
+                          &nbsp; 
+                        </div>
+                        <!-- Alternativa para el caso en que el tipo de documento no sea una imagen -->
+                          <pdf-viewer
+                            [src]="doc.filePath"
+                            [original-size]="true"
+                            [show-all]="false"
+                            [zoom]="0.3"
+                            class="custom-size-viewer cursor"
+                            *ngIf="(doc.type | fileType) === 'pdf' "
+                            (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack"
+                          >
+                          </pdf-viewer>
+                          
+                          <a class="w-100 mt-3 cursor"  (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack" *ngIf="(doc.type | fileType) === 'pdf' ">{{ doc.originalName }}</a>
+
+                          <a class="w-100 mt-3 cursor"  (click)="onViewImage(doc)" data-toggle="modal" data-target="#viewModalBack" *ngIf="(doc.type | fileType) === 'image' ">{{ doc.originalName }}</a>
+
+                          <div class="text-white d-flex justify-content-between align-items-center p-2" style="background-color: rgb(10, 120, 255);">
+                        
+                          <div class="d-flex justify-content-around">
+                            <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 16px; margin-left: 10px;"
+                              data-toggle="modal" data-target="#modalAskDelDocument" (click)="deleteDocById(doc)"
+                              [ngbTooltip]="'Excluir documento'"></i>
+                        
+                            <i class="fas fa-cloud-download-alt" style="cursor: pointer; text-align: center; font-size: 16px; margin-left: 20px;"
+                              (click)="downloadPdf(doc)" [ngbTooltip]="'Baixar documento'"></i>
+                          </div>
+                        
+                      
+                            <div class="form-check">
+                              <input class="form-check-input cursor" type="checkbox" value="" id="{{'defaultCheck' + doc.iddocument}}" [checked]="arrIds.includes(doc.iddocument)" (change)="onCheckboxChange($event, doc)">
+                              <label class="form-check-label font fs-10" [for]="'defaultCheck' + doc.iddocument">
+                                Seleccionar
+                              </label>
+                            </div>
+                        
+                          
+                      </div>
+                  </div>
+
+                </div>
+
+                <div class="modal fade" id="uploadDocument" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+                  <div class="modal-dialog modal-xl " role="document" > 
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideModalUploadPdf()" #closebutton >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      
+                        <app-upload-documents [user]="user" *ngIf="showUploadModal" ></app-upload-documents>
+                    </div>
+                  </div>
+                </div>
+
+                </div>
+              </div>
+
+
+         
           </div>
-        </div>
 
+
+          </div>
       </div>
-
-
   </div>
 
 </div>
 
 
+
+ 
   <!-- Modal Preview Back -->
   <div class="modal fade" id="viewModalBack" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl justify-content-center" role="document"> 

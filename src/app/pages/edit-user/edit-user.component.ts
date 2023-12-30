@@ -17,12 +17,7 @@ import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { ImageUploadService } from 'src/app/shared/services/ImageUpload/image-upload.service';
 import { DataTableDirective } from 'angular-datatables';
-import { emptyObjectsAreNotAllowedMsg } from '@ngrx/store/src/models';
 
-interface CustomFile extends File {
-  previewUrl?: string;
-  downloadLink?: string;
-}
 
 
 @Component({
@@ -579,16 +574,16 @@ selectAllChecked = false;
 
       this.actualizarEstadoSwitch();
 
-        this.role = this.user.role;
-        if(this.user.role === 'user'){
-          this.userRole = true;
-          this.adminRole = false;
-          this.webMRole = false;
-        }else if(this.user.role === 'admin'){
-          this.adminRole = true;
-          this.userRole = false;
-          this.webMRole = false;
-        }else if(this.user.role === 'webmaster'){
+      this.role = this.user.role;
+      if(this.user.role === 'user'){
+        this.userRole = true;
+        this.adminRole = false;
+        this.webMRole = false;
+      }else if(this.user.role === 'admin'){
+        this.adminRole = true;
+        this.userRole = false;
+        this.webMRole = false;
+      }else if(this.user.role === 'webmaster'){
           this.webMRole = true;
           this.userRole = false;
           this.adminRole = false;

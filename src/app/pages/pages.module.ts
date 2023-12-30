@@ -18,7 +18,7 @@ import { NewClientComponent } from './new-client/new-client.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AlarmsComponent } from './alarms/alarms/alarms.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GroupsComponent } from './groups/groups.component';
 import { CongregatioComponent } from './congregatio/congregatio/congregatio.component';
@@ -81,7 +81,6 @@ import { ContextMenuComponent } from './context-menu/context-menu/context-menu.c
     SharedModule,
     RouterModule,
     ReactiveFormsModule,
-    FormsModule,
     DataTablesModule,
     NgChartsModule.forRoot(),
     BsDatepickerModule.forRoot(),
