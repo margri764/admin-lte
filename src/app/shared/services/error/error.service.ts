@@ -195,6 +195,13 @@ export class ErrorService {
         return of(null);
     }
 
+    if (error.status === 400  ) {
+      this.status400Error$.emit({emmited:true, msg: "Ops! Algo deu errado, por favor, tente novamente" });
+        this.closeIsLoading$.emit(true);
+        return of(null);
+    }
+
+
  
     if (error.status === 400) {
       this.status400Error$.emit({emmited:true, msg: error.error.message });

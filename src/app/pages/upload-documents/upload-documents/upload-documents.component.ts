@@ -141,6 +141,8 @@ uploadDocument( file:any, index:number){
 bulkUploadDocument() {
   const unsentFiles = this.files.filter((file) => !this.sentDocumentsArray.includes(file));
 
+  let successCounter = 0;
+
     this.files.forEach((file, index) => {
       if (unsentFiles.includes(file)) {
         this.startProgress(index);
@@ -149,24 +151,26 @@ bulkUploadDocument() {
           this.userService.uploadDocument(this.user.iduser, file).subscribe(({ success }) => {
             if (success) {
               this.subirTodo = true;
-
-              setTimeout(() => {
+              
                 this.bulkProgress = 100;
                 this.progressBars[index] = 100;
                 this.isFileUploaded[index] = true;
-                this.showSuccess = true;
-                this.msg = "Operação de envio bem-sucedida!";
-
+                
                 if (!this.sentDocumentsArray.includes(file)) {
                   this.sentDocumentsArray.push(file);
                 }
+                successCounter++;
 
-              }, 2000);
-              setTimeout(()=>{ 
-                this.reset(); 
-                this.userService.closeDocumentModal$.emit(true);
-                this.userService.reloadDocuments$.emit(true);
-               }, 5000)
+              if (successCounter === this.files.length) {
+                this.showSuccess = true;
+                this.msg = "Operação de envio bem-sucedida!";
+                setTimeout(() => {
+                  this.reset();
+                  this.userService.closeDocumentModal$.emit(true);
+                  this.userService.reloadDocuments$.emit(true);
+                }, 3000);
+              }
+          
             }
           });
 

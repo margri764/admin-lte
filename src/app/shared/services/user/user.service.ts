@@ -6,7 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.models';
 import { environment } from 'src/environments/environment';
-import { Subject, map, tap } from 'rxjs';
+import { BehaviorSubject, Subject, filter, map, tap } from 'rxjs';
 import * as authActions from 'src/app/shared/redux/auth.actions'
 import { LocalstorageService } from '../localstorage/localstorage.service';
 
@@ -21,6 +21,12 @@ export class UserService {
   closeDocumentModal$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   resetDocumentUpload$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
   reloadDocuments$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  selectAllDocuments$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  deSelectAllDocuments$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  deleteSelectedDocuments$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  downloadSelectedDocuments$ : EventEmitter<boolean> = new EventEmitter<boolean>; 
+  
+  changeMenuStates$ = new BehaviorSubject(null)
   
 
 
@@ -264,6 +270,32 @@ export class UserService {
     )
   }
 
+  downloadZip(selectedIds: any) {
+    const options = {
+      responseType: 'blob' as const,
+    };
+  
+    return this.http.post(`${this.baseUrl}api/document/generateAndDownloadZIP`, { selectedIds }, options)
+      .pipe(
+        filter((res: Blob) => res.size > 0),
+        tap((res: Blob) => {
+          // La respuesta contiene datos
+          console.log("from downloadZip service:", res);
+  
+          // Crea un enlace (link) para descargar el archivo
+          const downloadLink = document.createElement('a');
+          downloadLink.href = URL.createObjectURL(res);
+          downloadLink.download = 'archivo.zip';
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+          
+        }),
+        map((res: Blob) => {
+          return { success: true };
+        })
+      );
+  }
 
 
   searchUser( query:any ){

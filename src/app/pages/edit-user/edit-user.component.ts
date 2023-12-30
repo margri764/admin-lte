@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as $ from 'jquery';
 import 'bootstrap-switch';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +17,7 @@ import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { ImageUploadService } from 'src/app/shared/services/ImageUpload/image-upload.service';
 import { DataTableDirective } from 'angular-datatables';
+import { emptyObjectsAreNotAllowedMsg } from '@ngrx/store/src/models';
 
 interface CustomFile extends File {
   previewUrl?: string;
@@ -31,7 +32,7 @@ interface CustomFile extends File {
 })
 
 
-export class EditUserComponent implements OnInit, AfterViewInit  {
+export class EditUserComponent implements OnInit, AfterViewInit, OnDestroy  {
 
 // start search
 @Output() onDebounce: EventEmitter<string> = new EventEmitter();
@@ -42,6 +43,49 @@ debouncer: Subject<string> = new Subject();
 @ViewChild('closebutton') closebutton! : ElementRef;
 @ViewChild('closeModalFichaCompl') closeModalFichaCompl! : ElementRef;
 @ViewChild('groupSelect') groupSelect! : ElementRef;
+
+//menu segundo boton
+@HostListener('document:contextmenu', ['$event'])
+onContextMenu(event: MouseEvent): void {
+  event.preventDefault();
+// Obtener dimensiones de la pantalla
+const screenWidth = window.innerWidth;
+const screenHeight = window.innerHeight;
+
+// Posición inicial del menú contextual
+const initialX = event.clientX;
+const initialY = event.clientY;
+
+// Ancho y alto del menú contextual
+const menuWidth = 280; // Ajusta según sea necesario
+const menuHeight = 200; // Ajusta según sea necesario
+
+// Márgenes mínimos desde los bordes de la pantalla
+const margin = 10;
+
+// Ajustar la posición si el menú se encuentra cerca de los bordes de la pantalla
+const adjustedX = initialX + menuWidth + margin > screenWidth ? screenWidth - menuWidth - margin : initialX;
+const adjustedY = initialY + menuHeight + margin > screenHeight ? screenHeight - menuHeight - margin : initialY;
+
+// Asignar la posición ajustada al componente
+this.showContextMenu = true;
+this.contextMenuPosition = { x: adjustedX, y: adjustedY };
+}
+
+@HostListener('document:click', ['$event'])
+onClick(event: MouseEvent): void {
+  const clickedInside = this.elRef.nativeElement.contains(event.target);
+  if (clickedInside) {
+    // Si el clic no fue dentro del componente, cierra el menú
+    this.showContextMenu = false;
+    this.showSubMenu = false;
+  }
+}
+
+showContextMenu = false;
+contextMenuPosition = { x: 0, y: 0 };
+showSubMenu = false;
+menuStates : any=  {selected: false, downloadAll: false, noSelected: false}
 
 myForm! : FormGroup;
 myFormSearch! : FormGroup;
@@ -144,6 +188,7 @@ userFichaCompleta : any;
 sendUserCongregatio : boolean = false;
 sendUser : boolean = false;
 showUploadModal : boolean = false;
+selectAllChecked = false;
 
 
 
@@ -158,6 +203,7 @@ showUploadModal : boolean = false;
                 private localeService: BsLocaleService,
                 private router : Router,
                 private imageUploadService : ImageUploadService,
+                private elRef: ElementRef
                 ) 
                 
 { 
@@ -174,8 +220,8 @@ showUploadModal : boolean = false;
     this.dtOptions = { language: LanguageApp.portuguese_brazil_datatables,  pagingType: 'full_numbers', responsive:true }
 }
 
-  ngOnInit(): void {
 
+  ngOnInit(): void {
 
 
     this.maxDate.setFullYear(this.bsValue.getFullYear() + 50);
@@ -197,6 +243,15 @@ showUploadModal : boolean = false;
     this.userService.closeDocumentModal$.subscribe( (emitted)=>{ if(emitted){ this.closebutton.nativeElement.click()} });
 
     this.userService.reloadDocuments$.subscribe( (emitted)=>{ if(emitted){ this.getDocByUserId(this.user.iduser)} });
+
+    this.userService.selectAllDocuments$.subscribe( (emmited)=>{ if(emmited){ this.toggleSelectAll() }});
+
+    this.userService.deSelectAllDocuments$.subscribe( (emmited)=>{ if(emmited){ this.toggleDeSelectAll() }});
+
+    this.userService.downloadSelectedDocuments$.subscribe( (emmited)=>{ if(emmited){ this.downloadBulkPdf() }});
+
+    this.userService.deleteSelectedDocuments$.subscribe( (emmited)=>{ if(emmited){ this.showBulk = true }})
+
 
 
     this.myFormSearch.get('itemSearch')?.valueChanges.subscribe(newValue => {
@@ -365,16 +420,21 @@ showUploadModal : boolean = false;
        if(this.isLinkedToCongregatio && this.userCongregatio){
          
          // esto es por si no trae esos campos el congregatio
-         const propiedades = ['Email', 'Telefone1', 'Data_Nascimento', 'Residencia_atual', 'Nacionalidade'];
+         const propiedades = ['Telefone1', 'Data_Nascimento', 'Residencia_atual', 'Nacionalidade'];
          
          for (const propiedad of propiedades) {
            if (!this.userCongregatio[propiedad] || this.userCongregatio[propiedad] === '') {
              this.userCongregatio[propiedad] = this.myForm.get(propiedad)?.value;
             }
           }
-          
-        body = {...this.userCongregatio};
-        body = {...body, groups: [...this.selectedGroups]}
+         
+          // el email tiene  q ser con el q se creo la cuenta
+        const email = this.myForm.get('Email')?.value;  
+
+        this.userCongregatio.Email = email;
+        body = {
+            ...this.userCongregatio,
+            groups: [...this.selectedGroups]}
 
         console.log(body);
 
@@ -389,7 +449,7 @@ showUploadModal : boolean = false;
 
        }else{
 
-        // edicion sin congrgatio 
+        // edicion sin congregatio 
 
         body = this.myForm.value;
 
@@ -604,7 +664,7 @@ close(){
   // this.noMatches = false;
   this.clientFound= null;
   this.isClientFound = false;
-  }
+}
 
 teclaPresionada(){
 // this.noMatches = false;
@@ -690,10 +750,11 @@ fileBackContentToBuffer(fileContent: any): Uint8Array {
   return new Uint8Array();
 }
 
+
+
 continue(){
   this.userService.authDelDocument$.emit( true );
 }
-
 
 // onViewClick(name: string, index: number): void {
 //   if (this.pdfSrcList[index]) {
@@ -730,8 +791,6 @@ onView( doc:any ){
 
 }
 
-
-
 // muestra el preview de los doc tipo img
 onViewImage( doc:any ){
 
@@ -751,6 +810,48 @@ closeModalPreview(){
   this.showImgInModal = false;
 }
 
+toggleSelectAll(): void {
+
+  this.selectAllChecked = !this.selectAllChecked;
+
+    if (this.selectAllChecked) {
+      this.arrIds = this.arrDocument.map((doc: any) => doc.iddocument);
+      this.userService.changeMenuStates$.next( { ...this.menuStates, selected: true });
+    } else {
+      this.arrIds = [];
+    }
+
+}
+
+toggleDeSelectAll(): void {
+  this.selectAllChecked = false;
+  this.arrIds = [];
+  this.userService.changeMenuStates$.next({ ...this.menuStates, selected: false });
+}
+
+bulkDeleteDocuments(){
+
+  if(this.arrIds.length !== 0){
+
+    this.isLoading = true;
+
+    const body = { ids: this.arrIds}
+
+    this.imageUploadService.bulkDeleteDocuments(body).subscribe( 
+      ( {success})=>{
+        if(success){
+          this.showBulk = false;
+          this.msg = 'Documentos excluídos com sucesso';
+          this.showSuccess = true;
+          this.arrIds = [];
+          this.getDocByUserId(this.user.iduser)
+        }
+        
+      });
+    }else{
+      return;
+    }    
+}
 
 onCheckboxChange(  event:any, doc:any ){
 
@@ -758,7 +859,10 @@ onCheckboxChange(  event:any, doc:any ){
   const id = doc.iddocument;
 
   if(isChecked){
-    this.arrIds.push(id)
+    this.arrIds.push(id);
+    this.userService.changeMenuStates$.next( { ...this.menuStates, selected: true });
+
+   
   }else{
     this.arrIds = this.arrIds.filter((item)=>item !== id)
   }
@@ -774,6 +878,8 @@ closeMenu(): void {
 }
 
 downloadPdf(files: any) {
+
+
   if (files && files.filePath) {
     // Obtén el nombre del archivo desde la ruta
     const fileName = files.filePath.split('/').pop() || files.name;
@@ -796,6 +902,19 @@ downloadPdf(files: any) {
     // Simula un clic en el enlace para iniciar la descarga
     link.click();
   }
+}
+
+downloadBulkPdf() {
+  this.showSuccess = false;
+  this.userService.downloadZip(this.arrIds).subscribe( 
+    ({success})=>{
+      if(success){
+        this.toggleDeSelectAll();
+        this.msg = "Documentos baixados com sucesso";
+        this.showSuccess = true;
+      }
+    })
+ 
 }
 
 deleteDocById( doc:any){
@@ -832,7 +951,6 @@ getDocByUserId( id:any ){
   this.userService.getDocByUserId(id).subscribe(
   ( {document} )=>{
     this.isLoading = false;
-    // this.arrDocument = document
     this.arrDocument = document.map( (doc:any) => {
       const fileName = doc.filePath.split('/').pop();
       const serverURL = 'https://arcanjosaorafael.org/documents/';
@@ -848,29 +966,6 @@ getDocByUserId( id:any ){
 
 }
 
-bulkDeleteDocuments(){
-
-  if(this.arrIds.length !== 0){
-
-    this.isLoading = true;
-
-    const body = { ids: this.arrIds}
-
-    this.imageUploadService.bulkDeleteDocuments(body).subscribe( 
-      ( {success})=>{
-        if(success){
-          this.showBulk = false;
-          this.msg = 'Documentos excluídos com sucesso';
-          this.showSuccess = true;
-          this.arrIds = [];
-          this.getDocByUserId(this.user.iduser)
-        }
-        
-      });
-    }else{
-      return;
-    }    
-}
 // documents
 
 onKeyUp(event: KeyboardEvent): void {
@@ -940,7 +1035,7 @@ this.pathImg =`https://congregatio.info/${user['Ruta Imagen']}`
 const backFullName = user['Nome Completo'];
 const backPhone = user.Telefone1;
 const backBirthday = user['Data Nacimento'];
-const backEmail = user.Email;
+// const backEmail = user.Email;
 const backNationality = user.Nacionalidade;
 const backActualAddress = user['Residência atual'];
 const backSede = user['Sede onde entrou'];
@@ -953,7 +1048,7 @@ const fields = [
   { name: 'Nome_Completo', backValue: backFullName },
   { name: 'Telefone1', backValue: backPhone },
   { name: 'Data_Nascimento', backValue: backBirthday },
-  { name: 'Email', backValue: backEmail },
+  // { name: 'Email', backValue: backEmail },
   { name: 'Nacionalidade', backValue: backNationality },
   { name: 'Residencia_atual', backValue: backActualAddress },
   { name: 'Nome_da_sede', backValue: backSede },
@@ -1138,6 +1233,8 @@ hideModalUploadPdf(){
   this.userService.resetDocumentUpload$.emit(true);
 }
 
+ngOnDestroy(): void {
+}
 
 
 }

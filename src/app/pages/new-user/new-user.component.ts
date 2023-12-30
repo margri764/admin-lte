@@ -236,7 +236,7 @@ selectUser(user: any){
   const backFullName = user['Nome Completo'];
   const backPhone = user.Telefone1;
   const backBirthday = user['Data Nacimento'];
-  const backEmail = user.Email;
+  // const backEmail = user.Email;
   const backNationality = user.Nacionalidade;
   const backActualAddress = user['Residência atual'];
   const backSede = user['Sede onde entrou'];
@@ -249,7 +249,7 @@ selectUser(user: any){
     { name: 'Nome_Completo', backValue: backFullName },
     { name: 'Telefone1', backValue: backPhone },
     { name: 'Data_Nascimento', backValue: backBirthday },
-    { name: 'Email', backValue: backEmail },
+    // { name: 'Email', backValue: backEmail },
     { name: 'Nacionalidade', backValue: backNationality },
     { name: 'Residencia_atual', backValue: backActualAddress },
     { name: 'Nome_da_sede', backValue: backSede },

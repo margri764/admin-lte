@@ -93,6 +93,7 @@ this.errorService.backIsDown$.pipe(delay(1200)).subscribe(( {emmited, msg} )=>{ 
 }
 
 closeToast(){
+  this.show400 = false;
   this.show401 = false;
   this.show404 = false;
   this.show429 = false;

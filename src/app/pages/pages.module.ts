@@ -18,7 +18,7 @@ import { NewClientComponent } from './new-client/new-client.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AlarmsComponent } from './alarms/alarms/alarms.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GroupsComponent } from './groups/groups.component';
 import { CongregatioComponent } from './congregatio/congregatio/congregatio.component';
@@ -36,6 +36,8 @@ import { UploadDocumentsComponent } from './upload-documents/upload-documents/up
 import { FileSizePipe } from '../shared/pipes/file-size.pipe';
 import { FileTypePipe } from '../shared/pipes/file-img.pipe';
 import { ImagenDocPathPipe } from '../shared/pipes/imagen-doc-path.pipe';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { ContextMenuComponent } from './context-menu/context-menu/context-menu.component';
 
 
 @NgModule({
@@ -64,7 +66,8 @@ import { ImagenDocPathPipe } from '../shared/pipes/imagen-doc-path.pipe';
     AdminComponent,
     UploadDocumentsComponent,
     FileTypePipe,
-    ImagenDocPathPipe
+    ImagenDocPathPipe,
+    ContextMenuComponent
   ],
   exports: [
     DashboardComponent,
@@ -78,12 +81,14 @@ import { ImagenDocPathPipe } from '../shared/pipes/imagen-doc-path.pipe';
     SharedModule,
     RouterModule,
     ReactiveFormsModule,
+    FormsModule,
     DataTablesModule,
     NgChartsModule.forRoot(),
     BsDatepickerModule.forRoot(),
     NgxDropzoneModule,
     PdfViewerModule,
     NgbModule,
+    OverlayModule 
 
   ]
 })

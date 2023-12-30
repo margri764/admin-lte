@@ -4,361 +4,459 @@
   <div class="col-12">
 
       <div class="card card-primary card-outline card-outline-tabs fs-9">
+        
         <div class="card-header p-0 border-bottom-0">
           <div class="ml-auto">
-              <ul class="nav nav-tabs fs-11 p-1" id="custom-tabs-four-tab" role="tablist">
-                  <li class="nav-item">
-                      <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#dados" role="tab" aria-controls="custom-tabs-four-dados" aria-selected="true">Dados</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" id="custom-tabs-four-logs-tab" data-toggle="pill" href="#logs" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Logs</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" id="custom-tabs-four-access-tab" data-toggle="pill" href="#access" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Acceso sistema</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#documents" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Documentos</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#roles" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Roles</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-four-profile-alarm" data-toggle="pill" href="#alarm" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Alarmes</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-four-profile-alarm" data-toggle="pill" href="#history" role="tab" aria-controls="custom-tabs-four-history" aria-selected="false">Histórico da sede</a>
-                   </li>
+            <ul class="nav nav-tabs fs-11 p-1" id="custom-tabs-four-tab" role="tablist">
+              <li class="nav-item">
+                  <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#dados" role="tab" aria-controls="custom-tabs-four-dados" aria-selected="true">Dados</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link"  data-toggle="pill" href="#logs" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Logs</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link"  data-toggle="pill" href="#access" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Acceso sistema</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link"  data-toggle="pill" href="#documents" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Documentos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#roles" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Roles</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="custom-tabs-four-profile-alarm" data-toggle="pill" href="#alarm" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Alarmes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="custom-tabs-four-profile-alarm" data-toggle="pill" href="#history" role="tab" aria-controls="custom-tabs-four-history" aria-selected="false">Histórico da sede</a>
+             </li>
 
-              </ul>
+          </ul>
           </div>
          </div>
       
       
         <div class="card-body ">
+
           <div class="tab-content" id="custom-tabs-four-tabContent " >
 
-            <div class="tab-pane fade show active " id="dados" role="tabpanel" aria-labelledby="dados">
-              <div class="row ">
-                  <div class="col-9">
+              <div class="tab-pane fade show active " id="dados" role="tabpanel" aria-labelledby="dados">
+                <div class="row ">
+                    <div class="col-9">
 
-                    <form [formGroup]="myForm" class="needs-validation mt-1 "  novalidate  [autocomplete]="false" >
-
-                        <div class="row">
-                        
-                              <div class="input-group mt-3 col-4 fs-11" >
-                                <label class="text w-100" > Ordem </label>
-                                <select class="form-control select2 "  formControlName="ordem" [attr.disabled]="(disableOrdem) ? '' : null">
-                                  <option *ngFor="let ord of ordem" [value]="ord" > {{ ord }} </option>
-                                </select>
-                              </div>   
-                              
-                              <div class="input-group mt-3 col-4">
-                                <label class="text w-100">Seleccione grupo</label>
-                                <select #groupSelect class="form-control select2 col-12 cursor" (change)="onSelectGroup($event)">
-                                  <option style="display:none" disabled selected></option>
-                                  <option *ngFor="let group of groups" [value]="[group.name, group.idgroup]" class="font">{{ group.name }}</option>
-                                </select>
-                              </div>
-
-                            
-                              <div class="mt-3 col-4 shadow frame-work" *ngIf="nameGroups.length !== 0">
-                                <div class="font fs-11 groups" *ngFor="let sel of nameGroups" >{{ sel }} &nbsp; <i class="fas fa-times-circle cursor" (click)="removeGroup(sel)"></i></div>
-                              </div>
-
-                        </div>
+                      <form [formGroup]="myForm" class="needs-validation mt-1 "  novalidate  [autocomplete]="false" >
 
                           <div class="row">
-                              <div class="input-group mt-4 col-12">
-                                <span class="text mb-3 w-100"> <b>Nome completo</b> </span>
-                                <input type="text" class="form-control" [readonly]="readonlyFields['Nome_Completo'] || isLinkedToCongregatio" formControlName="Nome_Completo" >
-                                <button type="button" class="btn btn-primary btn-block" style="width: 150px; font-size: 1em; line-height: 20px;" data-toggle="modal" data-target="#modalCongregatio" >
-                                  <i class="fas fa-search"></i> &nbsp; Congregatio
-                                </button>
-                              </div>
-
-                              <div class="input-group mb-3 mt-5 col-12" >
-                                <label class="text w-100">Link com Congregatio</label>
-                                <div class="mt-1" >
-                                    <input type="checkbox"  data-bootstrap-switch data-off-color="danger" data-on-color="success" #link >
-                                    <label class=" font fs-11" style="color: rgb(4, 171, 4); margin-left: 10px;" *ngIf="stateLink && wasLinked"> Usuário vinculado com sucesso </label>
-
-                                    <button type="button" class="btn btn-primary shadow fs-9" style="margin-left: 30px; padding: 4.2px 9px 4.2px 9px !important; " data-toggle="modal" data-target="#modalFichaCompleta" (click)="selectUserFichaCompleta()" ><i class="fa fa-list-ul"></i> &nbsp; Ver ficha completa</button>
+                          
+                                <div class="input-group mt-3 col-4 fs-11" >
+                                  <label class="text w-100" > Ordem </label>
+                                  <select class="form-control select2 "  formControlName="ordem" [attr.disabled]="(disableOrdem) ? '' : null">
+                                    <option *ngFor="let ord of ordem" [value]="ord" > {{ ord }} </option>
+                                  </select>
+                                </div>   
+                                
+                                <div class="input-group mt-3 col-4">
+                                  <label class="text w-100">Seleccione grupo</label>
+                                  <select #groupSelect class="form-control select2 col-12 cursor" (change)="onSelectGroup($event)">
+                                    <option style="display:none" disabled selected></option>
+                                    <option *ngFor="let group of groups" [value]="[group.name, group.idgroup]" class="font">{{ group.name }}</option>
+                                  </select>
                                 </div>
 
-                              </div>
+                              
+                                <div class="mt-3 col-4 shadow frame-work" *ngIf="nameGroups.length !== 0">
+                                  <div class="font fs-11 groups" *ngFor="let sel of nameGroups" >{{ sel }} &nbsp; <i class="fas fa-times-circle cursor" (click)="removeGroup(sel)"></i></div>
+                                </div>
 
-                      
-
-                                <div class="input-group mt-4 mb-3 col-6" >
-                                  <label class="text w-100"  > <b>Nome</b> </label>
-                                  <input type="text" class="form-control" [readonly]="readonlyFields['name'] || isLinkedToCongregatio" formControlName="name" >
-                              </div>    
-                                
-                              <div class="input-group mt-4 mb-3  col-6">
-                                  <label class="text w-100" >Sobrenome</label>
-                                  <input type="text" class="form-control" [readonly]="readonlyFields['lastName'] || isLinkedToCongregatio" formControlName="lastName">
-                              </div>
-                        </div>
-
-                        <div class="row">
-
-                          <div class="input-group mb-3 mt-3 col-6">
-                            <label class="text w-100" > Telefone  </label>
-                            <input type="text" class="form-control" [readonly]=" readonlyFields['Telefone1'] || isLinkedToCongregatio" formControlName="Telefone1">
                           </div>
 
-                          <div class="input-group mb-3 mt-3 col-6" >
-                            <div class="input-group date" >
-                          <label class="text w-100" > Data de nascimento  </label>
-                              <input type="text"
-                                class="form-control datetimepicker-input"
-                                bsDatepicker
-                                [bsValue]="bsValue"
-                                [minDate]="minDate"
-                                [maxDate]="maxDate"
-                                [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
-                                formControlName="Data_Nascimento" [readonly]="readonlyFields['Data_Nascimento'] || isLinkedToCongregatio">
-                              <div class="input-group-append"  >
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                              </div>
-                            </div>
-                            <div *ngIf="validField('Data_Nascimento')" class="invalid" > Dado obrigatório </div>
-                        </div>
-                       
-                        </div>
+                            <div class="row">
+                                <div class="input-group mt-4 col-12">
+                                  <span class="text mb-3 w-100"> <b>Nome completo</b> </span>
+                                  <input type="text" class="form-control" [readonly]="readonlyFields['Nome_Completo'] || isLinkedToCongregatio" formControlName="Nome_Completo" >
+                                  <button type="button" class="btn btn-primary btn-block" style="width: 150px; font-size: 1em; line-height: 20px;" data-toggle="modal" data-target="#modalCongregatio" >
+                                    <i class="fas fa-search"></i> &nbsp; Congregatio
+                                  </button>
+                                </div>
 
-                        <div class="row">
+                                <div class="input-group mb-3 mt-5 col-12" >
+                                  <label class="text w-100">Link com Congregatio</label>
+                                  <div class="mt-1" >
+                                      <input type="checkbox"  data-bootstrap-switch data-off-color="danger" data-on-color="success" #link >
+                                      <label class=" font fs-11" style="color: rgb(4, 171, 4); margin-left: 10px;" *ngIf="stateLink && wasLinked"> Usuário vinculado com sucesso </label>
 
-                            <div class="input-group mb-3 mt-3 col-6" >
-                              <label class="text w-100" >Email</label>
-                              <input type="email" class="form-control" [readonly]="readonlyFields['Email'] || isLinkedToCongregatio" formControlName="Email">
-                            </div>
+                                      <button type="button" class="btn btn-primary shadow fs-9" style="margin-left: 30px; padding: 4.2px 9px 4.2px 9px !important; " data-toggle="modal" data-target="#modalFichaCompleta" (click)="selectUserFichaCompleta()" ><i class="fa fa-list-ul"></i> &nbsp; Ver ficha completa</button>
+                                  </div>
 
-                            <div class="input-group mb-3 mt-3 col-6">
-                              <label class="text w-100" > Nacionalidade </label>
-                              <input type="text" class="form-control" [readonly]="readonlyFields['Nacionalidade'] || isLinkedToCongregatio" formControlName="Nacionalidade">
-                            </div>
+                                </div>
 
-                            <div class="input-group mb-3 mt-3 col-6">
-                              <label class="text w-100" > Residência atual </label>
-                              <input type="text" class="form-control" [readonly]="readonlyFields['Residencia_atual'] || isLinkedToCongregatio" formControlName="Residencia_atual">
-                            </div>
+                        
 
-                        </div>
-
-                        <div class="row mt-3 font">
-                          <div style="border-top: 2px solid rgb(203, 203, 203); width: 100%; padding-top: 5px; margin-left: 10px;">
-                            <p>Sede</p>
-                          </div>
-
-                            <div class="input-group mb-3 mt-3 col-6" >
-                              <label class="text w-100" > País da sede </label>
-                              <input type="text" class="form-control" [readonly]="readonlyFields['Pais_da_sede'] || isLinkedToCongregatio" formControlName="Pais_da_sede">
-                            </div>
-
-                            <div class="input-group mb-3 mt-3 col-6" >
-                              <label class="text w-100"> Cidade da sede </label>
-                                <input type="text" class="form-control" [readonly]="readonlyFields['Cidade_da_sede'] || isLinkedToCongregatio" formControlName="Cidade_da_sede">
-                            </div>
-                            </div>
-                                          
-                        <div class="row mt-3" >
-                            <div class="input-group mb-3 mt-3 col-6" >
-                              <label class="text w-100"> Nome da sede </label>
-                              <input type="text" class="form-control"  [readonly]="readonlyFields['Nome_da_sede'] || isLinkedToCongregatio"formControlName="Nome_da_sede">
-                            </div>
-                          </div>
-
-                          <div class="d-flex align-items-start mt-3" >
-
-                            <button type="button" class="btn btn-primary shadow fs-11" style="display: block"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
-
-                            <button type="button" class="btn btn-danger shadow fs-11"  style="margin-left: 30px;" data-toggle="modal" data-target="#modalAskDelUser" (click)="deleteUser()"> <i class="fas fa-trash"></i> &nbsp; Excluir</button>
-
-                            <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 30px;" >
-                              <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="activeDeacTive($event)" [checked]="myForm.get('active')?.value === 1" >
-                              <label class="custom-control-label cursor" for="customSwitch1" [ngbTooltip]="'Salvar primeiro'"> Ativar usúario  </label>
-                            </div>
-                  
-                          </div>
-
-                      
-                
-                    </form>    
+                                  <div class="input-group mt-4 mb-3 col-6" >
+                                    <label class="text w-100"  > <b>Nome</b> </label>
+                                    <input type="text" class="form-control" [readonly]="readonlyFields['name'] || isLinkedToCongregatio" formControlName="name" >
+                                </div>    
                                   
-                  </div>
-                  
-                  <div class="col-3" >
+                                <div class="input-group mt-4 mb-3  col-6">
+                                    <label class="text w-100" >Sobrenome</label>
+                                    <input type="text" class="form-control" [readonly]="readonlyFields['lastName'] || isLinkedToCongregatio" formControlName="lastName">
+                                </div>
+                          </div>
 
-                    <div class="card card-primary card-outline col-12 p-0"> 
-                            <div class="card-body box-profile p-2 ">
+                          <div class="row">
 
-                              <div class="text-center" [ngClass]="{'uploadImg': !isLinkedToCongregatio}">
-                                <i class="fas fa-times" *ngIf="showClose" (click)="removePreview()"></i>
-                                  <img class="img-fluid br-6" [src]="pathImg " alt="Foto do Perfil do Usuário" (click)="fileUploader.click()">
+                            <div class="input-group mb-3 mt-3 col-6">
+                              <label class="text w-100" > Telefone  </label>
+                              <input type="text" class="form-control" [readonly]=" readonlyFields['Telefone1'] || isLinkedToCongregatio" formControlName="Telefone1">
+                            </div>
+
+                            <div class="input-group mb-3 mt-3 col-6" >
+                              <div class="input-group date" >
+                            <label class="text w-100" > Data de nascimento  </label>
+                                <input type="text"
+                                  class="form-control datetimepicker-input"
+                                  bsDatepicker
+                                  [bsValue]="bsValue"
+                                  [minDate]="minDate"
+                                  [maxDate]="maxDate"
+                                  [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
+                                  formControlName="Data_Nascimento" [readonly]="readonlyFields['Data_Nascimento'] || isLinkedToCongregatio">
+                                <div class="input-group-append"  >
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                              </div>
+                              <div *ngIf="validField('Data_Nascimento')" class="invalid" > Dado obrigatório </div>
+                          </div>
+                        
+                          </div>
+
+                          <div class="row">
+
+                              <div class="input-group mb-3 mt-3 col-6" >
+                                <label class="text w-100" >Email</label>
+                                <input type="email" class="form-control" [readonly]="readonlyFields['Email'] || isLinkedToCongregatio" formControlName="Email">
                               </div>
 
-                              <div style="display: none;" >
-                                <input type="file" (change)="onFileSelected($event)" accept=".jpg, .jpeg, .png" #fileUploader [attr.disabled]="isLinkedToCongregatio ? true : null" />
-                              </div>
-                          
-
-                            <h5 class="font fs-11 mt-3 text-center" *ngIf="!wasLinked"> {{ user && user.Nome_Completo }} </h5>
-                            <h5 class="font fs-11 mt-3 text-center" *ngIf="wasLinked "> {{ userCongregatio && userCongregatio['Nome Completo'] }} </h5>
-
-                            <div class="card mt-5 p-0"  *ngIf="!wasLinked ">
-                                
-                              <div class="capuz">
-                                <span class="font fs-11"> Residencia Actual </span>
+                              <div class="input-group mb-3 mt-3 col-6">
+                                <label class="text w-100" > Nacionalidade </label>
+                                <input type="text" class="form-control" [readonly]="readonlyFields['Nacionalidade'] || isLinkedToCongregatio" formControlName="Nacionalidade">
                               </div>
 
-                              <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
-                                  <span style="width: 100%; display: inline-block;" >  {{ user && user.Residencia_atual || 'sin datos' }}  </span>
+                              <div class="input-group mb-3 mt-3 col-6">
+                                <label class="text w-100" > Residência atual </label>
+                                <input type="text" class="form-control" [readonly]="readonlyFields['Residencia_atual'] || isLinkedToCongregatio" formControlName="Residencia_atual">
+                              </div>
+
+                          </div>
+
+                          <div class="row mt-3 font">
+                            <div style="border-top: 2px solid rgb(203, 203, 203); width: 100%; padding-top: 5px; margin-left: 10px;">
+                              <p>Sede</p>
+                            </div>
+
+                              <div class="input-group mb-3 mt-3 col-6" >
+                                <label class="text w-100" > País da sede </label>
+                                <input type="text" class="form-control" [readonly]="readonlyFields['Pais_da_sede'] || isLinkedToCongregatio" formControlName="Pais_da_sede">
+                              </div>
+
+                              <div class="input-group mb-3 mt-3 col-6" >
+                                <label class="text w-100"> Cidade da sede </label>
+                                  <input type="text" class="form-control" [readonly]="readonlyFields['Cidade_da_sede'] || isLinkedToCongregatio" formControlName="Cidade_da_sede">
+                              </div>
+                              </div>
+                                            
+                          <div class="row mt-3" >
+                              <div class="input-group mb-3 mt-3 col-6" >
+                                <label class="text w-100"> Nome da sede </label>
+                                <input type="text" class="form-control"  [readonly]="readonlyFields['Nome_da_sede'] || isLinkedToCongregatio"formControlName="Nome_da_sede">
                               </div>
                             </div>
 
-                            <div class="card mt-5 p-0"  *ngIf="wasLinked ">
-                                
-                              <div class="capuz">
-                                <span class="font fs-11"> Residencia Actual </span>
-                              </div>
+                            <div class="d-flex align-items-start mt-3" >
 
-                              <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
-                                  <span style="width: 100%; display: inline-block;" >  {{ userCongregatio && userCongregatio['Residência atual'] || 'sin datos' }}   </span>
+                              <button type="button" class="btn btn-primary shadow fs-11" style="display: block"  (click)="onSave()" ><i class="fa fa-save"></i> &nbsp; Guardar</button>
+
+                              <button type="button" class="btn btn-danger shadow fs-11"  style="margin-left: 30px;" data-toggle="modal" data-target="#modalAskDelUser" (click)="deleteUser()"> <i class="fas fa-trash"></i> &nbsp; Excluir</button>
+
+                              <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 30px;" >
+                                <input type="checkbox" class="custom-control-input " id="customSwitch1" #excluir (change)="activeDeacTive($event)" [checked]="myForm.get('active')?.value === 1" >
+                                <label class="custom-control-label cursor" for="customSwitch1" [ngbTooltip]="'Salvar primeiro'"> Ativar usúario  </label>
                               </div>
-                            </div>
-                            
-                            
-                            </div>
-                    </div> 
                     
-                  </div>
+                            </div>
+
+                        
+                  
+                      </form>    
+                                    
+                    </div>
+                    
+                    <div class="col-3" >
+
+                      <div class="card card-primary card-outline col-12 p-0"> 
+                              <div class="card-body box-profile p-2 ">
+
+                                <div class="text-center" [ngClass]="{'uploadImg': !isLinkedToCongregatio}">
+                                  <i class="fas fa-times" *ngIf="showClose" (click)="removePreview()"></i>
+                                    <img class="img-fluid br-6" [src]="pathImg " alt="Foto do Perfil do Usuário" (click)="fileUploader.click()">
+                                </div>
+
+                                <div style="display: none;" >
+                                  <input type="file" (change)="onFileSelected($event)" accept=".jpg, .jpeg, .png" #fileUploader [attr.disabled]="isLinkedToCongregatio ? true : null" />
+                                </div>
+                            
+
+                              <h5 class="font fs-11 mt-3 text-center" *ngIf="!wasLinked"> {{ user && user.Nome_Completo }} </h5>
+                              <h5 class="font fs-11 mt-3 text-center" *ngIf="wasLinked "> {{ userCongregatio && userCongregatio['Nome Completo'] }} </h5>
+
+                              <div class="card mt-5 p-0"  *ngIf="!wasLinked ">
+                                  
+                                <div class="capuz">
+                                  <span class="font fs-11"> Residencia Actual </span>
+                                </div>
+
+                                <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
+                                    <span style="width: 100%; display: inline-block;" >  {{ user && user.Residencia_atual || 'sin datos' }}  </span>
+                                </div>
+                              </div>
+
+                              <div class="card mt-5 p-0"  *ngIf="wasLinked ">
+                                  
+                                <div class="capuz">
+                                  <span class="font fs-11"> Residencia Actual </span>
+                                </div>
+
+                                <div class="block" style="padding: 10px; line-height: 23px; background-color: rgb(236, 236, 236);" >
+                                    <span style="width: 100%; display: inline-block;" >  {{ userCongregatio && userCongregatio['Residência atual'] || 'sin datos' }}   </span>
+                                </div>
+                              </div>
+                              
+                              
+                              </div>
+                      </div> 
+                      
+                    </div>
+                </div>
               </div>
-            </div>
 
-            <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="logs">
-              
-            
-              <div class="card col-12 table-responsive" style="padding: 12px; padding-top: 20px; background-color: white;">
-
-            <table  datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger2" class="table table-hover">
-                <thead class="">
-                    <tr>
-                      <th scope="col" style="width: 20%;"> Data</th>
-                      <th scope="col" style="width: 60%;"> Cidade</th>
-                      <th scope="col " style="width: 20%;"> País </th>
-                      <th scope="col" style="width: 20%;"> Ip </th>
-                    </tr>
-                  </thead>
-                  <tbody *ngIf="arrLogs.length !== 0">
-                    <tr *ngFor="let log of arrLogs">
-                      <td > {{ log.date | date: 'dd-MM-yyyy HH:mm:ss'}}  </td>
-                      <td> {{ log.city }} </td>
-                      <td> {{ log.country}} </td>
-                      <td> {{ log.ip}} </td>
-                    </tr>
-                  </tbody>
-              </table>
-            
-            </div>
-            </div>
-
-            <div class="tab-pane fade" id="access" role="tabpanel" aria-labelledby="access" style="padding: 20px;">
+              <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="logs">
                 
-              <div class="row">
-                <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 0px;" >
-                  <input type="checkbox" class="custom-control-input " id="customSwitch2" (change)="simpleCode($event)" [checked]="simpleCodeSelected">
-                  <label class="custom-control-label" for="customSwitch2">Código de acceso simples</label>
-                </div>
-                <p style="color: rgb(152, 152, 152); margin-top: 10px;">Esta opção permite que você insira no aplicativo com um código de 6 dígitos, caso ele seja desativado, seu código de acesso será mais complexo</p>
+              
+                <div class="card col-12 table-responsive" style="padding: 12px; padding-top: 20px; background-color: white;">
+
+              <table  datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger2" class="table table-hover">
+                  <thead class="">
+                      <tr>
+                        <th scope="col" style="width: 20%;"> Data</th>
+                        <th scope="col" style="width: 60%;"> Cidade</th>
+                        <th scope="col " style="width: 20%;"> País </th>
+                        <th scope="col" style="width: 20%;"> Ip </th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="arrLogs.length !== 0">
+                      <tr *ngFor="let log of arrLogs">
+                        <td > {{ log.date | date: 'dd-MM-yyyy HH:mm:ss'}}  </td>
+                        <td> {{ log.city }} </td>
+                        <td> {{ log.country}} </td>
+                        <td> {{ log.ip}} </td>
+                      </tr>
+                    </tbody>
+                </table>
+              
+              </div>
+              </div>
+
+              <div class="tab-pane fade" id="access" role="tabpanel" aria-labelledby="access" style="padding: 20px;">
                   
-            </div>
-            
-              <div class="row" >
-                <div style="border: 1px solid rgb(197, 197, 197); width: 100%; margin-bottom: 20px; margin-top: 10px;"></div>
-                <button type="button" class="btn btn-primary shadow d-flex mr-auto " (click)="resendPassword()"> <i class="fas fa-key"></i> &nbsp; Generar nova senha</button>
+                <div class="row">
+                  <div class="custom-control custom-switch d-flex  align-items-center justify-content-center" style="margin-left: 0px;" >
+                    <input type="checkbox" class="custom-control-input " id="customSwitch2" (change)="simpleCode($event)" [checked]="simpleCodeSelected">
+                    <label class="custom-control-label" for="customSwitch2">Código de acceso simples</label>
+                  </div>
+                  <p style="color: rgb(152, 152, 152); margin-top: 10px;">Esta opção permite que você insira no aplicativo com um código de 6 dígitos, caso ele seja desativado, seu código de acesso será mais complexo</p>
+                    
               </div>
-            
-            </div>
-
-            <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents">
-
-              <div class="d-flex justify-content-start" style="margin-bottom: auto;" >
-                <button type="button" class="btn btn-primary shadow font" data-toggle="modal" data-target="#uploadDocument" (click)="showModalUploadPdf()"> <i class="fas fa-upload" style="cursor: pointer; text-align: center; font-size: 16px;"  [ngbTooltip]="'Subir tudo'"></i>&nbsp;  Subir documentos</button>
-      
-            
-            </div>
-
               
+                <div class="row" >
+                  <div style="border: 1px solid rgb(197, 197, 197); width: 100%; margin-bottom: 20px; margin-top: 10px;"></div>
+                  <button type="button" class="btn btn-primary shadow d-flex mr-auto " (click)="resendPassword()"> <i class="fas fa-key"></i> &nbsp; Generar nova senha</button>
+                </div>
               
-              <div class="row mt-5" (contextmenu)="mostrarMenu($event)" >
+              </div>
 
-                <div class="col-12 col-md-6 col-lg-4  " *ngFor="let doc of arrDocument, index as i " style="margin-bottom: 100px;" >
+              <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents" >
 
-                    <div class="card mb-3 pdfSelection" style="padding: 10px;" >
+                <div class="d-flex justify-content-start" style="margin-bottom: auto;" >
+                  <button type="button" class="btn btn-primary shadow font" data-toggle="modal" data-target="#uploadDocument" (click)="showModalUploadPdf()"> <i class="fas fa-upload" style="cursor: pointer; text-align: center; font-size: 16px;"  [ngbTooltip]="'Subir tudo'"></i>&nbsp;  Subir documentos</button>
+        
+              
+              </div>
 
-                      <div *ngIf="(doc.type | fileType) === 'image' ">
-                        <img  [src]="doc | imagenDocPath" alt="Imagen" class="img-fluid" data-toggle="modal" data-target="#viewModalBack">
-                        &nbsp; 
-                      </div>
-                      <!-- Alternativa para el caso en que el tipo de documento no sea una imagen -->
-                        <pdf-viewer
-                          [src]="doc.filePath"
-                          [original-size]="true"
-                          [show-all]="false"
-                          [zoom]="0.3"
-                          class="custom-size-viewer"
-                         *ngIf="(doc.type | fileType) === 'pdf' ">
-                        </pdf-viewer>
-                        
-                        <a class="w-100 mt-3 cursor"  (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack" *ngIf="(doc.type | fileType) === 'pdf' ">{{ doc.originalName }}</a>
-
-                        <a class="w-100 mt-3 cursor"  (click)="onViewImage(doc)" data-toggle="modal" data-target="#viewModalBack" *ngIf="(doc.type | fileType) === 'image' ">{{ doc.originalName }}</a>
-
-                        <div class="text-white d-flex justify-content-between align-items-center p-2" style="background-color: rgb(10, 120, 255);">
+                <div class="row mt-5" >
+                
+                    <app-context-menu
+                          [showContextMenu]="showContextMenu"
+                          [contextMenuPosition]="contextMenuPosition"
+                    ></app-context-menu>
                       
-                        <div class="d-flex justify-content-around">
-                          <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 16px; margin-left: 10px;"
-                            data-toggle="modal" data-target="#modalAskDelDocument" (click)="deleteDocById(doc)"
-                            [ngbTooltip]="'Excluir documento'"></i>
-                      
-                          <i class="fas fa-cloud-download-alt" style="cursor: pointer; text-align: center; font-size: 16px; margin-left: 20px;"
-                            (click)="downloadPdf(doc)" [ngbTooltip]="'Baixar documento'"></i>
+
+                  <div class="col-12 col-md-6 col-lg-4  " *ngFor="let doc of arrDocument, index as i " style="margin-bottom: 100px;" >
+
+                      <div class="card mb-3 pdfSelection" style="padding: 10px;" >
+
+                        <div *ngIf="(doc.type | fileType) === 'image' " (click)="onViewImage(doc)" data-toggle="modal" data-target="#viewModalBack" class="cursor">
+                          <img  [src]="doc | imagenDocPath" alt="Imagen" class="img-fluid" data-toggle="modal" data-target="#viewModalBack">
+                          &nbsp; 
                         </div>
-                      
-                        <div class="form-check" >
-                          <input class="form-check-input cursor" type="checkbox" value="" id="defaultCheck1" (change)="onCheckboxChange($event, doc)">
-                          <label class="form-check-label font fs-10" for="defaultCheck1">
-                            Seleccionar
-                          </label>
-                      
-                        </div>
-                      </div>
-                      
+                        <!-- Alternativa para el caso en que el tipo de documento no sea una imagen -->
+                          <pdf-viewer
+                            [src]="doc.filePath"
+                            [original-size]="true"
+                            [show-all]="false"
+                            [zoom]="0.3"
+                            class="custom-size-viewer cursor"
+                            *ngIf="(doc.type | fileType) === 'pdf' "
+                            (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack"
+                          >
+                          </pdf-viewer>
+                          
+                          <a class="w-100 mt-3 cursor"  (click)="onView(doc)" data-toggle="modal" data-target="#viewModalBack" *ngIf="(doc.type | fileType) === 'pdf' ">{{ doc.originalName }}</a>
+
+                          <a class="w-100 mt-3 cursor"  (click)="onViewImage(doc)" data-toggle="modal" data-target="#viewModalBack" *ngIf="(doc.type | fileType) === 'image' ">{{ doc.originalName }}</a>
+
+                          <div class="text-white d-flex justify-content-between align-items-center p-2" style="background-color: rgb(10, 120, 255);">
                         
-                    </div>
+                          <div class="d-flex justify-content-around">
+                            <i class="fas fa-trash" style="cursor: pointer; text-align: center; font-size: 16px; margin-left: 10px;"
+                              data-toggle="modal" data-target="#modalAskDelDocument" (click)="deleteDocById(doc)"
+                              [ngbTooltip]="'Excluir documento'"></i>
+                        
+                            <i class="fas fa-cloud-download-alt" style="cursor: pointer; text-align: center; font-size: 16px; margin-left: 20px;"
+                              (click)="downloadPdf(doc)" [ngbTooltip]="'Baixar documento'"></i>
+                          </div>
+                        
+                      
+                            <div class="form-check">
+                              <input class="form-check-input cursor" type="checkbox" value="" id="{{'defaultCheck' + doc.iddocument}}" [checked]="arrIds.includes(doc.iddocument)" (change)="onCheckboxChange($event, doc)">
+                              <label class="form-check-label font fs-10" [for]="'defaultCheck' + doc.iddocument">
+                                Seleccionar
+                              </label>
+                            </div>
+                        
+                          
+                      </div>
+                  </div>
+
                 </div>
 
-              </div>
+                <div class="modal fade" id="uploadDocument" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+                  <div class="modal-dialog modal-xl " role="document" > 
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideModalUploadPdf()" #closebutton >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
 
-              <div class="modal fade" id="uploadDocument" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-                <div class="modal-dialog modal-xl " role="document" > 
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideModalUploadPdf()" #closebutton >
-                        <span aria-hidden="true">&times;</span>
-                      </button>
+                      
+                        <app-upload-documents [user]="user" *ngIf="showUploadModal" ></app-upload-documents>
                     </div>
-
-                    
-                      <app-upload-documents [user]="user" *ngIf="showUploadModal" ></app-upload-documents>
                   </div>
                 </div>
+
               </div>
 
-            </div>
+              <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles">
 
-            <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles">
+                <div class="row mt-5">
+                  <div class="col-sm-6">
+                    <!-- Primer radio (arriba) -->
+                    <div class="form-group clearfix">
+                      <div class="icheck-success d-inline">
+                        <input type="radio" name="r3"  id="radioSuccess1" (change)="handleRoleChange('admin')" [checked]="adminRole">
+                        <label for="radioSuccess1"> Administrador </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-sm-6">
+                    <!-- Segundo radio (abajo) -->
+                    <div class="form-group clearfix">
+                      <div class="icheck-success d-inline">
+                        <input type="radio" name="r3" id="radioSuccess2" (change)="handleRoleChange('user')" [checked]="userRole">
+                        <label for="radioSuccess2"> Usúario </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <!-- Segundo radio (abajo) -->
+                    <div class="form-group clearfix">
+                      <div class="icheck-success d-inline">
+                        <input type="radio" name="r3" id="radioSuccess3" (change)="handleRoleChange('webmaster')" [checked]="webMRole">
+                        <label for="radioSuccess3"> Web master </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+              <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm">
+
+
+                <div class="row mt-4">
+        
+                  <div class="card col-12 table-responsive" style="padding: 12px; padding-top: 20px; background-color: white; ">
+          
+                    <div class="customTHead shadow font"> Alarmes pessoales</div>
+          
+                    <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover font fs-10" #table >
+          
+                          <thead >
+                              <tr class="fs-11" >
+                                  <th >Nome alarme</th>
+                                  <th>Descrição</th>
+                                  <th>Data</th>
+                                  <th>Ação</th>
+                              </tr>
+                          </thead>
+                          <tbody *ngIf="personalAlarms.length !== 0">
+                              <tr *ngFor="let pes of personalAlarms">
+                                  <td class="align-top"> {{ pes.name }} </td>
+                                  <td> {{ pes.description }} </td>
+                                  <td class="align-top"> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
+                                  <td class="d-flex align-items-center justify-content-start" style="align-items: start;">
+                                    <i class="far fa-play-circle" style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(27, 188, 24); margin-right: 5px;"  [ngbTooltip]="'Ativar alarme'" *ngIf="pes.status === 'paused'" (click)="activePausePersonalAlarm(pes, 'active')" ></i>
+    
+                                    <i class="far fa-pause-circle " style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(0, 123, 255); margin-right: 5px;" [ngbTooltip]="'Pausar alarme'" *ngIf="pes.status !== 'paused'" (click)="activePausePersonalAlarm(pes, 'paused')" ></i> 
+                                    <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelAlarm" (click)="onRemoveAlarm(pes)" [ngbTooltip]="'Excluir alarme'"></i>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+              </div>
+          </div>
+
+              </div>
+
+              <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history">
+                <div class="row mt-5">
+                  <div class="col-12">
+                  
+                    <div class="boxSelection2 font" style="padding: 15px;" >
+                          {{ user && user.Historico_Sedes }}
+                        <span *ngIf="user?.Historico_Sedes === '' || user?.Historico_Sedes === undefined  || user?.Historico_Sedes === null" class="font fs-11"> Sem histórico de sede para mostrar </span> 
+                    </div>
+
+                </div>
+                </div>
+              </div>
+              </div>
+
+              <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles">
 
               <div class="row mt-5">
                 <div class="col-sm-6">
@@ -397,69 +495,68 @@
               </div>
               </div>
 
-            <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm">
+              <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm">
 
 
-              <div class="row mt-4">
-       
-                <div class="card col-12 table-responsive" style="padding: 12px; padding-top: 20px; background-color: white; ">
+                <div class="row mt-4">
         
-                  <div class="customTHead shadow font"> Alarmes pessoales</div>
-        
-                  <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover font fs-10" #table >
-        
-                        <thead >
-                            <tr class="fs-11" >
-                                <th >Nome alarme</th>
-                                <th>Descrição</th>
-                                <th>Data</th>
-                                <th>Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody *ngIf="personalAlarms.length !== 0">
-                            <tr *ngFor="let pes of personalAlarms">
-                                <td class="align-top"> {{ pes.name }} </td>
-                                <td> {{ pes.description }} </td>
-                                <td class="align-top"> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
-                                <td class="d-flex align-items-center justify-content-start" style="align-items: start;">
-                                  <i class="far fa-play-circle" style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(27, 188, 24); margin-right: 5px;"  [ngbTooltip]="'Ativar alarme'" *ngIf="pes.status === 'paused'" (click)="activePausePersonalAlarm(pes, 'active')" ></i>
-  
-                                  <i class="far fa-pause-circle " style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(0, 123, 255); margin-right: 5px;" [ngbTooltip]="'Pausar alarme'" *ngIf="pes.status !== 'paused'" (click)="activePausePersonalAlarm(pes, 'paused')" ></i> 
-                                  <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelAlarm" (click)="onRemoveAlarm(pes)" [ngbTooltip]="'Excluir alarme'"></i>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-            </div>
-        </div>
-
-            </div>
-
-            <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history">
-              <div class="row mt-5">
-                <div class="col-12">
-                
-                  <div class="boxSelection2 font" style="padding: 15px;" >
-                        {{ user && user.Historico_Sedes }}
-                       <span *ngIf="user?.Historico_Sedes === '' || user?.Historico_Sedes === undefined  || user?.Historico_Sedes === null" class="font fs-11"> Sem histórico de sede para mostrar </span> 
-                  </div>
-
-               </div>
+                  <div class="card col-12 table-responsive" style="padding: 12px; padding-top: 20px; background-color: white; ">
+          
+                    <div class="customTHead shadow font"> Alarmes pessoales</div>
+          
+                    <table datatable  [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover font fs-10" #table >
+          
+                          <thead >
+                              <tr class="fs-11" >
+                                  <th >Nome alarme</th>
+                                  <th>Descrição</th>
+                                  <th>Data</th>
+                                  <th>Ação</th>
+                              </tr>
+                          </thead>
+                          <tbody *ngIf="personalAlarms.length !== 0">
+                              <tr *ngFor="let pes of personalAlarms">
+                                  <td class="align-top"> {{ pes.name }} </td>
+                                  <td> {{ pes.description }} </td>
+                                  <td class="align-top"> {{ pes.alarmDate | date:'dd/MM/yyyy'}} </td>
+                                  <td class="d-flex align-items-center justify-content-start" style="align-items: start;">
+                                    <i class="far fa-play-circle" style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(27, 188, 24); margin-right: 5px;"  [ngbTooltip]="'Ativar alarme'" *ngIf="pes.status === 'paused'" (click)="activePausePersonalAlarm(pes, 'active')" ></i>
+    
+                                    <i class="far fa-pause-circle " style="cursor: pointer; text-align: center; font-size: 22px;  color: rgb(0, 123, 255); margin-right: 5px;" [ngbTooltip]="'Pausar alarme'" *ngIf="pes.status !== 'paused'" (click)="activePausePersonalAlarm(pes, 'paused')" ></i> 
+                                    <i class="fas fa-trash " style="cursor: pointer; text-align: center; font-size: 18px;  color: red; margin-left: 5px;" data-toggle="modal" data-target="#modalAskDelAlarm" (click)="onRemoveAlarm(pes)" [ngbTooltip]="'Excluir alarme'"></i>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
               </div>
-            </div>
           </div>
 
+              </div>
+
+              <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history">
+                <div class="row mt-5">
+                  <div class="col-12">
+                  
+                    <div class="boxSelection font" style="padding: 15px;" >
+                          {{ user && user.Historico_Sedes }}
+                        <span *ngIf="user?.Historico_Sedes === '' || user?.Historico_Sedes === undefined  || user?.Historico_Sedes === null" class="font fs-11"> Sem histórico de sede para mostrar </span> 
+                    </div>
+
+                </div>
+                </div>
+              </div>
+
+          </div>
         </div>
+
       </div>
-    </div>
 
 
+  </div>
 
 </div>
 
 
-
- 
   <!-- Modal Preview Back -->
   <div class="modal fade" id="viewModalBack" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl justify-content-center" role="document"> 
